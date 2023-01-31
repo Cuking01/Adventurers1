@@ -69,5 +69,12 @@ struct Allocator
 		free((void*)((char*)p-al));
 	}
 
-
+	//析构并释放
+	void operator<<(T*p)
+	{
+		u3 n=*(u3*)((char*)p-al);
+		for(u3 i=0;i<n;i+=sizeof(T))
+			((T*)((char*)p+i))->~T();
+		deallocate(p);
+	}
 };
