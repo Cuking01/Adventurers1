@@ -1,13 +1,5 @@
 #pragma once
 
-#include<stdlib.h>
-#include<algorithm>
-#include<cstddef>
-#include<atomic>
-
-namespace Mem
-{
-
 namespace Resource
 {
 	std::atomic<u3> in_use;
@@ -29,5 +21,4 @@ namespace Resource
 		in_use-=*(u3*)p;
 		::free(p);
 	}
-};
 };

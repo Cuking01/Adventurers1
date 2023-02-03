@@ -1,8 +1,5 @@
 #pragma once
 
-namespace Mem
-{
-
 template<typename T,typename SA,u3 bs>
 struct Pool
 {
@@ -74,6 +71,4 @@ struct Pool
 		p->~T();
 		deallocate(p);
 	}
-};
-
 };
