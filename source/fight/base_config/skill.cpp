@@ -2,8 +2,8 @@
 
 struct Skill
 {
-	wchar_t name[32];
-	wchar_t description[1024];
+	const wchar_t* name;
+	const wchar_t* description;
 	Attribute_Table exAttribute;
 	Attribute cd,cd_init;
 	Attribute AP_use,MP_use;
