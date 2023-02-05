@@ -5,11 +5,7 @@
 template<typename T,typename SA,typename TS>
 struct Allocator
 {
-	typedef T value_type;
-	typedef u3 size_type;
-	typedef s3 difference_type;
-	typedef std::true_type propagate_on_container_move_assignment;
-	typedef std::true_type propagate_on_container_copy_assignment;
+	
 
 	typedef SA source_type;
 	static constexpr s2 thread_safe=0;
@@ -57,11 +53,6 @@ struct Allocator
 	{
 		void*p=alloc(n*sizeof(T));
 		return (T*)((char*)p+al);
-	}
-
-	T* allocate_at_least(u3 n)
-	{
-		return allocate(n);
 	}
 
 	void deallocate(T*p,u3 n)
