@@ -18,7 +18,7 @@ struct Pool
 	Block*block_list;
 	Node*node_list;
 
-	Pool(SA&sa):source_allocator(&sa),node_list(nullptr),node_list(nullptr){}
+	Pool(SA&sa):source_allocator(&sa),block_list(nullptr),node_list(nullptr){}
 	~Pool()
 	{
 		Block*nxt;
@@ -36,7 +36,7 @@ struct Pool
 		b->next=block_list;
 		block_list=b;
 
-		for(int i=0;i<bs;i++)
+		for(u3 i=0;i<bs;i++)
 		{
 			b->node[i].next=node_list;
 			node_list=b->node+i;

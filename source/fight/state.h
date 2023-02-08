@@ -7,5 +7,6 @@ namespace State
 #include "state/group.h"
 #include "state/hero.h"
 #include "state/skill.h"
-
+#include "state/trigger.h"
+	
 };
