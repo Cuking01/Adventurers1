@@ -3,7 +3,7 @@
 template<typename T>
 struct Set_Node
 {
-	T ele;
+	const T ele;
 	Set_Node*f,*l,*r;
 
 	void rotate()
@@ -34,7 +34,8 @@ struct Set
 	using Node=Set_Node<T>;
 	A&allocator;
 	Node*root;
-	
+	u3 sz;
+
 	struct iterator
 	{
 		Node*t;
@@ -69,13 +70,34 @@ struct Set
 		{
 			return t->ele;
 		}
+
+		const T* operator->() const
+		{
+			return &t->ele;
+		}
 	}_begin;
 	Set(A&allocator):allocator(allocator)
 	{
 		root=nullptr;
 		_begin.t=nullptr;
+		sz=0;
 	}
 
+	void destroy(Node*p)
+	{
+		if(!p)return;
+
+		destroy(p->l);
+		destroy(p->r);
+		allocator<<p;
+	}
+
+	~Set()
+	{
+		destroy(root);
+		root=nullptr;
+		sz=0;
+	}
 	void splay(Node*p)
 	{
 		while(p->f)
@@ -87,13 +109,14 @@ struct Set
 		root=p;
 	}
 
-	void insert(const T&e)
+	iterator insert(const T&e)
 	{
 		if(root==nullptr)
 		{
 			root=new (allocator.allocate()) Node{e,nullptr,nullptr,nullptr};
 			_begin.t=root;
-			return;
+			sz++;
+			return {root};
 		}
 		Node*p=root;
 		while(p->ele<e||e<p->ele)
@@ -107,6 +130,7 @@ struct Set
 					p->l=new (allocator.allocate()) Node{e,p,nullptr,nullptr};
 					if(p==_begin.t)_begin.t=p->l;
 					p=p->l;
+					sz++;
 					break;
 				}
 			}
@@ -118,12 +142,13 @@ struct Set
 				{
 					p->r=new (allocator.allocate()) Node{e,p,nullptr,nullptr};
 					p=p->r;
+					sz++;
 					break;
 				}
 			}
 		}
 		splay(p);
-
+		return {p};
 	}
 
 	iterator find(const T&e) noexcept
@@ -177,6 +202,7 @@ struct Set
 			root=nullptr;
 			_begin.t=nullptr;
 		}
+		sz--;
 		allocator<<p;
 	}
 	iterator begin() const noexcept
