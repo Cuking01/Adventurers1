@@ -1,7 +1,6 @@
 #pragma once
 
-
-struct State
+struct Damage
 {
-	
+
 };
