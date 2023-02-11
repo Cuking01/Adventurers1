@@ -12,11 +12,12 @@ struct Map_T
 };
 
 
-template<typename TK,typename TV,typename A>
+template<typename TK,typename TV>
 struct Map
 {
 	using T=Map_T<TK,TV>;
-	Set<T,A> set;
+	using A=Mem::Pool<Set_Node<T>,32>;
+	Set<T> set;
 
 	Map(A&a):set(a){}
 
@@ -28,7 +29,6 @@ struct Map
 	template<typename TKp,typename TVp>
 	void insert(TKp&&key,TVp&&value)
 	{
-		static_assert(std::is_same_v<std::remove_reference<TKp>::type,std::remove_reference<TVp>::type>);
 		set.insert({std::forward<TKp>(key),std::forward<TVp>(value)});
 	}
 	void erase(const TK&key)

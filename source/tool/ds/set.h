@@ -3,5 +3,5 @@
 template<typename T>
 struct Set_Node;
 
-template<typename T,typename A>
+template<typename T>
 struct Set;

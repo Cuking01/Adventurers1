@@ -3,7 +3,7 @@
 template<typename TK,typename TV>
 struct Map_T;
 
-template<typename TK,typename TV,typename A>
+template<typename TK,typename TV>
 struct Map;
 
 template<typename TK,typename TV>

@@ -28,10 +28,11 @@ struct Set_Node
 	}
 };
 
-template<typename T,typename A>
+template<typename T>
 struct Set
 {
 	using Node=Set_Node<T>;
+	using A=Mem::Pool<Node,32>;
 	A&allocator;
 	Node*root;
 	u3 sz;
@@ -66,6 +67,10 @@ struct Set
 			return t!=b.t;
 		}
 
+		int operator==(iterator b) const
+		{
+			return t==b.t;
+		}
 		const T& operator*() const
 		{
 			return t->ele;

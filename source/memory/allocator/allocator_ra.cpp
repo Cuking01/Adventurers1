@@ -3,9 +3,9 @@
 //根内存分配器
 
 template<>
-struct Allocator<Source_T,Source_T,Thread_Safe_T>
+struct Allocator<Root_Source_T>
 {
-	typedef Source_T source_type;
+	typedef Source_T SA;
 	static constexpr s2 thread_safe=1;
 
 	void*alloc(u3 sz){return Resource::alloc(sz);}

@@ -8,5 +8,7 @@ namespace State
 #include "state/hero.cpp"
 #include "state/skill.cpp"
 #include "state/trigger.cpp"
+#include "state/buff.cpp"
+#include "state/attribute.cpp"
 
 };

@@ -9,8 +9,8 @@ struct Thread_Safe_T{};//线程安全标识，注意仅保证分配和解分配�
 
 //源内存分配器类型
 #include "allocator/allocator_sa.cpp"
-#include "allocator/allocator_sa_ts.cpp"
+//#include "allocator/allocator_sa_ts.cpp"
 
 //一般分配器类型
 #include "allocator/allocator_T.cpp"
-#include "allocator/allocator_T_ts.cpp"
+//#include "allocator/allocator_T_ts.cpp"

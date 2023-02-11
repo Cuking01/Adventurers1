@@ -2,35 +2,21 @@
 
 //一般内存分配器，线程不安全版本，可以用于STL容器使用
 
-template<typename T,typename SA,typename TS>
+template<typename T>
 struct Allocator
 {
-	
-
-	typedef SA source_type;
 	static constexpr s2 thread_safe=0;
+	using SA=Allocator<Source_T>;
 
 	SA*source_allocator;
 	u3 in_use;
 
 	Allocator(SA&sa) noexcept :source_allocator(&sa),in_use(0){}
-	Allocator(const Allocator& o):source_allocator(o.source_allocator),in_use(0){}
-	Allocator(Allocator&& o):source_allocator(o.source_allocator),in_use(o.in_use){o.in_use=0;}
-	Allocator& operator=(const Allocator& o)
-	{
-		//if(in_use)Warning("fuzhi:xie lou!%llu\n",in_use);
-		source_allocator=o.source_allocator;
-		in_use=0;
-		return *this;
-	}
-	Allocator& operator=(Allocator&& o)
-	{
-		//if(in_use)Warning("fuzhi:xie lou!%llu\n",in_use);
-		source_allocator=o.source_allocator;
-		in_use=o.in_use;
-		o.in_use=0;
-		return *this;
-	}
+	Allocator(const Allocator& o)=delete;
+	Allocator(Allocator&& o)=delete;
+	Allocator& operator=(const Allocator& o)=delete;
+	Allocator& operator=(Allocator&& o)=delete;
+
 	~Allocator()
 	{
 		//if(in_use)Warning("xigou:xie lou!%llu\n",in_use);
@@ -55,7 +41,7 @@ struct Allocator
 		return (T*)((char*)p+al);
 	}
 
-	void deallocate(T*p,u3 n)
+	void deallocate(T*p,[[maybe_unused]]u3 n=0)
 	{
 		free((void*)((char*)p-al));
 	}

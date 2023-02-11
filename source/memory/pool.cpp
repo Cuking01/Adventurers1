@@ -1,6 +1,6 @@
 #pragma once
 
-template<typename T,typename SA,u3 bs>
+template<typename T,u3 bs>
 struct Pool
 {
 	static_assert(bs>0);
@@ -14,6 +14,8 @@ struct Pool
 		Node node[bs];
 		Block*next;
 	};
+	using SA=Allocator<T>;
+
 	SA* source_allocator;
 	Block*block_list;
 	Node*node_list;

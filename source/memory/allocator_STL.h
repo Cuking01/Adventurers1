@@ -1,4 +1,4 @@
 #pragma once
 
-template<typename T,typename SA>
+template<typename T>
 struct Allocator_STL;

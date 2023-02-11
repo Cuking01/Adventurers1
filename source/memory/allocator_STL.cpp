@@ -1,6 +1,6 @@
 #pragma once
 
-template<typename T,typename SA>
+template<typename T>
 struct Allocator_STL
 {
 	typedef T value_type;
@@ -9,16 +9,16 @@ struct Allocator_STL
 	typedef std::true_type propagate_on_container_move_assignment;
 	typedef std::true_type propagate_on_container_copy_assignment;
 
-	typedef Allocator<T,SA,void> source_type;
+	using SA=Allocator<T>;
+
 	static constexpr s2 thread_safe=0;
 
-	Allocator<T,SA,void>*source_allocator;
-	Allocator_STL(Allocator<T,SA,void>*p): source_allocator(p){}
+	SA*source_allocator;
+	Allocator_STL(SA&p): source_allocator(&p){}
 
 	T* allocate(u3 n)
 	{
-		void*p=source_allocator->alloc(n*sizeof(T));
-		return (T*)((char*)p+al);
+		return source_allocator->allocate(n*sizeof(T));
 	}
 
 	T* allocate_at_least(u3 n)
@@ -26,8 +26,8 @@ struct Allocator_STL
 		return allocate(n);
 	}
 
-	void deallocate(T*p,u3 n)
+	void deallocate(T*p,[[maybe_unused]]u3 n=0)
 	{
-		source_allocator->free((void*)((char*)p-al));
+		source_allocator->deallocate(p);
 	}
 };
