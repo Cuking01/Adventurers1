@@ -11,9 +11,11 @@ constexpr f3 eps=1e-6;
 #include "state/group.h"
 #include "state/hero.h"
 #include "state/skill.h"
-#include "state/damage.cpp"
+#include "state/equipment.h"
+#include "state/damage.h"
 #include "state/trigger.h"
 #include "state/buff.h"
 #include "state/attribute.h"
+#include "state/attribute_table.h"
 
 };

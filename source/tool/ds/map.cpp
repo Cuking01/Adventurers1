@@ -31,13 +31,13 @@ struct Map
 	{
 		set.insert({std::forward<TKp>(key),std::forward<TVp>(value)});
 	}
-	void erase(const TK&key)
+	void erase(const TK&key) noexcept
 	{
 		set.erase({key,TV()});
 	}
 
 
-	auto find(const TK&key)
+	auto find(const TK&key) noexcept
 	{
 		return set.find({key,TV()});
 	}

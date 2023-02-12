@@ -7,7 +7,8 @@ struct Attribute
 	Trigger<Buff> trigger;
 	using A=Attribute_A;
 
-	Attribute(f3 x,A&a):x(x),min(0),max(inf),trigger(a){}
+	Attribute(A&a):Attribute(0,a){}
+	Attribute(f3 x,A&a):Attribute(x,0,0,a){}
 	Attribute(f3 x,f3 min,f3 max,A&a):x(x),min(min),max(max),trigger(a){}
 	void add(u2 key,const Buff&buff)
 	{
