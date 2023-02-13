@@ -1,5 +1,6 @@
 #pragma once
 
+struct Skill_A;
 struct Skill;
 
 #define lambda_Skill_init []([[maybe_unused]] ::Fight::State::Skill&skill)

@@ -14,7 +14,7 @@ struct Pool
 		Node node[bs];
 		Block*next;
 	};
-	using SA=Allocator<T>;
+	using SA=Mem::SA;
 
 	SA* source_allocator;
 	Block*block_list;

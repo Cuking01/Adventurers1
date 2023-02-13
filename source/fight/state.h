@@ -17,5 +17,6 @@ constexpr f3 eps=1e-6;
 #include "state/buff.h"
 #include "state/attribute.h"
 #include "state/attribute_table.h"
+#include "state/script.h"
 
 };

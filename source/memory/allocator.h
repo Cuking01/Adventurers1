@@ -8,6 +8,7 @@ struct Thread_Safe_T;
 template<typename T>
 struct Allocator;
 
-typedef Allocator<Root_Source_T> RA;
+using RA=Allocator<Root_Source_T>;
+using SA=Allocator<Source_T>;
 
 extern RA ra;

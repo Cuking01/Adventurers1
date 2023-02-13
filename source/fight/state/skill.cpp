@@ -1,5 +1,13 @@
 #pragma once
 
+struct Skill_A
+{
+	Attribute_A attribute_a;
+	Skill_A(Mem::SA&sa):
+		attribute_a(sa)
+	{}
+};
+
 struct Skill
 {
 	State&state;
@@ -24,13 +32,13 @@ struct Skill
 	s2   (*fun_check)(Skill&skill,const Arg_t_6&arg);
 	void (*fun_use)(Skill&skill,const Arg_t_6&arg);
 	
-	Skill(State&state,Hid hid,const Base_Config::Skill&skill,s2 level,Attribute_A&a):
+	Skill(State&state,Hid hid,const Base_Config::Skill&skill,s2 level,Skill_A&a):
 		state(state),
 		hid(hid),
 		level(level),
-		AP_use(skill.AP_use(level),a),
-		MP_use(skill.MP_use(level),a),
-		CD_lim(skill.cd(level),a),
+		AP_use(skill.AP_use(level),a.attribute_a),
+		MP_use(skill.MP_use(level),a.attribute_a),
+		CD_lim(skill.cd(level),a.attribute_a),
 		st{},
 		CD(skill.cd_init(level)),
 		tag{},

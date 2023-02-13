@@ -18,7 +18,7 @@ struct Allocator_STL
 
 	T* allocate(u3 n)
 	{
-		return source_allocator->allocate(n*sizeof(T));
+		return source_allocator->allocate(n);
 	}
 
 	T* allocate_at_least(u3 n)

@@ -1,5 +1,13 @@
 #pragma once
 
+struct Attribute_A
+{
+	Trigger_A<Buff> trigger_a;
+	Attribute_A(Mem::SA&sa):
+		trigger_a(sa)
+	{}
+};
+
 struct Attribute
 {
 	f3 x;
@@ -9,7 +17,7 @@ struct Attribute
 
 	Attribute(A&a):Attribute(0,a){}
 	Attribute(f3 x,A&a):Attribute(x,0,0,a){}
-	Attribute(f3 x,f3 min,f3 max,A&a):x(x),min(min),max(max),trigger(a){}
+	Attribute(f3 x,f3 min,f3 max,A&a):x(x),min(min),max(max),trigger(a.trigger_a){}
 	void add(u2 key,const Buff&buff)
 	{
 		trigger.insert(key,buff);

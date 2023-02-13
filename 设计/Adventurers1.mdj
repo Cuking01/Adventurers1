@@ -4636,7 +4636,7 @@
 											"font": "Arial;13;1",
 											"left": 4973,
 											"top": 1503,
-											"width": 407,
+											"width": 418.3232421875,
 											"height": 13,
 											"text": "装备状态类，Equipment"
 										},
@@ -4671,7 +4671,7 @@
 									"font": "Arial;13;0",
 									"left": 4968,
 									"top": 1496,
-									"width": 417,
+									"width": 428.3232421875,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGFrJPcJD+qaKc="
@@ -4708,7 +4708,7 @@
 											"font": "Arial;13;0",
 											"left": 4973,
 											"top": 1526,
-											"width": 407,
+											"width": 418.3232421875,
 											"height": 13,
 											"text": "+技能状态: Skill",
 											"horizontalAlignment": 0
@@ -4717,7 +4717,7 @@
 									"font": "Arial;13;0",
 									"left": 4968,
 									"top": 1521,
-									"width": 417,
+									"width": 428.3232421875,
 									"height": 23
 								},
 								{
@@ -4742,7 +4742,7 @@
 											"font": "Arial;13;0",
 											"left": 4973,
 											"top": 1549,
-											"width": 407,
+											"width": 418.3232421875,
 											"height": 13,
 											"text": "+Constructor(state: State&, skill: BaseConfig.Skill, hid: Hid, level: s2)",
 											"horizontalAlignment": 0
@@ -4751,7 +4751,7 @@
 									"font": "Arial;13;0",
 									"left": 4968,
 									"top": 1544,
-									"width": 417,
+									"width": 428.3232421875,
 									"height": 23
 								},
 								{
@@ -4794,7 +4794,7 @@
 							"containerChangeable": true,
 							"left": 4968,
 							"top": 1496,
-							"width": 417,
+							"width": 428.3232421875,
 							"height": 209,
 							"nameCompartment": {
 								"$ref": "AAAAAAGFrJPcJD+p9Bo="
@@ -6438,7 +6438,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"left": 4934,
-									"top": 1586,
+									"top": 1585,
 									"height": 13,
 									"alpha": 0.7853981633974483,
 									"distance": 40,
@@ -6459,7 +6459,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"left": 4947,
-									"top": 1547,
+									"top": 1546,
 									"height": 13,
 									"alpha": -0.5235987755982988,
 									"distance": 25,
@@ -6569,7 +6569,7 @@
 								"$ref": "AAAAAAGFrJPcIz+om4s="
 							},
 							"lineStyle": 1,
-							"points": "4967:1569;4720:1532",
+							"points": "4967:1568;4720:1532",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGFrJdkKScaYAc="
@@ -6901,8 +6901,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 5142,
-									"top": 1728,
+									"left": 5145,
+									"top": 1727,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -6922,8 +6922,8 @@
 									},
 									"visible": null,
 									"font": "Arial;13;0",
-									"left": 5127,
-									"top": 1726,
+									"left": 5130,
+									"top": 1725,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -6943,8 +6943,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 5171,
-									"top": 1731,
+									"left": 5174,
+									"top": 1732,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -6964,8 +6964,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 5141,
-									"top": 1733,
+									"left": 5144,
+									"top": 1732,
 									"height": 13,
 									"alpha": 0.5235987755982988,
 									"distance": 30,
@@ -6985,8 +6985,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 5128,
-									"top": 1729,
+									"left": 5131,
+									"top": 1728,
 									"height": 13,
 									"alpha": 0.7853981633974483,
 									"distance": 40,
@@ -7006,7 +7006,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 5168,
+									"left": 5170,
 									"top": 1741,
 									"height": 13,
 									"alpha": -0.5235987755982988,
@@ -7027,7 +7027,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 5142,
+									"left": 5146,
 									"top": 1722,
 									"height": 13,
 									"alpha": -0.5235987755982988,
@@ -7047,8 +7047,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 5129,
-									"top": 1723,
+									"left": 5132,
+									"top": 1722,
 									"height": 13,
 									"alpha": -0.7853981633974483,
 									"distance": 40,
@@ -7067,7 +7067,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 5170,
+									"left": 5173,
 									"top": 1722,
 									"height": 13,
 									"alpha": 0.5235987755982988,
@@ -7117,7 +7117,7 @@
 								"$ref": "AAAAAAGFrJRuBHXwNa8="
 							},
 							"lineStyle": 1,
-							"points": "5153:1767;5161:1705",
+							"points": "5155:1767;5165:1705",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGFrJefbj7vw8s="
@@ -11505,23 +11505,6 @@
 										},
 										{
 											"_type": "UMLAttributeView",
-											"_id": "AAAAAAGF2NGlDbVJWD4=",
-											"_parent": {
-												"$ref": "AAAAAAGF2L0GEue+ps8="
-											},
-											"model": {
-												"$ref": "AAAAAAGF2NGk+bUZrZQ="
-											},
-											"font": "Arial;13;0",
-											"left": 5029,
-											"top": 2437,
-											"width": 255,
-											"height": 13,
-											"text": "+真实伤害: 1",
-											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLAttributeView",
 											"_id": "AAAAAAGF2NHR2bkubXQ=",
 											"_parent": {
 												"$ref": "AAAAAAGF2L0GEue+ps8="
@@ -11531,10 +11514,10 @@
 											},
 											"font": "Arial;13;0",
 											"left": 5029,
-											"top": 2452,
+											"top": 2437,
 											"width": 255,
 											"height": 13,
-											"text": "+物理or魔法: 1",
+											"text": "+物理or魔法or真实: 2",
 											"horizontalAlignment": 0
 										},
 										{
@@ -11548,7 +11531,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 5029,
-											"top": 2467,
+											"top": 2452,
 											"width": 255,
 											"height": 13,
 											"text": "+单体or群体: 1",
@@ -11565,7 +11548,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 5029,
-											"top": 2482,
+											"top": 2467,
 											"width": 255,
 											"height": 13,
 											"text": "+是否必中（无视闪避）: 1",
@@ -11582,7 +11565,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 5029,
-											"top": 2497,
+											"top": 2482,
 											"width": 255,
 											"height": 13,
 											"text": "+是否视为普攻: 1",
@@ -11599,7 +11582,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 5029,
-											"top": 2512,
+											"top": 2497,
 											"width": 255,
 											"height": 13,
 											"text": "+是否为暴击伤害: 1",
@@ -11610,7 +11593,7 @@
 									"left": 5024,
 									"top": 2417,
 									"width": 265,
-									"height": 113
+									"height": 98
 								},
 								{
 									"_type": "UMLOperationCompartmentView",
@@ -11623,7 +11606,7 @@
 									},
 									"font": "Arial;13;0",
 									"left": 5024,
-									"top": 2530,
+									"top": 2515,
 									"width": 265,
 									"height": 10
 								},
@@ -20470,21 +20453,12 @@
 												},
 												{
 													"_type": "UMLAttribute",
-													"_id": "AAAAAAGF2NGk+bUZrZQ=",
-													"_parent": {
-														"$ref": "AAAAAAGF2L0GEee2G1o="
-													},
-													"name": "真实伤害",
-													"type": "1"
-												},
-												{
-													"_type": "UMLAttribute",
 													"_id": "AAAAAAGF2NHR0rj+RLQ=",
 													"_parent": {
 														"$ref": "AAAAAAGF2L0GEee2G1o="
 													},
-													"name": "物理or魔法",
-													"type": "1"
+													"name": "物理or魔法or真实",
+													"type": "2"
 												},
 												{
 													"_type": "UMLAttribute",

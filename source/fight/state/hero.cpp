@@ -1,5 +1,13 @@
 #pragma once
 
+struct Sp_State_A
+{
+	Attribute_A attribute_a;
+	Sp_State_A(Mem::SA&sa):
+		attribute_a(sa)
+	{}
+};
+
 struct Sp_State
 {
 	Attribute 眩晕;
@@ -11,8 +19,30 @@ struct Sp_State
 	Attribute 免疫;
 	Attribute 霸体;
 
-	Sp_State(Attribute_A&a):
-		眩晕(a),沉默(a),致盲(a),潜行(a),嘲讽(a),重伤(a),免疫(a),霸体(a)
+	Sp_State(Sp_State_A&a):
+		眩晕(a.attribute_a),
+		沉默(a.attribute_a),
+		致盲(a.attribute_a),
+		潜行(a.attribute_a),
+		嘲讽(a.attribute_a),
+		重伤(a.attribute_a),
+		免疫(a.attribute_a),
+		霸体(a.attribute_a)
+	{}
+};
+
+struct Hero_A
+{
+	Attribute_Table_A attribute_table_a;
+	Sp_State_A sp_state_a;
+	Skill_A skill_a;
+	Equipment_A equipment_a;
+
+	Hero_A(Mem::SA&sa):
+		attribute_table_a(sa),
+		sp_state_a(sa),
+		skill_a(sa),
+		equipment_a(sa)
 	{}
 };
 
@@ -24,24 +54,24 @@ struct Hero:Attribute_Table,Sp_State
 	Skill skill[5];
 	Equipment equipment[3];
 
-	Hero(State&state,Hid hid,const Player_Config::Hero&hero,Attribute_A&a):
-		Attribute_Table(hero,a),
-		Sp_State(a),
+	Hero(State&state,Hid hid,const Player_Config::Hero&hero,Hero_A&a):
+		Attribute_Table(hero,a.attribute_table_a),
+		Sp_State(a.sp_state_a),
 		alive(1),
 		level(hero.level),
 		skill
 		{
-			{state,hid,Base_Config::hero[hero.id].skill[0],hero.skill[0].level,a},
-			{state,hid,Base_Config::hero[hero.id].skill[1],hero.skill[1].level,a},
-			{state,hid,Base_Config::hero[hero.id].skill[2],hero.skill[2].level,a},
-			{state,hid,Base_Config::hero[hero.id].skill[3],hero.skill[3].level,a},
-			{state,hid,Base_Config::hero[hero.id].skill[4],hero.skill[4].level,a},
+			{state,hid,Base_Config::hero[hero.id].skill[0],hero.skill[0].level,a.skill_a},
+			{state,hid,Base_Config::hero[hero.id].skill[1],hero.skill[1].level,a.skill_a},
+			{state,hid,Base_Config::hero[hero.id].skill[2],hero.skill[2].level,a.skill_a},
+			{state,hid,Base_Config::hero[hero.id].skill[3],hero.skill[3].level,a.skill_a},
+			{state,hid,Base_Config::hero[hero.id].skill[4],hero.skill[4].level,a.skill_a},
 		},
 		equipment
 		{
-			{state,hid,hero.equipment[0],a},
-			{state,hid,hero.equipment[1],a},
-			{state,hid,hero.equipment[2],a},
+			{state,hid,hero.equipment[0],a.equipment_a},
+			{state,hid,hero.equipment[1],a.equipment_a},
+			{state,hid,hero.equipment[2],a.equipment_a},
 		}
 	{}
 
