@@ -28,10 +28,12 @@ struct Trigger
 	
 
 	template<typename...Arg>
-	void operator()(Arg&...arg)
+	s2 operator()(Arg&...arg)
 	{
 		for(auto&[k,v]:map)
-			if(v(arg...))break;
+			if(s2 ret=v(arg...);ret)
+				return ret;
+		return 0;
 	}
 };
 

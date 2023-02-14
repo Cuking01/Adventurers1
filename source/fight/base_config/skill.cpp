@@ -8,11 +8,6 @@ struct Skill
 	Attribute cd,cd_init;
 	Attribute AP_use,MP_use;
 
-
-
-	void(*fun_init)([[maybe_unused]] ::Fight::State::Skill&skill);
-	s2  (*fun_check)([[maybe_unused]] ::Fight::State::Skill&skill,[[maybe_unused]] const Arg_t_6&arg);
-	void(*fun_use)([[maybe_unused]] ::Fight::State::Skill&skill,[[maybe_unused]] const Arg_t_6&arg);
 	struct Tag
 	{
 		u2 default_target_check:1;
@@ -21,4 +16,9 @@ struct Skill
 		u2 target_group:1;
 	};
 	Tag tag;
+
+	void(*fun_init)([[maybe_unused]] ::Fight::State::Skill&skill);
+	s2  (*fun_check)([[maybe_unused]] ::Fight::State::Skill&skill,[[maybe_unused]] const Arg_t_6&arg);
+	void(*fun_use)([[maybe_unused]] ::Fight::State::Skill&skill,[[maybe_unused]] const Arg_t_6&arg);
+	
 };

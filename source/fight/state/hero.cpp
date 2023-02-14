@@ -37,26 +37,37 @@ struct Hero_A
 	Sp_State_A sp_state_a;
 	Skill_A skill_a;
 	Equipment_A equipment_a;
+	Trigger_A<Event> trigger_event_a;
+	Trigger_A<Damage_Handler> trigger_damage_handler_a;
 
 	Hero_A(Mem::SA&sa):
 		attribute_table_a(sa),
 		sp_state_a(sa),
 		skill_a(sa),
-		equipment_a(sa)
+		equipment_a(sa),
+		trigger_event_a(sa),
+		trigger_damage_handler_a(sa)
 	{}
 };
 
 struct Hero:Attribute_Table,Sp_State
 {
+	State&state;
+	Hid hid;
 	s2 alive;
 	s2 level;
 	f3 HP,MP,AP;
 	Skill skill[5];
 	Equipment equipment[3];
+	Trigger<Damage_Handler> t_damaged;
+	Trigger<Event> t_die;
+
 
 	Hero(State&state,Hid hid,const Player_Config::Hero&hero,Hero_A&a):
 		Attribute_Table(hero,a.attribute_table_a),
 		Sp_State(a.sp_state_a),
+		state(state),
+		hid(hid),
 		alive(1),
 		level(hero.level),
 		skill
@@ -72,7 +83,9 @@ struct Hero:Attribute_Table,Sp_State
 			{state,hid,hero.equipment[0],a.equipment_a},
 			{state,hid,hero.equipment[1],a.equipment_a},
 			{state,hid,hero.equipment[2],a.equipment_a},
-		}
+		},
+		t_damaged(a.trigger_damage_handler_a),
+		t_die(a.trigger_event_a)
 	{}
 
 	void init()
@@ -85,5 +98,19 @@ struct Hero:Attribute_Table,Sp_State
 		HP=HP_lim();
 		MP=MP_init();
 		AP=AP_init();
+	}
+
+	auto die()
+	{
+		auto ret=t_die(state,hid);
+		if(ret==0)
+			alive=0;
+		return ret;
+	}
+
+	void damage(f3 x)
+	{
+		HP-=x;
+		if(x<eps)die();
 	}
 };
