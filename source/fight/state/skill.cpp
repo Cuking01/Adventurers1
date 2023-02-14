@@ -47,8 +47,8 @@ struct Skill
 		fun_use(skill.fun_use)
 	{}
 
-	void init(){fun_init(*this);}
-	s2 check(const Arg_t_6&arg){return fun_check(*this,arg);}
-	void use(const Arg_t_6&arg){return fun_use(*this,arg);}
+	void init(){if(fun_init)fun_init(*this);}
+	s2 check(const Arg_t_6&arg){return fun_check?fun_check(*this,arg):0;}
+	void use(const Arg_t_6&arg){fun_use(*this,arg);}
 
 };

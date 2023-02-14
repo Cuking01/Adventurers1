@@ -77,7 +77,11 @@ struct Hero:Attribute_Table,Sp_State
 
 	void init()
 	{
-
+		for(int i=0;i<5;i++)
+			skill[i].init();
+		for(int i=0;i<3;i++)
+			equipment[i].init();
+		
 		HP=HP_lim();
 		MP=MP_init();
 		AP=AP_init();

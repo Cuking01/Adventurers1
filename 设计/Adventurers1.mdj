@@ -11200,7 +11200,7 @@
 											"top": 2238,
 											"width": 359,
 											"height": 13,
-											"text": "+伤害值: f3",
+											"text": "+伤害值: Attribute",
 											"horizontalAlignment": 0
 										},
 										{
@@ -11239,23 +11239,6 @@
 										},
 										{
 											"_type": "UMLAttributeView",
-											"_id": "AAAAAAGF2QutlzrBN5Y=",
-											"_parent": {
-												"$ref": "AAAAAAGF2LOT5oSHzxo="
-											},
-											"model": {
-												"$ref": "AAAAAAGF2QutjzqRMSg="
-											},
-											"font": "Arial;13;0",
-											"left": 4533,
-											"top": 2283,
-											"width": 359,
-											"height": 13,
-											"text": "+tag: Tag",
-											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLAttributeView",
 											"_id": "AAAAAAGF2Rg9n88Zy3U=",
 											"_parent": {
 												"$ref": "AAAAAAGF2LOT5oSHzxo="
@@ -11265,27 +11248,10 @@
 											},
 											"font": "Arial;13;0",
 											"left": 4533,
-											"top": 2298,
+											"top": 2283,
 											"width": 359,
 											"height": 13,
 											"text": "+伤害附加效果表：Trigger",
-											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLAttributeView",
-											"_id": "AAAAAAGF6IxogI3BNB8=",
-											"_parent": {
-												"$ref": "AAAAAAGF2LOT5oSHzxo="
-											},
-											"model": {
-												"$ref": "AAAAAAGF6IxoYY2Rzro="
-											},
-											"font": "Arial;13;0",
-											"left": 4533,
-											"top": 2313,
-											"width": 359,
-											"height": 13,
-											"text": "+伤害buff表: Attribute",
 											"horizontalAlignment": 0
 										},
 										{
@@ -11299,10 +11265,27 @@
 											},
 											"font": "Arial;13;0",
 											"left": 4533,
-											"top": 2328,
+											"top": 2298,
 											"width": 359,
 											"height": 13,
 											"text": "+护甲魔抗buff表（破甲破魔表）: Attribute",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLAttributeView",
+											"_id": "AAAAAAGF2QutlzrBN5Y=",
+											"_parent": {
+												"$ref": "AAAAAAGF2LOT5oSHzxo="
+											},
+											"model": {
+												"$ref": "AAAAAAGF2QutjzqRMSg="
+											},
+											"font": "Arial;13;0",
+											"left": 4533,
+											"top": 2313,
+											"width": 359,
+											"height": 13,
+											"text": "+tag: Tag",
 											"horizontalAlignment": 0
 										}
 									],
@@ -11310,7 +11293,7 @@
 									"left": 4528,
 									"top": 2233,
 									"width": 369,
-									"height": 113
+									"height": 98
 								},
 								{
 									"_type": "UMLOperationCompartmentView",
@@ -11323,7 +11306,7 @@
 									},
 									"font": "Arial;13;0",
 									"left": 4528,
-									"top": 2346,
+									"top": 2331,
 									"width": 369,
 									"height": 10
 								},
@@ -11428,7 +11411,7 @@
 											"top": 2399,
 											"width": 255,
 											"height": 13,
-											"text": "Tag（成员均为位域）"
+											"text": "Tag"
 										},
 										{
 											"_type": "LabelView",
@@ -11500,7 +11483,7 @@
 											"top": 2422,
 											"width": 255,
 											"height": 13,
-											"text": "+直接or间接: 1",
+											"text": "+直接or间接: u0",
 											"horizontalAlignment": 0
 										},
 										{
@@ -11517,7 +11500,7 @@
 											"top": 2437,
 											"width": 255,
 											"height": 13,
-											"text": "+物理or魔法or真实: 2",
+											"text": "+物理or魔法or真实: u0",
 											"horizontalAlignment": 0
 										},
 										{
@@ -11534,7 +11517,7 @@
 											"top": 2452,
 											"width": 255,
 											"height": 13,
-											"text": "+单体or群体: 1",
+											"text": "+单体or群体: u0",
 											"horizontalAlignment": 0
 										},
 										{
@@ -11551,7 +11534,7 @@
 											"top": 2467,
 											"width": 255,
 											"height": 13,
-											"text": "+是否必中（无视闪避）: 1",
+											"text": "+是否必中（无视闪避）: u0",
 											"horizontalAlignment": 0
 										},
 										{
@@ -11568,7 +11551,7 @@
 											"top": 2482,
 											"width": 255,
 											"height": 13,
-											"text": "+是否视为普攻: 1",
+											"text": "+是否视为普攻: u0",
 											"horizontalAlignment": 0
 										},
 										{
@@ -11585,7 +11568,7 @@
 											"top": 2497,
 											"width": 255,
 											"height": 13,
-											"text": "+是否为暴击伤害: 1",
+											"text": "+是否为暴击伤害: u0",
 											"horizontalAlignment": 0
 										}
 									],
@@ -20440,7 +20423,7 @@
 											"_parent": {
 												"$ref": "AAAAAAGF2LOT5oR/12c="
 											},
-											"name": "Tag（成员均为位域）",
+											"name": "Tag",
 											"attributes": [
 												{
 													"_type": "UMLAttribute",
@@ -20449,7 +20432,7 @@
 														"$ref": "AAAAAAGF2L0GEee2G1o="
 													},
 													"name": "直接or间接",
-													"type": "1"
+													"type": "u0"
 												},
 												{
 													"_type": "UMLAttribute",
@@ -20458,7 +20441,7 @@
 														"$ref": "AAAAAAGF2L0GEee2G1o="
 													},
 													"name": "物理or魔法or真实",
-													"type": "2"
+													"type": "u0"
 												},
 												{
 													"_type": "UMLAttribute",
@@ -20467,7 +20450,7 @@
 														"$ref": "AAAAAAGF2L0GEee2G1o="
 													},
 													"name": "单体or群体",
-													"type": "1"
+													"type": "u0"
 												},
 												{
 													"_type": "UMLAttribute",
@@ -20476,7 +20459,7 @@
 														"$ref": "AAAAAAGF2L0GEee2G1o="
 													},
 													"name": "是否必中（无视闪避）",
-													"type": "1"
+													"type": "u0"
 												},
 												{
 													"_type": "UMLAttribute",
@@ -20485,7 +20468,7 @@
 														"$ref": "AAAAAAGF2L0GEee2G1o="
 													},
 													"name": "是否视为普攻",
-													"type": "1"
+													"type": "u0"
 												},
 												{
 													"_type": "UMLAttribute",
@@ -20494,7 +20477,7 @@
 														"$ref": "AAAAAAGF2L0GEee2G1o="
 													},
 													"name": "是否为暴击伤害",
-													"type": "1"
+													"type": "u0"
 												}
 											]
 										}
@@ -20507,7 +20490,7 @@
 												"$ref": "AAAAAAGF2LOT5oR/12c="
 											},
 											"name": "伤害值",
-											"type": "f3"
+											"type": "Attribute"
 										},
 										{
 											"_type": "UMLAttribute",
@@ -20529,15 +20512,6 @@
 										},
 										{
 											"_type": "UMLAttribute",
-											"_id": "AAAAAAGF2QutjzqRMSg=",
-											"_parent": {
-												"$ref": "AAAAAAGF2LOT5oR/12c="
-											},
-											"name": "tag",
-											"type": "Tag"
-										},
-										{
-											"_type": "UMLAttribute",
 											"_id": "AAAAAAGF2Rg9ls7pqhA=",
 											"_parent": {
 												"$ref": "AAAAAAGF2LOT5oR/12c="
@@ -20547,21 +20521,21 @@
 										},
 										{
 											"_type": "UMLAttribute",
-											"_id": "AAAAAAGF6IxoYY2Rzro=",
-											"_parent": {
-												"$ref": "AAAAAAGF2LOT5oR/12c="
-											},
-											"name": "伤害buff表",
-											"type": "Attribute"
-										},
-										{
-											"_type": "UMLAttribute",
 											"_id": "AAAAAAGF6L7zXJG4qeM=",
 											"_parent": {
 												"$ref": "AAAAAAGF2LOT5oR/12c="
 											},
 											"name": "护甲魔抗buff表（破甲破魔表）",
 											"type": "Attribute"
+										},
+										{
+											"_type": "UMLAttribute",
+											"_id": "AAAAAAGF2QutjzqRMSg=",
+											"_parent": {
+												"$ref": "AAAAAAGF2LOT5oR/12c="
+											},
+											"name": "tag",
+											"type": "Tag"
 										}
 									]
 								},

@@ -22,10 +22,18 @@ struct Group
 			{state,{gid,2},group.hero[2],a.hero_a},
 			{state,{gid,3},group.hero[3],a.hero_a},
 			{state,{gid,4},group.hero[4],a.hero_a}
-		}
+		},
+		script(state,gid,group.script)
 	{}
 
-	Hero& operator[](s2 pos) noexcept
+	void init()
+	{
+		for(int i=0;i<5;i++)
+			hero[i].init();
+		script.init();
+	}
+
+	Hero& operator[](s1 pos) noexcept
 	{
 		return hero[pos];
 	}

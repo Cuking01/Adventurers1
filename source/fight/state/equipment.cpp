@@ -13,4 +13,10 @@ struct Equipment:Skill
 	Equipment(State&state,Hid hid,const Player_Config::Equipment &equipment,Equipment_A&a):
 		Skill(state,hid,Base_Config::equipment[equipment.id].skill,equipment.level,a.skill_a)
 	{}
+
+	void init()
+	{
+		Skill::init();
+	}
+	
 };

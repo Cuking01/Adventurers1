@@ -16,7 +16,7 @@ template<typename TK,typename TV>
 struct Map
 {
 	using T=Map_T<TK,TV>;
-	using A=Mem::Pool<Set_Node<T>,32>;
+	using A=Mem::Pool<Set_Node<T>,31>;
 	Set<T> set;
 
 	Map(A&a):set(a){}

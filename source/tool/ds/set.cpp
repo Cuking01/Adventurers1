@@ -32,7 +32,7 @@ template<typename T>
 struct Set
 {
 	using Node=Set_Node<T>;
-	using A=Mem::Pool<Node,32>;
+	using A=Mem::Pool<Node,31>;
 	A&allocator;
 	Node*root;
 	u3 sz;
