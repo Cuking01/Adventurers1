@@ -1,40 +1,30 @@
 #pragma once
 
-struct Group_A
-{
-	Hero_A hero_a;
-	Group_A(Mem::SA&sa):
-		hero_a(sa)
-	{}
-};
+Group_A::Group_A(Mem::SA&sa):
+	hero_a(sa)
+{}
 
-struct Group
-{
-	Hero hero[5];
-	Script script;
+Group::Group(State&state,s1 gid,const Player_Config::Group&group,Group_A&a):
+	hero
+	{
+		{state,{gid,0},group.hero[0],a.hero_a},
+		{state,{gid,1},group.hero[1],a.hero_a},
+		{state,{gid,2},group.hero[2],a.hero_a},
+		{state,{gid,3},group.hero[3],a.hero_a},
+		{state,{gid,4},group.hero[4],a.hero_a}
+	},
+	script(state,gid,group.script)
+{}
 
+void Group::init()
+{
+	for(int i=0;i<5;i++)
+		hero[i].init();
 	
-	Group(State&state,s1 gid,const Player_Config::Group&group,Group_A&a):
-		hero
-		{
-			{state,{gid,0},group.hero[0],a.hero_a},
-			{state,{gid,1},group.hero[1],a.hero_a},
-			{state,{gid,2},group.hero[2],a.hero_a},
-			{state,{gid,3},group.hero[3],a.hero_a},
-			{state,{gid,4},group.hero[4],a.hero_a}
-		},
-		script(state,gid,group.script)
-	{}
+	//script.init();//script的初始化放到战前单独执行
+}
 
-	void init()
-	{
-		for(int i=0;i<5;i++)
-			hero[i].init();
-		script.init();
-	}
-
-	Hero& operator[](s1 pos) noexcept
-	{
-		return hero[pos];
-	}
-};
+Hero& Group::operator[](s1 pos) noexcept
+{
+	return hero[pos];
+}

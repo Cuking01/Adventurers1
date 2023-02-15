@@ -1,21 +1,31 @@
 #pragma once
 
-struct State_A
+State_A::State_A(Mem::SA&sa):
+	group_a(sa),
+	damage_a(sa)
+{}
+
+struct Resource
 {
-	Group_A group_a;
-	Damage_A damage_a;
-	State_A(Mem::SA&sa):
-		group_a(sa),
-		damage_a(sa)
+	u2 count;
+	std::mt19937_64 rnd;
+	Damage_A&damage_a;
+
+	Resource(u3 seed,Damage_A&damage_a):
+		count(0),
+		rnd(seed),
+		damage_a(damage_a)
 	{}
 };
 
-struct State
+struct State:Resource
 {
 	State_A&a;
 	Group group[2];
 	s2 time;
-	State(const Player_Config::Group&ga,const Player_Config::Group&gb,State_A&a):
+
+	State(const Player_Config::Group&ga,const Player_Config::Group&gb,u3 seed,State_A&a):
+		Resource(seed,a.damage_a),
 		a(a),
 		group
 		{
@@ -50,44 +60,26 @@ struct State
 		return 2;
 	}
 
-	void cause_damage(Damage damage)
-	{
-		[[maybe_unused]] Hid from=damage.from;
-		Hid to=damage.to;
+	// void cause_damage(Damage damage)
+	// {
+		
 
-		f3 val=damage.x();
+	// }
 
-		auto type=damage.tag.物理_魔法_真实;
-		if(type==DT::物理)
-		{
-			damage.破甲.x=hero(to).P_res();
-			val=val/(1+0.01*damage.破甲());
-		}
-		else if(type==DT::魔法)
-		{
-			damage.破魔.x=hero(to).M_res();
-			val=val/(1+0.01*damage.破魔());
-		}
-		else
-		{
-			//真实伤害啥也不干
-		}
-
-		hero(to).damage(val);
-		damage.addition(*this,damage);
-
-	}
-
-	void use_skill()
-	{
-
-	}
-
+	//0,1表示对应队伍获胜，2表示平局.
 	s2 start()
 	{
+		init();
+		for(s1 gid=0;gid<2;gid++)
+			if(auto ret=group[gid].script.init();ret)
+				return gid^1;
+		
+
 		for(time=0;time<1000;time++)
 		{
 			
+
+
 			if(auto ret=check_win();~ret)
 				return ret;
 		}

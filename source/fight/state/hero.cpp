@@ -108,9 +108,59 @@ struct Hero:Attribute_Table,Sp_State
 		return ret;
 	}
 
-	void damage(f3 x)
+	void damaged(f3 x)
 	{
 		HP-=x;
 		if(x<eps)die();
+	}
+
+	void cause_damage(Hid to,f3 x,Damage::Tag tag)
+	{
+		Hid from=hid;
+		Damage damage(x,from,to,tag, state.damage_a);
+
+		f3 val=damage.x();
+
+		auto type=damage.tag.物理_魔法_真实;
+		if(type==DT::物理)
+		{
+			damage.破甲.x=state[to].P_res();
+			val/=1+0.01*damage.破甲();
+		}
+		else if(type==DT::魔法)
+		{
+			damage.破魔.x=state[to].M_res();
+			val/=1+0.01*damage.破魔();
+		}
+		else
+		{
+			//真实伤害啥也不干
+		}
+
+		state[to].damaged(val);
+		damage.addition(*this,damage);
+	}
+
+	//0:正常释放,正数:技能内部检查不通过,负数:其他
+	//id参数，0~4表示英雄技能，5~7表示装备技能
+	s2 use_skill(s2 id,const Arg_t_6&arg)
+	{
+		if(id>=0&&id<5)
+		{
+			if(auto ret=skill[id].check(arg);ret)
+				return ret;
+			skill[id].use(arg);
+		}
+		else if(id>=5&&id<8)
+		{
+			if(auto ret=equipment[id-5].check(arg);ret)
+				return ret;
+			equipment[id-5].use(arg);
+		}
+		else
+		{
+			return -1;
+		}
+		return 0;
 	}
 };

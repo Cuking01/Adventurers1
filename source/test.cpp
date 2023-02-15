@@ -3,6 +3,7 @@
 #include "memory.h"
 #include "fight.h"
 
+#include "fight.hpp"
 
 #define Warning(...) printf(__VA_ARGS__)
 
@@ -10,10 +11,6 @@
 #include "memory.cpp"
 #include "fight.cpp"
 
-#include<random>
-
-
-#include<set>
 int main()
 {
 	Mem::SA allocor1(Mem::ra);

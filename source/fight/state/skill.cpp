@@ -23,8 +23,14 @@ struct Skill
 	{
 		u2 default_check:1;
 		u2 need_target:1;
-		u2 group_limit:1;
+		u2 group_restrict:1;
 		u2 target_group:1;
+		Tag(Base_Config::Skill::Tag tag):
+			default_check(tag.default_check),
+			need_target(tag.need_target),
+			group_restrict(tag.group_restrict),
+			target_group(tag.target_group)
+		{}
 	};
 	Tag tag;
 
@@ -41,14 +47,23 @@ struct Skill
 		CD_lim(skill.cd(level),a.attribute_a),
 		st{},
 		CD(skill.cd_init(level)),
-		tag{},
+		tag{skill.tag},
 		fun_init(skill.fun_init),
 		fun_check(skill.fun_check),
 		fun_use(skill.fun_use)
 	{}
 
 	void init(){if(fun_init)fun_init(*this);}
-	s2 check(const Arg_t_6&arg){return fun_check?fun_check(*this,arg):0;}
+	
+	//0表示正常
+	s2 check(const Arg_t_6&arg)
+	{
+		if(tag.default_check)
+		{
+			
+		}
+		return fun_check?fun_check(*this,arg):0;
+	}
 	void use(const Arg_t_6&arg){fun_use(*this,arg);}
 
 };

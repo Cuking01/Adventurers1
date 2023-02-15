@@ -10,7 +10,7 @@ struct Skill
 
 	struct Tag
 	{
-		u2 default_target_check:1;
+		u2 default_check:1;
 		u2 need_target:1;
 		u2 group_restrict:1;
 		u2 target_group:1;
