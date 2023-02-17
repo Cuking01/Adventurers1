@@ -3,6 +3,7 @@
 #include "memory.h"
 #include "fight.h"
 
+#include "tool.hpp"
 #include "fight.hpp"
 
 #define Warning(...) printf(__VA_ARGS__)
