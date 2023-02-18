@@ -10252,7 +10252,7 @@
 								"$ref": "AAAAAAGF05flbiyZf38="
 							},
 							"lineStyle": 1,
-							"points": "5167:2207;5151:2081"
+							"points": "5160:2207;5147:2081"
 						},
 						{
 							"_type": "UMLClassView",
@@ -10282,7 +10282,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 3896,
+											"left": 3880,
 											"top": -2192,
 											"height": 13
 										},
@@ -10293,7 +10293,7 @@
 												"$ref": "AAAAAAGF05flbyyakz0="
 											},
 											"font": "Arial;13;1",
-											"left": 5045,
+											"left": 5037,
 											"top": 2215,
 											"width": 262,
 											"height": 13,
@@ -10307,7 +10307,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 3896,
+											"left": 3880,
 											"top": -2192,
 											"width": 145.2216796875,
 											"height": 13,
@@ -10321,14 +10321,14 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 3896,
+											"left": 3880,
 											"top": -2192,
 											"height": 13,
 											"horizontalAlignment": 1
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 5040,
+									"left": 5032,
 									"top": 2208,
 									"width": 272,
 									"height": 25,
@@ -10365,11 +10365,45 @@
 												"$ref": "AAAAAAGF6OEdTtVJNTY="
 											},
 											"font": "Arial;13;0",
-											"left": 5045,
+											"left": 5037,
 											"top": 2238,
 											"width": 262,
 											"height": 13,
 											"text": "+是否需要默认检查: 1",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLAttributeView",
+											"_id": "AAAAAAGGZNpNDQ3htvY=",
+											"_parent": {
+												"$ref": "AAAAAAGF05flbyyfNtc="
+											},
+											"model": {
+												"$ref": "AAAAAAGGZNpM8w2xXM0="
+											},
+											"font": "Arial;13;0",
+											"left": 5037,
+											"top": 2253,
+											"width": 262,
+											"height": 13,
+											"text": "+是否需要消耗资源检查: 1",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLAttributeView",
+											"_id": "AAAAAAGGZNpQdA8xG6c=",
+											"_parent": {
+												"$ref": "AAAAAAGF05flbyyfNtc="
+											},
+											"model": {
+												"$ref": "AAAAAAGGZNpQaQ8BIs4="
+											},
+											"font": "Arial;13;0",
+											"left": 5037,
+											"top": 2268,
+											"width": 262,
+											"height": 13,
+											"text": "+是否需要英雄特殊状态检查: 1",
 											"horizontalAlignment": 0
 										},
 										{
@@ -10382,11 +10416,11 @@
 												"$ref": "AAAAAAGF07m6mCxU98M="
 											},
 											"font": "Arial;13;0",
-											"left": 5045,
-											"top": 2253,
+											"left": 5037,
+											"top": 2283,
 											"width": 262,
 											"height": 13,
-											"text": "+是否需要目标: 1",
+											"text": "+是否需要目标检查: 1",
 											"horizontalAlignment": 0
 										},
 										{
@@ -10399,8 +10433,8 @@
 												"$ref": "AAAAAAGF40RODPwxdLA="
 											},
 											"font": "Arial;13;0",
-											"left": 5045,
-											"top": 2268,
+											"left": 5037,
+											"top": 2298,
 											"width": 262,
 											"height": 13,
 											"text": "+是否限制阵营: 1",
@@ -10416,8 +10450,8 @@
 												"$ref": "AAAAAAGF07vLcjjtrIU="
 											},
 											"font": "Arial;13;0",
-											"left": 5045,
-											"top": 2283,
+											"left": 5037,
+											"top": 2313,
 											"width": 262,
 											"height": 13,
 											"text": "+目标阵营: 1",
@@ -10425,10 +10459,10 @@
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 5040,
+									"left": 5032,
 									"top": 2233,
 									"width": 272,
-									"height": 68
+									"height": 98
 								},
 								{
 									"_type": "UMLOperationCompartmentView",
@@ -10440,8 +10474,8 @@
 										"$ref": "AAAAAAGF05flbiyXlU8="
 									},
 									"font": "Arial;13;0",
-									"left": 5040,
-									"top": 2301,
+									"left": 5032,
+									"top": 2331,
 									"width": 272,
 									"height": 10
 								},
@@ -10456,7 +10490,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 1984,
+									"left": 1976,
 									"top": -1520,
 									"width": 10,
 									"height": 10
@@ -10472,7 +10506,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 1984,
+									"left": 1976,
 									"top": -1520,
 									"width": 10,
 									"height": 10
@@ -10483,10 +10517,10 @@
 							},
 							"font": "Arial;13;0",
 							"containerChangeable": true,
-							"left": 5040,
+							"left": 5032,
 							"top": 2208,
 							"width": 272,
-							"height": 129,
+							"height": 133,
 							"nameCompartment": {
 								"$ref": "AAAAAAGF05flbyyakz0="
 							},
@@ -19734,7 +19768,7 @@
 												"$ref": "AAAAAAGFrJRuBHXu+/A="
 											},
 											"name": "Tag（成员均为位域）",
-											"documentation": "当没有目标或仅有一个时，可以启用默认检查。\n首先检查状态，冷却量是否足够，行动力，法力是否足够。如果不足则检查不通过。\n之后如果不需要目标则直接返回检查通过，如果需要目标则还会检查目标是否处于所要求的特定阵营，如果是敌方则检查是否存活，是否被嘲讽保护，是否处于潜行。",
+											"documentation": "检查分为默认检查和自定义检查：\n默认检查分三步：\n首先进行消耗性资源检查：冷却量是否足够，行动力，法力是否足够。\n然后进行英雄特殊状态检查：：眩晕，沉默，致盲。\n最后进行目标检查：目标参数是否正确，阵营限制，是否被嘲讽保护，是否处于免疫状态。\n之后进行自定义检查，如果检查函数指针非空则调用并进行检查。\n",
 											"attributes": [
 												{
 													"_type": "UMLAttribute",
@@ -19747,11 +19781,29 @@
 												},
 												{
 													"_type": "UMLAttribute",
+													"_id": "AAAAAAGGZNpM8w2xXM0=",
+													"_parent": {
+														"$ref": "AAAAAAGF05flbiyXlU8="
+													},
+													"name": "是否需要消耗资源检查",
+													"type": "1"
+												},
+												{
+													"_type": "UMLAttribute",
+													"_id": "AAAAAAGGZNpQaQ8BIs4=",
+													"_parent": {
+														"$ref": "AAAAAAGF05flbiyXlU8="
+													},
+													"name": "是否需要英雄特殊状态检查",
+													"type": "1"
+												},
+												{
+													"_type": "UMLAttribute",
 													"_id": "AAAAAAGF07m6mCxU98M=",
 													"_parent": {
 														"$ref": "AAAAAAGF05flbiyXlU8="
 													},
-													"name": "是否需要目标",
+													"name": "是否需要目标检查",
 													"type": "1"
 												},
 												{

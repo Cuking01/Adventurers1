@@ -58,19 +58,100 @@ hero[0x000]=
 		},
 		//1,普攻
 		{
-			
+			.name=L"skill1",
+			.description=L"skill1",
+			.attribute_table={},
+			.cd={0.5,0},
+			.cd_init={0,0},
+			.AP_use={100,-0.5},
+			.MP_use={0,0},
+			.tag=
+			{
+				.consumption_check=1,
+				.sp_state_check=1,
+				.target_check=1,
+				.group_restrict=1,
+				.target_group=1
+			},
+			.fun_init=lambda_Skill_init{},
+			.fun_check=nullptr,
+			.fun_use=lambda_Skill_use
+			{
+				auto&state=skill.state;
+				auto&hero=state[skill.hid];
+				hero.cause_damage
+				(
+					arg.I0,
+					hero.ATK()*(1+0.02*skill.level),
+					{DT::直接,DT::物理,DT::单体,DT::普攻,0,0}
+				);
+			}
 		},
 		//2,主动1
 		{
+			.name=L"skill2",
+			.description=L"skill2",
+			.attribute_table={},
+			.cd={1,0},
+			.cd_init={1,0},
+			.AP_use={0,0},
+			.MP_use={0,0},
+			.tag={},
+			.fun_init=lambda_Skill_init
+			{
 
+			},
+			//被动技能的check恒返回0
+			.fun_check=lambda_Skill_check
+			{
+				return 0;
+			},
+			//被动技能的use恒为空指针.
+			.fun_use=nullptr
 		},
 		//3,主动2
 		{
+			.name=L"skill3",
+			.description=L"skill3",
+			.attribute_table={},
+			.cd={1,0},
+			.cd_init={1,0},
+			.AP_use={0,0},
+			.MP_use={0,0},
+			.tag={},
+			.fun_init=lambda_Skill_init
+			{
 
+			},
+			//被动技能的check恒返回0
+			.fun_check=lambda_Skill_check
+			{
+				return 0;
+			},
+			//被动技能的use恒为空指针.
+			.fun_use=nullptr
 		},
 		//4,主动3
 		{
+			.name=L"skill4",
+			.description=L"skill4",
+			.attribute_table={},
+			.cd={1,0},
+			.cd_init={1,0},
+			.AP_use={0,0},
+			.MP_use={0,0},
+			.tag={},
+			.fun_init=lambda_Skill_init
+			{
 
+			},
+			//被动技能的check恒返回0
+			.fun_check=lambda_Skill_check
+			{
+				return 0;
+			},
+			//被动技能的use恒为空指针.
+			.fun_use=nullptr
 		}
 	}
 

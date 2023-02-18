@@ -1,52 +1,52 @@
-#include "stdhead.h"
-#include "tool.h"
-#include "memory.h"
-#include "fight.h"
-
-#include "memory.hpp"
-#include "tool.hpp"
-#include "fight.hpp"
-
-#define Warning(...) printf(__VA_ARGS__)
-
-#include "tool.cpp"
-#include "memory.cpp"
-#include "fight.cpp"
+#include "head.h"
 
 int main()
 {
-	Mem::SA allocor1(Mem::ra);
-	Mem::Allocator<int> allocor2(allocor1);
-	Mem::Allocator_STL<int>allocor3(allocor1);
-	std::vector<int,decltype(allocor3)> vec(allocor3);
-	vec.push_back(123123);
+	Mem::SA allocor(Mem::ra);
 	
-	using namespace Fight::State;
+	using namespace Fight;
 
+	Player_Config::Group gc=
+	{
+		.hero=
+		{
+			{
+				.id=0,.level=60,
+				.equipment={{0,10},{0,10},{0,10}},
+				.skill={{5},{5},{5},{5},{5}},
+			},
+			{
+				.id=0,.level=60,
+				.equipment={{0,10},{0,10},{0,10}},
+				.skill={{5},{5},{5},{5},{5}},
+			},
+			{
+				.id=0,.level=60,
+				.equipment={{0,10},{0,10},{0,10}},
+				.skill={{5},{5},{5},{5},{5}},
+			},
+			{
+				.id=0,.level=60,
+				.equipment={{0,10},{0,10},{0,10}},
+				.skill={{5},{5},{5},{5},{5}},
+			},
+			{
+				.id=0,.level=60,
+				.equipment={{0,10},{0,10},{0,10}},
+				.skill={{5},{5},{5},{5},{5}},
+			}
+		},
 
-	Attribute_A allocor5(allocor1);
+		.script=
+		{
+			lambda_Script_init{return 0;},
+			lambda_Script_act{return 0;}
+		}
 
-	Damage_A allocor7(allocor1);
+	};
 
-	State_A state_a(allocor1);
+	State::State_A state_a(allocor);
 
-	Fight::Player_Config::Group gc;
-	State state(gc,gc,1ull,state_a);
-
-	Attribute attr(10,0,100,allocor5);
-
-	attr.add(5,Buff{{{},{}},lambda_Buff{bh.add+=5;return 0;}});
-	attr.add(8,Buff{{{},{}},lambda_Buff{bh.addp+=1;return 0;}});
-	attr.add(10,Buff{{{.D0=10},{}},lambda_Buff{bh.sub+=st.D0;return 0;}});
-
-	printf("%f\n",attr());
-
-	attr.erase(8);
-
-	printf("%f\n",attr());
-	puts("****");
-
-	Damage damage(0,{},{},{},allocor7);
-
+	State::State state(gc,gc,0ull,state_a);
 	
 }

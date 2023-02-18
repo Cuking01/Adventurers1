@@ -19,10 +19,12 @@ struct Skill
 
     struct Tag
     {
-        u2 default_check:1;
-        u2 need_target:1;
+        u2 consumption_check:1;
+        u2 sp_state_check:1;
+        u2 target_check:1;
         u2 group_restrict:1;
         u2 target_group:1;
+
         Tag(Base_Config::Skill::Tag tag);
     };
     Tag tag;
@@ -34,6 +36,9 @@ struct Skill
     Skill(State&state,Hid hid,const Base_Config::Skill&skill,s2 level,Skill_A&a);
     void init();
     
+    s2 consumption_check();
+    s2 sp_state_check();
+    s2 target_check(Hid target);
     //0表示正常
     s2 check(const Arg_t_6&arg);
     void use(const Arg_t_6&arg);
