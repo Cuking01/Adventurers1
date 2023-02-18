@@ -1,7 +1,7 @@
 #pragma once
 
 template<typename T>
-Set_Node<T>::void rotate()
+void Set_Node<T>::rotate()
 {
 	auto*p=f;
 	if(p->l==this)

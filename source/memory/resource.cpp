@@ -2,7 +2,6 @@
 
 namespace Resource
 {
-	std::atomic<u3> in_use;
 	void*alloc(u3 sz)
 	{
 		sz+=al;

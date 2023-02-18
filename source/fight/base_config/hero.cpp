@@ -1,23 +1,14 @@
 #pragma once
 
-struct Hero
+s2 Hero::id() const
 {
-	const wchar_t* name;
-	const wchar_t* description;
-	struct Tag{};
-	Tag tag;
-	Attribute_Table attribute_table;
-	Skill skill[5];
+	return this-hero;
+}
 
-	s2 id() const
-	{
-		return this-hero;
-	}
-	s2 check() const
-	{
-		return name!=nullptr;
-	}
-};
+s2 Hero::check() const
+{
+	return name!=nullptr;
+}
 
 Hero hero[0x300];
 

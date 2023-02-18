@@ -1,17 +1,9 @@
 #pragma once
 
-struct Equipment
+Equipment::id() const
 {
-	const wchar_t* name;
-	const wchar_t* description;
-	Attribute_Table attribute_table;
-	Skill skill;
-
-	s2 id() const
-	{
-		return this-equipment;
-	}
-};
+	return this-equipment;
+}
 
 Equipment equipment[0x300];
 

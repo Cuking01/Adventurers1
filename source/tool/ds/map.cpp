@@ -31,18 +31,18 @@ void Map<TK,TV>::erase(const TK&key) noexcept
 
 
 template<typename TK,typename TV>
-Set<T>::iterator Map<TK,TV>::find(const TK&key) noexcept
+Set<typename Map<TK,TV>::T>::iterator Map<TK,TV>::find(const TK&key) noexcept
 {
 	return set.find({key,TV()});
 }
 
 template<typename TK,typename TV>
-Set<T>::iterator Map<TK,TV>::begin() const noexcept
+Set<typename Map<TK,TV>::T>::iterator Map<TK,TV>::begin() const noexcept
 {
 	return set.begin();
 }
 template<typename TK,typename TV>
-Set<T>::iterator Map<TK,TV>::end() const noexcept
+Set<typename Map<TK,TV>::T>::iterator Map<TK,TV>::end() const noexcept
 {
 	return set.end();
 }

@@ -13,7 +13,7 @@ struct Trigger
     DS::Map<u2,T> map;
     using A=Trigger_A<T>;
     
-    Trigger(A&a):map(a.map_a){}
+    Trigger(A&a);
     void insert(u2 key,const T&e);
     void erase(u2 key);
     T* find(u2 key);

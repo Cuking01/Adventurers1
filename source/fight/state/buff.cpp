@@ -1,54 +1,21 @@
 #pragma once
 
-struct Buff_Helper
+Buff_Helper::Buff_Helper():add(0),sub(0),addp(1),subp(1){}
+f3 Buff_Helper::operator()(f3 x) const
 {
-	f3 add;
-	f3 sub;
-	f3 addp;
-	f3 subp;
-	Buff_Helper():add(0),sub(0),addp(1),subp(1){}
-	f3 operator()(f3 x) const
-	{
-		return x*addp*subp+add-sub;
-	}
-};
+	return x*addp*subp+add-sub;
+}
+Buff_Base::Tag::Tag(){pn=0;}
 
-struct Buff_Base
+s2 Buff::operator()(Attribute&attr,Buff_Helper&bh)
 {
-	struct Tag
-	{
-		//pn正负面 positive or negative
-		u2 pn:2;
-		Tag(){pn=0;}
-	};
-	Arg_t_5 st;
-	Tag tag;
-};
-
-
-struct Buff:Buff_Base
+	return fun(attr,bh,st);
+}
+s2 Event::operator()(State&state,Hid hid)
 {
-	s2 (*fun)(Attribute&,Buff_Helper&,const Arg_t_5&);
-	s2 operator()(Attribute&attr,Buff_Helper&bh)
-	{
-		return fun(attr,bh,st);
-	}
-};
-
-struct Event:Buff_Base
+	return fun(state,hid,st);
+}
+s2 Damage_Handler::operator()(State&state,Damage&damage)
 {
-	s2 (*fun)(State&state,Hid,const Arg_t_5&);
-	s2 operator()(State&state,Hid hid)
-	{
-		return fun(state,hid,st);
-	}
-};
-
-struct Damage_Handler:Buff_Base
-{
-	s2 (*fun)(State&,Damage&,const Arg_t_5&);
-	s2 operator()(State&state,Damage&damage)
-	{
-		return fun(state,damage,st);
-	}
-};
+	return fun(state,damage,st);
+}

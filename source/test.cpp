@@ -3,6 +3,7 @@
 #include "memory.h"
 #include "fight.h"
 
+#include "memory.hpp"
 #include "tool.hpp"
 #include "fight.hpp"
 
@@ -16,7 +17,7 @@ int main()
 {
 	Mem::SA allocor1(Mem::ra);
 	Mem::Allocator<int> allocor2(allocor1);
-	Mem::Allocator_STL<int>allocor3(allocor2);
+	Mem::Allocator_STL<int>allocor3(allocor1);
 	std::vector<int,decltype(allocor3)> vec(allocor3);
 	vec.push_back(123123);
 	
@@ -30,7 +31,7 @@ int main()
 	State_A state_a(allocor1);
 
 	Fight::Player_Config::Group gc;
-	State state(gc,gc,state_a);
+	State state(gc,gc,1ull,state_a);
 
 	Attribute attr(10,0,100,allocor5);
 
