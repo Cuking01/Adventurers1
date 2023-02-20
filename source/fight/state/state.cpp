@@ -32,6 +32,11 @@ Group& State::operator[](s1 gid){return group[gid];}
 Hero& State::operator[](Hid hid){return group[hid.gid][hid.pos];}
 Hero& State::hero(Hid hid){return (*this)[hid];}
 
+u2 State::gen_bool(f3 p)
+{
+	return (rnd()&((1u<<31)-1))*(1.0/(1u<<31))<p;
+}
+
 s2 State::check_win()
 {
 	s2 cnt[2]={0,0};

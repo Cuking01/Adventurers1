@@ -45,6 +45,8 @@ Hero::Hero(State&state,Hid hid,const Player_Config::Hero&hero,Hero_A&a):
 		{state,hid,hero.equipment[1],a.equipment_a},
 		{state,hid,hero.equipment[2],a.equipment_a},
 	},
+	t_damage(a.trigger_damage_handler_a),
+	t_before_damaged(a.trigger_damage_handler_a),
 	t_damaged(a.trigger_damage_handler_a),
 	t_die(a.trigger_event_a)
 {}
@@ -69,16 +71,18 @@ auto Hero::die()
 	return ret;
 }
 
-void Hero::damaged(f3 x)
+s2 Hero::damaged(Hid from,f3 x,Damage::Tag tag)
 {
 	HP-=x;
 	if(x<eps)die();
 }
 
-void Hero::cause_damage(Hid to,f3 x,Damage::Tag tag)
+s2 Hero::cause_damage(Hid to,f3 x,Damage::Tag tag)
 {
-	Hid from=hid;
-	Damage damage(x,from,to,tag, state.damage_a);
+	Hid from=tag.无来源?Hid(-1):hid;
+
+	u2 crt=state.gen_bool(tag.可暴击?state[from].Crt():0.0);
+	Damage damage(x,from,to,crt,tag,state.damage_a);
 
 	f3 val=damage.x();
 
@@ -98,8 +102,15 @@ void Hero::cause_damage(Hid to,f3 x,Damage::Tag tag)
 		//真实伤害啥也不干
 	}
 
-	state[to].damaged(val);
+
+	state[to].t_before_damaged(state,damage);
+
+	if(auto ret=state[to].damaged(from,val,tag);ret)
+		return ret;
+
 	damage.addition(state,damage);
+
+	return 0;
 }
 
 //0:正常释放,正数:技能内部检查不通过,负数:其他

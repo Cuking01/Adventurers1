@@ -49,4 +49,7 @@ int main()
 
 	State::State state(gc,gc,0ull,state_a);
 	
+	DS::Set<int>::A allocor3(allocor);
+	DS::Set<int> a(allocor3);
+	DS::Set<int> b(a);
 }

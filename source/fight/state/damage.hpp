@@ -7,7 +7,8 @@ namespace Damage_Tag
 	enum T3:u0{单体,群体};
 	enum T4:u0{普攻=1};
 	enum T5:u0{必中=1};
-	enum T6:u0{暴击=1};
+	enum T6:u0{可暴击=1};
+	enum T7:u0{无来源=1};
 };
 
 struct Damage_A
@@ -26,14 +27,16 @@ struct Damage
 		u0 单体_群体;
 		u0 普攻;
 		u0 必中;
-		u0 暴击;
+		u0 可暴击;
+		u0 无来源;
 	};
 	Attribute x;
 	Hid from,to;
 	Trigger<Damage_Handler> addition;
 	Attribute 破甲,破魔;
+	u2 crt;
 	Tag tag;
 	
-	Damage(f3 x,Hid from,Hid to,Tag tag,Damage_A&a);
+	Damage(f3 x,Hid from,Hid to,u2 crt,Tag tag,Damage_A&a);
 
 };

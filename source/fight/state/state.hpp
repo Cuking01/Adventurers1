@@ -29,7 +29,7 @@ struct State:Resource
 	Group& operator[](s1 gid);
 	Hero& operator[](Hid hid);
 	Hero& hero(Hid hid);
-
+	u2 gen_bool(f3 p);
 	s2 check_win();
 
 	//0,1表示对应队伍获胜，2表示平局.

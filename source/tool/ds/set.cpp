@@ -73,6 +73,13 @@ Set<T>::Set(A&allocator):allocator(allocator)
 	_begin.t=nullptr;
 	sz=0;
 }
+template<typename T>
+Set<T>::Set(const Set<T>&set):
+	allocator(set.allocator)
+{
+	root=set.root;
+	sz=set.sz;
+}
 
 template<typename T>
 void Set<T>::destroy(Node*p)

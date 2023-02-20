@@ -28,6 +28,7 @@ struct Set
     }_begin;
 
     Set(A&allocator);
+    Set(const Set&set);
     ~Set();
     void destroy(Node*p);
     void splay(Node*p);
