@@ -47,7 +47,7 @@ int main()
 
 	State::State_A state_a(allocor);
 
-	State::State state(gc,gc,0ull,state_a);
+	State::State state(gc,gc,0ull,allocor);
 	
 	DS::Set<int>::A allocor3(allocor);
 	DS::Set<int> a(allocor3);

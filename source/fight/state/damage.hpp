@@ -30,6 +30,7 @@ struct Damage
 		u0 可暴击;
 		u0 无来源;
 	};
+	State&state;
 	Attribute x;
 	Hid from,to;
 	Trigger<Damage_Handler> addition;
@@ -37,6 +38,7 @@ struct Damage
 	u2 crt;
 	Tag tag;
 	
-	Damage(f3 x,Hid from,Hid to,u2 crt,Tag tag,Damage_A&a);
-
+	Damage(State&state,f3 x,Hid from,Hid to,u2 crt,Tag tag,Damage_A&a);
+	f3 operator()();
+	s2 act();
 };

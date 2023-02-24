@@ -46,3 +46,9 @@ Set<typename Map<TK,TV>::T>::iterator Map<TK,TV>::end() const noexcept
 {
 	return set.end();
 }
+
+template<typename TK,typename TV>
+u3 Map<TK,TV>::size() const noexcept
+{
+	return set.size();
+}

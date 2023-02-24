@@ -28,7 +28,7 @@ struct Hero_A
     Equipment_A equipment_a;
     Trigger_A<Event> trigger_event_a;
     Trigger_A<Damage_Handler> trigger_damage_handler_a;
-
+    Damage_A damage_a;
     Hero_A(Mem::SA&sa);
 };
 
@@ -51,9 +51,16 @@ struct Hero:Attribute_Table,Sp_State
     Hero(State&state,Hid hid,const Player_Config::Hero&hero,Hero_A&a);
 
     void init();
-    auto die();
-    s2 damaged(Hid from,f3 x,Damage::Tag tag);
-    s2 cause_damage(Hid to,f3 x,Damage::Tag tag);
+
+    void HP_recover(f3 x);
+    void MP_recover(f3 x);
+    void AP_recover(f3 x);
+
+    void recover();
+
+    s2 die();
+    s2 damaged(Damage&damage);
+    Damage& make_damage(Hid to,f3 x,Damage::Tag tag);
 
     //0:正常释放,正数:技能内部检查不通过,负数:其他
     //id参数，0~4表示英雄技能，5~7表示装备技能

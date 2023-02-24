@@ -21,7 +21,8 @@ Hero_A::Hero_A(Mem::SA&sa):
 	skill_a(sa),
 	equipment_a(sa),
 	trigger_event_a(sa),
-	trigger_damage_handler_a(sa)
+	trigger_damage_handler_a(sa),
+	damage_a(sa)
 {}
 
 Hero::Hero(State&state,Hid hid,const Player_Config::Hero&hero,Hero_A&a):
@@ -63,54 +64,67 @@ void Hero::init()
 	AP=AP_init();
 }
 
-auto Hero::die()
+void Hero::HP_recover(f3 x)
 {
-	auto ret=t_die(state,hid);
+	HP+=x;
+	f3 lim=HP_lim();
+	if(HP>lim)HP=lim;
+}
+
+void Hero::MP_recover(f3 x)
+{
+	MP+=x;
+	f3 lim=MP_lim();
+	if(MP>lim)MP=lim;
+}
+
+void Hero::AP_recover(f3 x)
+{
+	AP+=x;
+	f3 lim=AP_lim();
+	if(AP>lim)AP=lim;
+}
+
+void Hero::recover()
+{
+	HP_recover(HP_re()*0.1);
+	MP_recover(MP_re()*0.1);
+	if(!眩晕())
+	{
+		f3 x=(AP_re()-AP_re.x)*exAPre_profit();
+		if(x<0)x=0;
+		AP_recover(x*0.1);
+	}
+}
+
+s2 Hero::die()
+{
+	auto ret=t_die(state);
 	if(ret==0)
 		alive=0;
 	return ret;
 }
 
-s2 Hero::damaged(Hid from,f3 x,Damage::Tag tag)
+s2 Hero::damaged(Damage&damage)
 {
-	HP-=x;
-	if(x<eps)die();
+
+	HP-=damage();
+	if(HP<eps)die();
+	return 0;
 }
 
-s2 Hero::cause_damage(Hid to,f3 x,Damage::Tag tag)
+
+
+Damage& Hero::make_damage(Hid to,f3 x,Damage::Tag tag)
 {
 	Hid from=tag.无来源?Hid(-1):hid;
 
-	u2 crt=state.gen_bool(tag.可暴击?state[from].Crt():0.0);
-	Damage damage(x,from,to,crt,tag,state.damage_a);
+	u2 crt=state.gen_bool(tag.可暴击?state[hid].Crt():0.0);
+	Damage& damage=*state.damage_pool(state,x,from,to,crt,tag,state.damage_a);
 
-	f3 val=damage.x();
+	t_damage(state,damage);
 
-	auto type=damage.tag.物理_魔法_真实;
-	if(type==DT::物理)
-	{
-		damage.破甲.x=state[to].P_res();
-		val/=1+0.01*damage.破甲();
-	}
-	else if(type==DT::魔法)
-	{
-		damage.破魔.x=state[to].M_res();
-		val/=1+0.01*damage.破魔();
-	}
-	else
-	{
-		//真实伤害啥也不干
-	}
-
-
-	state[to].t_before_damaged(state,damage);
-
-	if(auto ret=state[to].damaged(from,val,tag);ret)
-		return ret;
-
-	damage.addition(state,damage);
-
-	return 0;
+	return damage;
 }
 
 //0:正常释放,正数:技能内部检查不通过,负数:其他

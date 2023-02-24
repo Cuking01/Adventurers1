@@ -31,8 +31,8 @@ struct Buff:Buff_Base
 
 struct Event:Buff_Base
 {
-    s2 (*fun)(State&state,Hid,const Arg_t_5&);
-    s2 operator()(State&state,Hid hid);
+    s2 (*fun)(State&state,const Arg_t_5&);
+    s2 operator()(State&state);
 };
 
 struct Damage_Handler:Buff_Base

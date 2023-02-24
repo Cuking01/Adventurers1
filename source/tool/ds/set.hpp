@@ -37,4 +37,5 @@ struct Set
     void erase(const T&e);
     iterator begin() const noexcept;
     iterator end() const noexcept;
+    u3 size() const noexcept;
 };

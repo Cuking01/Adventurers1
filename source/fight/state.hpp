@@ -6,6 +6,7 @@ namespace State
 #include "state/buff.hpp"
 #include "state/script.hpp"
 #include "state/trigger.hpp"
+#include "state/event_queue.hpp"
 #include "state/attribute.hpp"
 #include "state/attribute_table.hpp"
 #include "state/damage.hpp"

@@ -22,7 +22,10 @@ struct Map
     template<typename TKp,typename TVp>
     void insert(TKp&&key,TVp&&value);
     void erase(const TK&key) noexcept;
+
     Set<T>::iterator find(const TK&key) noexcept;
     Set<T>::iterator begin() const noexcept;
     Set<T>::iterator end() const noexcept;
+
+    u3 size() const noexcept;
 };

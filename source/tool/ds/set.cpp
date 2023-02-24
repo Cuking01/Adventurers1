@@ -218,3 +218,9 @@ Set<T>::iterator Set<T>::end() const noexcept
 {
 	return iterator{nullptr};
 }
+
+template<typename T>
+u3 Set<T>::size() const noexcept
+{
+	return sz;
+}

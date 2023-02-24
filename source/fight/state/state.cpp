@@ -2,22 +2,24 @@
 
 State_A::State_A(Mem::SA&sa):
 	group_a(sa),
-	damage_a(sa)
+	damage_a(sa),
+	event_queue_a(sa),
+	damage_pool(sa)
 {}
 
-Resource::Resource(u3 seed,Damage_A&damage_a):
+Resource::Resource(u3 seed):
 	count(0),
-	rnd(seed),
-	damage_a(damage_a)
+	rnd(seed)
 {}
 
-State::State(const Player_Config::Group&ga,const Player_Config::Group&gb,u3 seed,State_A&a):
-	Resource(seed,a.damage_a),
-	a(a),
+State::State(const Player_Config::Group&ga,const Player_Config::Group&gb,u3 seed,Mem::SA&sa):
+	State_A(sa),
+	Resource(seed),
+	event_queue(*this,event_queue_a),
 	group
 	{
-		{*this,0,ga,a.group_a},
-		{*this,1,gb,a.group_a}
+		{*this,0,ga,group_a},
+		{*this,1,gb,group_a}
 	},
 	time(0)
 {}
@@ -53,6 +55,14 @@ s2 State::check_win()
 }
 
 //0,1表示对应队伍获胜，2表示平局.
+
+void State::recover()
+{
+	for(s1 gid=0;gid<2;gid++)
+		for(s1 pos=0;pos<5;pos++)
+			hero({gid,pos}).recover();
+}
+
 s2 State::start()
 {
 	init();
@@ -63,9 +73,10 @@ s2 State::start()
 
 	for(time=0;time<1000;time++)
 	{
+		recover();
 		
 
-
+		event_queue.run(time);
 		if(auto ret=check_win();~ret)
 			return ret;
 	}

@@ -11,9 +11,9 @@ s2 Buff::operator()(Attribute&attr,Buff_Helper&bh)
 {
 	return fun(attr,bh,st);
 }
-s2 Event::operator()(State&state,Hid hid)
+s2 Event::operator()(State&state)
 {
-	return fun(state,hid,st);
+	return fun(state,st);
 }
 s2 Damage_Handler::operator()(State&state,Damage&damage)
 {

@@ -7,6 +7,7 @@ namespace State
 #include "state/trigger.cpp"
 #include "state/buff.cpp"
 #include "state/attribute.cpp"
+#include "state/event_queue.cpp"
 #include "state/damage.cpp"
 #include "state/attribute_table.cpp"
 #include "state/skill.cpp"
