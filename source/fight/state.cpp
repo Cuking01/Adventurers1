@@ -15,6 +15,7 @@ namespace State
 #include "state/hero.cpp"
 #include "state/script.cpp"
 #include "state/group.cpp"
+#include "state/report.cpp"
 #include "state/state.cpp"
 
 };

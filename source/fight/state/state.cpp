@@ -4,6 +4,7 @@ State_A::State_A(Mem::SA&sa):
 	group_a(sa),
 	damage_a(sa),
 	event_queue_a(sa),
+	report_a(sa),
 	damage_pool(sa)
 {}
 
@@ -16,6 +17,7 @@ State::State(const Player_Config::Group&ga,const Player_Config::Group&gb,u3 seed
 	State_A(sa),
 	Resource(seed),
 	event_queue(*this,event_queue_a),
+	report(report_a),
 	group
 	{
 		{*this,0,ga,group_a},

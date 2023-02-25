@@ -29,6 +29,7 @@ Hero::Hero(State&state,Hid hid,const Player_Config::Hero&hero,Hero_A&a):
 	Attribute_Table(hero,a.attribute_table_a),
 	Sp_State(a.sp_state_a),
 	state(state),
+	id(hero.id),
 	hid(hid),
 	alive(1),
 	level(hero.level),

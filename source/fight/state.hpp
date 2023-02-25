@@ -14,6 +14,7 @@ namespace State
 #include "state/equipment.hpp"
 #include "state/hero.hpp"
 #include "state/group.hpp"
+#include "state/report.hpp"
 #include "state/state.hpp"
 
 };

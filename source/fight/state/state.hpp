@@ -5,6 +5,7 @@ struct State_A
 	Group_A group_a;
 	Damage_A damage_a;
 	Event_Queue_A event_queue_a;
+	Report_A report_a;
 	Mem::Pool<Damage,31> damage_pool;
 	State_A(Mem::SA&sa);
 };
@@ -20,6 +21,7 @@ struct Resource
 struct State:State_A,Resource
 {
 	Event_Queue event_queue;
+	Report report;
 	Group group[2];
 	s2 time;
 
