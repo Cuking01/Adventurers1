@@ -41,4 +41,5 @@ struct Damage
 	Damage(State&state,f3 x,Hid from,Hid to,u2 crt,Tag tag,Damage_A&a);
 	f3 operator()();
 	s2 act();
+	void destroy();
 };

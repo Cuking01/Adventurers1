@@ -127,6 +127,14 @@ Damage& Hero::make_damage(Hid to,f3 x,Damage::Tag tag)
 	return damage;
 }
 
+s2 Hero::cause_damage(Hid to,f3 x,Damage::Tag tag)
+{
+	Damage& damage=make_damage(to,x,tag);
+	s2 ret=damage.act();
+	damage.destroy();
+	return ret;
+}
+
 //0:正常释放,正数:技能内部检查不通过,负数:其他
 //id参数，0~4表示英雄技能，5~7表示装备技能
 s2 Hero::use_skill(s2 id,const Arg_t_6&arg)

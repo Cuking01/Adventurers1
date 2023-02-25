@@ -61,6 +61,7 @@ struct Hero:Attribute_Table,Sp_State
     s2 die();
     s2 damaged(Damage&damage);
     Damage& make_damage(Hid to,f3 x,Damage::Tag tag);
+    s2 cause_damage(Hid to,f3 x,Damage::Tag tag);
 
     //0:正常释放,正数:技能内部检查不通过,负数:其他
     //id参数，0~4表示英雄技能，5~7表示装备技能

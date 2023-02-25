@@ -13,3 +13,17 @@ s2 Script::init()
 	return 0;
 }
 
+s2 Script::act()
+{
+	Skill_ID sid;
+	fun_act(state,gid,st,sid);
+	if(sid.check())
+	{
+		[[maybe_unused]]s2 ret=state[gid][sid.pos].use_skill(sid.id,sid.arg);
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}

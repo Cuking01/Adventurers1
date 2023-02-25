@@ -43,3 +43,8 @@ s2 Damage::act()
 	state[to].t_before_damaged(state,*this);
 	return state[to].damaged(*this);
 }
+
+void Damage::destroy()
+{
+	state.damage_pool<<this;
+}

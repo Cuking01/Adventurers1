@@ -40,7 +40,11 @@ int main()
 		.script=
 		{
 			lambda_Script_init{return 0;},
-			lambda_Script_act{return 0;}
+			lambda_Script_act
+			{
+				
+				return 0;
+			}
 		}
 
 	};
