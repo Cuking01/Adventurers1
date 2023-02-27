@@ -29,7 +29,6 @@ struct Report
 	template<typename... Args>
 	void write(fmt::wformat_string<Args...> fmt,const Args&... args);
 	
-
 	s2 length() const;
 
 	void save(FILE*fp) const;
