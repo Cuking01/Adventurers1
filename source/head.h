@@ -1,6 +1,8 @@
 #pragma once
 
 #include "stdhead.h"
+#include "otherhead.h"
+
 #include "tool.h"
 #include "memory.h"
 #include "fight.h"

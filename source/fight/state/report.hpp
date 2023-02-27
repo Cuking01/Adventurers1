@@ -1,8 +1,11 @@
 #pragma once
 
+
+
 struct Report_Block
 {
-	wchar_t s[60];
+	static constexpr s2 bs=60;
+	wchar_t s[bs];
 	Report_Block*next;
 	Report_Block();
 };
@@ -15,10 +18,22 @@ struct Report_A
 
 struct Report
 {
+	static constexpr s2 bs=Report_Block::bs;
 	Report_A&a;
 	Report_Block*head;
 	Report_Block*end;
 	s2 len;
 
 	Report(Report_A&a);
+
+	template<typename... Args>
+	void write(fmt::wformat_string<Args...> fmt,const Args&... args);
+	
+
+	s2 length() const;
+
+	void save(FILE*fp) const;
+	void save(wchar_t*tp) const;
+
 };
+
