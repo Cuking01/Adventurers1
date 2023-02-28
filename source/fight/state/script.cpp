@@ -20,10 +20,10 @@ s2 Script::act()
 	if(sid.check())
 	{
 		[[maybe_unused]]s2 ret=state[gid][sid.pos].use_skill(sid.id,sid.arg);
-		return 1;
+		return ret;
 	}
 	else
 	{
-		return 0;
+		return -1;
 	}
 }

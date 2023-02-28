@@ -39,6 +39,8 @@ struct State:State_A,Resource
 	//每帧的回复效果。
 	void recover();
 
+	void log_hero_state();
+
 	//0,1表示对应队伍获胜，2表示平局.
 	s2 start();
 };

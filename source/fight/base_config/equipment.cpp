@@ -1,6 +1,6 @@
 #pragma once
 
-Equipment::id() const
+s2 Equipment::id() const
 {
 	return this-equipment;
 }

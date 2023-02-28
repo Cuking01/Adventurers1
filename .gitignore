@@ -1,2 +1,4 @@
-/source/test.cppp
-*.exe
+/source/test/
+!/source/test/test.cpp
+!/source/test/make.cpp
+

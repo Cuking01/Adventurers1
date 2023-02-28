@@ -4,8 +4,8 @@
 
 struct Report_Block
 {
-	static constexpr s2 bs=60;
-	wchar_t s[bs];
+	static constexpr s2 bs=59;
+	wchar_t s[bs+1];
 	Report_Block*next;
 	Report_Block();
 };
@@ -26,9 +26,15 @@ struct Report
 
 	Report(Report_A&a);
 
-	template<typename... Args>
-	void write(fmt::wformat_string<Args...> fmt,const Args&... args);
+	void write(const wchar_t* str);
+	void write(const std::wstring&str);
+
+	// template<typename... Args>
+	// void write(fmt::wformat_string<Args...> fmt,const Args&... args);
 	
+	// template<typename... Args>
+	// void write(const wchar_t* fm,const Args&... args);
+
 	s2 length() const;
 
 	void save(FILE*fp) const;

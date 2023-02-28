@@ -65,6 +65,27 @@ void State::recover()
 			hero({gid,pos}).recover();
 }
 
+void State::log_hero_state()
+{
+	report.write(fmt::format(L"<------------------------第{:2.1f}秒------------------------>\n\n",time*0.1));
+	for(s1 gid=0;gid<2;gid++)
+	{
+		report.write(fmt::format(L"<------------------------队伍{:c}------------------------>\n\n",(wchar_t)('A'+gid)));
+
+		for(s1 pos=0;pos<5;pos++)
+		{
+			report.write(fmt::format(
+				L"{:s}: HP={:.2f}/{:.2f}  MP:{:.2f}/{:.2f}  AP:{:.2f}/{:.2f}\n",
+				Base_Config::hero[hero({gid,pos}).id].name,
+				hero({gid,pos}).HP,hero({gid,pos}).HP_lim(),
+				hero({gid,pos}).MP,hero({gid,pos}).MP_lim(),
+				hero({gid,pos}).AP,hero({gid,pos}).AP_lim()
+			));
+		}
+		report.write(L"\n");
+	}
+}
+
 s2 State::start()
 {
 	init();
@@ -77,10 +98,26 @@ s2 State::start()
 	{
 		recover();
 		
+		while(1)
+		{
+			s2 ret0=group[0].script.act();
+			if(auto ret=check_win();~ret)
+				return ret;
+
+			s2 ret1=group[1].script.act();
+			if(auto ret=check_win();~ret)
+				return ret;
+
+			//都没有正常释放技能则返回.
+			if(ret0&&ret1)break;
+		}
 
 		event_queue.run(time);
 		if(auto ret=check_win();~ret)
 			return ret;
+
+		if(time%50==0)
+			log_hero_state();
 	}
 	return 2;
 }

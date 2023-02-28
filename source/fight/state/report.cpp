@@ -26,16 +26,18 @@ void Report::save(FILE*fp) const
 	s2 tlen=len;
 	Report_Block*p=head;
 
-	while(tlen>60)
+	while(tlen>bs)
 	{
-		fwrite(p->s,sizeof(wchar_t),bs,fp);
+		p->s[bs]=L'\0';
+		fwprintf(fp,L"%ls",p->s);
 		p=p->next;
 		tlen-=bs;
 	}
 	
 	if(tlen>0)
 	{
-		fwrite(p->s,sizeof(wchar_t),tlen,fp);
+		p->s[tlen]=L'\0';
+		fwprintf(fp,L"%ls",p->s);
 	}
 }
 
@@ -60,20 +62,23 @@ void Report::save(wchar_t*tp) const
 	tp[tlen]=L'\0';
 }
 
-template<typename... Args>
-void Report::write(fmt::wformat_string<Args...> fmt,const Args&... args)
+void Report::write(const wchar_t* sp)
 {
-	std::wstring str=fmt::format(fmt,args...);
-	//太长的滚蛋
-	if(str.length()>10000)
-		return;
+	//最长10万
+	if(len>=100000)return;
 
-	s2 l=str.length();
+	s2 l=wcslen(sp);
+
+	//太长的滚蛋
+	if(l>100000)return;
+
 	s2 rlen=bs-len%bs;
-	wchar_t*sp=str.data();
+	len+=l;
+
 
 	s2 mlen=std::min(rlen,l);
-	memcpy(end->s,sp,mlen);
+	memcpy(end->s+bs-rlen,sp,mlen*sizeof(wchar_t));
+
 	sp+=mlen;
 	l-=mlen;
 
@@ -97,4 +102,9 @@ void Report::write(fmt::wformat_string<Args...> fmt,const Args&... args)
 		memcpy(end->s,sp,l*sizeof(wchar_t));
 	}
 
+}
+
+void Report::write(const std::wstring&str)
+{
+	write(str.data());
 }

@@ -70,6 +70,7 @@ s2 Skill::target_check(Hid target)
 //0表示正常
 s2 Skill::check(const Arg_t_6&arg)
 {
+	if(!state[hid].alive)return 0x101;
 	if(auto ret=consumption_check();ret)return ret;
 	if(auto ret=sp_state_check();ret)return ret;
 	if(auto ret=target_check(arg);ret)return ret;
