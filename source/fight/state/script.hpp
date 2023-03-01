@@ -2,9 +2,9 @@
 
 struct Skill_ID
 {
-    s1 pos;
-    s2 id;
-    Arg_t_6 arg;
+    s1 pos;  //释放者位置
+    s2 id;   //释放者技能编号
+    Arg_t_6 arg; //技能参数
     s2 check()
     {
         return pos>=0&&pos<5&&id>=0&&id<8;

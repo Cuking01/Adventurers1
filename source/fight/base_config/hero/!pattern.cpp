@@ -71,7 +71,8 @@ hero[0x000]=
 				.sp_state_check=1,
 				.target_check=1,
 				.group_restrict=1,
-				.target_group=1
+				.target_group=1,
+				.auto_consume=1
 			},
 			.fun_init=lambda_Skill_init{},
 			.fun_check=nullptr,
@@ -79,12 +80,14 @@ hero[0x000]=
 			{
 				auto&state=skill.state;
 				auto&hero=state[skill.hid];
+
 				hero.cause_damage
 				(
 					arg.I0,
 					hero.ATK()*(1+0.02*skill.level),
 					{DT::直接,DT::物理,DT::单体,DT::普攻,0,0}
 				);
+
 				// auto&damage=hero.make_damage
 				// (
 					

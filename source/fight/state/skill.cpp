@@ -9,7 +9,8 @@ Skill::Tag::Tag(Base_Config::Skill::Tag tag):
 			sp_state_check(tag.sp_state_check),
 			target_check(tag.target_check),
 			group_restrict(tag.group_restrict),
-			target_group(tag.target_group)
+			target_group(tag.target_group),
+			auto_consume(tag.auto_consume)
 		{}
 
 Skill::Skill(State&state,Hid hid,const Base_Config::Skill&skill,s2 level,Skill_A&a):
@@ -29,7 +30,11 @@ Skill::Skill(State&state,Hid hid,const Base_Config::Skill&skill,s2 level,Skill_A
 
 void Skill::init(){if(fun_init)fun_init(*this);}
 
-
+void Skill::CD_recover()
+{
+	if(CD>eps)
+		CD-=0.1;
+}
 
 s2 Skill::consumption_check()
 {
@@ -55,16 +60,23 @@ s2 Skill::target_check(Hid target)
 {
 	if(!tag.target_check)return 0;
 	if(!target.check())return 0x21;
-	if(tag.group_restrict&&target.gid!=tag.target_group)return 0x22;
-	if(target.gid==1)
+	if(tag.group_restrict&&target.gid!=(tag.target_group^hid.gid))return 0x22;
+	if(target.gid!=hid.gid)
 	{
-		target.gid^=hid.gid;
 		s2 cnt_嘲讽=0;
-		for(s2 i=0;i<5;i++)
+		for(s1 i=0;i<5;i++)
 			cnt_嘲讽+=state[target.gid][i].嘲讽()>eps;
 		if(cnt_嘲讽&&state[target].嘲讽()<eps)return 0x23;
 	}
 	return 0;
+}
+
+void Skill::auto_consume()
+{
+	auto& hero=state[hid];
+	hero.MP-=MP_use()*hero.MP_lim();
+	hero.AP-=AP_use();
+	CD+=CD_lim();
 }
 
 //0表示正常
@@ -76,4 +88,9 @@ s2 Skill::check(const Arg_t_6&arg)
 	if(auto ret=target_check(arg);ret)return ret;
 	return fun_check?fun_check(*this,arg):0;
 }
-void Skill::use(const Arg_t_6&arg){fun_use(*this,arg);}
+void Skill::use(const Arg_t_6&arg)
+{
+	if(tag.auto_consume)
+		auto_consume();
+	fun_use(*this,arg);
+}

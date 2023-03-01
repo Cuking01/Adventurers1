@@ -24,6 +24,7 @@ struct Skill
         u2 target_check:1;
         u2 group_restrict:1;
         u2 target_group:1;
+        u2 auto_consume:1;
 
         Tag(Base_Config::Skill::Tag tag);
     };
@@ -36,9 +37,12 @@ struct Skill
     Skill(State&state,Hid hid,const Base_Config::Skill&skill,s2 level,Skill_A&a);
     void init();
     
+    void CD_recover();
+
     s2 consumption_check();
     s2 sp_state_check();
     s2 target_check(Hid target);
+    void auto_consume();
     //0表示正常
     s2 check(const Arg_t_6&arg);
     void use(const Arg_t_6&arg);

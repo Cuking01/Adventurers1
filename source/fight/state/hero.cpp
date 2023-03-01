@@ -86,16 +86,23 @@ void Hero::AP_recover(f3 x)
 	if(AP>lim)AP=lim;
 }
 
+
 void Hero::recover()
 {
+	if(!alive)return;
 	HP_recover(HP_re()*0.1);
 	MP_recover(MP_re()*0.1);
-	if(!眩晕())
+	if(!(眩晕()>eps))
 	{
-		f3 x=(AP_re()-AP_re.x)*exAPre_profit();
+		f3 profit=exAPre_profit();
+		f3 x=AP_re()*profit+Base_Config::hero[id].attribute_table.AP_re(level)*(1-profit);
 		if(x<0)x=0;
 		AP_recover(x*0.1);
 	}
+	for(s1 sid=0;sid<5;sid++)
+		skill[sid].CD_recover();
+	for(s1 eid=0;eid<3;eid++)
+		equipment[eid].CD_recover();
 }
 
 s2 Hero::die()
