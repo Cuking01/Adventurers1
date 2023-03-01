@@ -5,7 +5,6 @@ f3 Buff_Helper::operator()(f3 x) const
 {
 	return x*addp*subp+add-sub;
 }
-Buff_Base::Tag::Tag(){pn=0;}
 
 s2 Buff::operator()(Attribute&attr,Buff_Helper&bh)
 {

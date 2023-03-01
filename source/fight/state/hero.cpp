@@ -65,6 +65,12 @@ void Hero::init()
 	AP=AP_init();
 }
 
+//战报中使用的名称
+std::wstring Hero::report_name() const
+{
+	return fmt::format(L"{:s}({:c},{:d})",Base_Config::hero[id].name,(wchar_t)('A'+hid.gid),hid.pos);
+};
+
 void Hero::HP_recover(f3 x)
 {
 	HP+=x;
@@ -115,8 +121,16 @@ s2 Hero::die()
 
 s2 Hero::damaged(Damage&damage)
 {
+	f3 val=damage();
+	Damage damage_tmp(state,val,damage.from,damage.to,damage.crt,damage.tag,state.damage_a);
 
-	HP-=damage();
+	if(s2 ret=t_damaged(state,damage_tmp);ret)
+		return ret;
+
+	val=damage_tmp();
+
+	state.report.write(fmt::format(L"[第{:4.1f}秒] {:s} 受到了 {:.2f} 点伤害\n",state.time*0.1,report_name(),val));
+	HP-=val;
 	if(HP<eps)die();
 	return 0;
 }

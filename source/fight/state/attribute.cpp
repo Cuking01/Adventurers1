@@ -9,7 +9,7 @@ Attribute::Attribute(f3 x,A&a):Attribute(x,0,inf,a){}
 Attribute::Attribute(f3 x,f3 min,f3 max,A&a):x(x),min(min),max(max),trigger(a.trigger_a){}
 void Attribute::add(u2 key,const Buff&buff)
 {
-	trigger.insert(key,buff);
+	trigger.add(key,buff);
 }
 void Attribute::erase(u2 key)
 {

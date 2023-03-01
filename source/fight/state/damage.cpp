@@ -40,7 +40,8 @@ f3 Damage::operator()()
 
 s2 Damage::act()
 {
-	state[to].t_before_damaged(state,*this);
+	if(s2 ret=state[to].t_before_damaged(state,*this);ret)
+		return ret;
 	return state[to].damaged(*this);
 }
 

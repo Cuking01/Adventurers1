@@ -13,6 +13,16 @@ Resource::Resource(u3 seed):
 	rnd(seed)
 {}
 
+u2 Resource::gen_bool(f3 p)
+{
+	return (rnd()&((1u<<31)-1))*(1.0/(1u<<31))<p;
+}
+
+u2 Resource::gen_id()
+{
+	return count++;
+}
+
 State::State(const Player_Config::Group&ga,const Player_Config::Group&gb,u3 seed,Mem::SA&sa):
 	State_A(sa),
 	Resource(seed),
@@ -36,10 +46,7 @@ Group& State::operator[](s1 gid){return group[gid];}
 Hero& State::operator[](Hid hid){return group[hid.gid][hid.pos];}
 Hero& State::hero(Hid hid){return (*this)[hid];}
 
-u2 State::gen_bool(f3 p)
-{
-	return (rnd()&((1u<<31)-1))*(1.0/(1u<<31))<p;
-}
+
 
 s2 State::check_win()
 {
@@ -92,20 +99,18 @@ void State::log_hero_state()
 	}
 }
 
-s2 State::start()
+s2 State::fight()
 {
-	init();
 	for(s1 gid=0;gid<2;gid++)
 		if(auto ret=group[gid].script.init();ret)
 			return gid^1;
 
 	log_hero_state();
-
 	for(time=1;time<=1000;time++)
 	{
 		recover();
 		
-		while(1)
+		for(s2 i=0;i<5;i++)
 		{
 			s2 ret0=group[0].script.act();
 			if(auto ret=check_win();~ret)
@@ -127,4 +132,15 @@ s2 State::start()
 			log_hero_state();
 	}
 	return 2;
+}
+
+s2 State::start()
+{
+	init();
+	s2 ret=fight();
+	if(ret>=0&&ret<=2)
+		log_hero_state();
+
+	report.write(fmt::format(L"战斗结束，{:s}\n",ret==0?L"队伍 A 获胜！":ret==1?L"队伍 B 获胜！":ret==2?L"双方势均力敌，战成平手！":fmt::format(L"内部错误:{:d}。\n",ret)));
+	return ret;
 }

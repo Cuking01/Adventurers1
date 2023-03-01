@@ -1,5 +1,11 @@
 #pragma once
 
+namespace Buff_Tag
+{
+    enum T1:u0{正面=1,负面=2};
+    enum T2:u0{不可驱散,可驱散};
+};
+
 struct Buff_Helper
 {
     f3 add;
@@ -15,11 +21,14 @@ struct Buff_Base
     struct Tag
     {
         //pn正负面 positive or negative
+        //1正面,2负面,0非正非负,3不合法
         u2 pn:2;
-        Tag();
+        u2 可否驱散:1;
     };
     Arg_t_5 st;
     Tag tag;
+    s2 驱散等级;
+
 };
 
 

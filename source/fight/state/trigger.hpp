@@ -14,7 +14,7 @@ struct Trigger
     using A=Trigger_A<T>;
     
     Trigger(A&a);
-    void insert(u2 key,const T&e);
+    void add(u2 key,const T&e);
     void erase(u2 key);
     T* find(u2 key);
     

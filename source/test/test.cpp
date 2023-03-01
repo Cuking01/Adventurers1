@@ -7,7 +7,7 @@ int main()
 	
 	using namespace Fight;
 
-	Player_Config::Group gc=
+	Player_Config::Group gc= 
 	{
 		.hero=
 		{
@@ -73,7 +73,11 @@ int main()
 		}
 
 	};
-	State::State state(gc,gc,0ull,allocor);
+	Player_Config::Group gc2=gc;
+	for(s2 i=0;i<5;i++)
+		gc2.hero[i].level=30;
+
+	State::State state(gc,gc2,0ull,allocor);
 	state.start();
 
 	//printf("%f\n",state.hero({0,0}).HP_lim.x);

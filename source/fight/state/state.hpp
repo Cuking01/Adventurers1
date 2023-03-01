@@ -16,6 +16,8 @@ struct Resource
 	std::mt19937_64 rnd;
 
 	Resource(u3 seed);
+	u2 gen_bool(f3 p);
+	u2 gen_id();
 };
 
 struct State:State_A,Resource
@@ -32,7 +34,7 @@ struct State:State_A,Resource
 	Group& operator[](s1 gid);
 	Hero& operator[](Hid hid);
 	Hero& hero(Hid hid);
-	u2 gen_bool(f3 p);
+	
 
 	s2 check_win();
 
@@ -42,5 +44,6 @@ struct State:State_A,Resource
 	void log_hero_state();
 
 	//0,1表示对应队伍获胜，2表示平局.
+	s2 fight();
 	s2 start();
 };

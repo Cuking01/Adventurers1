@@ -5,8 +5,8 @@
 
 hero[0x000]=
 {
-	.name=L"test_hero",
-	.description=L"the hero for test",
+	.name=L"王者铜",
+	.description=L"",
 	.tag={},
 	.attribute_table=
 	{
@@ -36,8 +36,8 @@ hero[0x000]=
 	{
 		//0,被动
 		{
-			.name=L"skill0",
-			.description=L"skill0",
+			.name=L"坚韧不屈",
+			.description=L"每次受到直接伤害后，获得一层坚韧不屈效果，英雄获得((3+0.1*L)*层数)%的伤害减免，最多叠加5层，4秒内不受伤害则层数清零",
 			.attribute_table={},
 			.cd={1,0},
 			.cd_init={1,0},
@@ -46,7 +46,31 @@ hero[0x000]=
 			.tag={},
 			.fun_init=lambda_Skill_init
 			{
+				//I0存储层数，I4存储上次受伤时间，D8存储每层减伤比例。
+				st.I0=0;
+				st.I4=0;
+				st.D8=0.01*(3+0.1*skill.level);
+				auto&state=skill.state;
+				auto&hero=state[skill.hid];
 
+				hero.t_damaged.add(state.gen_id(),
+				{
+					{{.P0=(void*)&st},{BT::正面,BT::不可驱散}},
+					lambda_Damage_Handler
+					{
+						damage.x.add(state.gen_id(),
+						{
+							{{.P0=st.P0}},
+							lambda_Buff
+							{
+								auto*p=(Arg_t_6*)st.P0;
+								bh.gsub*=(1-p->D8*p->I0);
+								return 0;
+							}
+						});
+						return 0;
+					}
+				});
 			},
 			//被动技能的check恒返回0
 			.fun_check=lambda_Skill_check

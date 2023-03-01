@@ -53,6 +53,8 @@ struct Hero:Attribute_Table,Sp_State
 
     void init();
 
+    std::wstring report_name() const;
+
     void HP_recover(f3 x);
     void MP_recover(f3 x);
     void AP_recover(f3 x);
