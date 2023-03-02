@@ -1,5 +1,6 @@
 #pragma once
-
+Hid::Hid():Hid(-1,-1)
+{}
 Hid::Hid(s2 x)
 {
     *(s2*)this=x;

@@ -3,7 +3,7 @@
 namespace Buff_Tag
 {
     enum T1:u0{正面=1,负面=2};
-    enum T2:u0{不可驱散,可驱散};
+    enum T2:u0{弱驱散,中驱散,强驱散,不可驱散};
 };
 
 struct Buff_Helper
@@ -23,12 +23,12 @@ struct Buff_Base
         //pn正负面 positive or negative
         //1正面,2负面,0非正非负,3不合法
         u2 pn:2;
-        u2 可否驱散:1;
+        u2 驱散等级:2;
     };
     Arg_t_5 st;
     Tag tag;
-    s2 驱散等级;
-
+    Hid hid;
+    const wchar_t*name;
 };
 
 

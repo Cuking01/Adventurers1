@@ -11,13 +11,13 @@ Event_Queue::Event_Queue(State&state,Event_Queue_A&a):
 	events(a.events_a)
 {}
 
-void Event_Queue::insert(s2 id,s2 t,const Event& event)
+void Event_Queue::add(u2 id,s2 t,const Event& event)
 {
 	time.insert(id,t);
 	events.insert(std::pair{t,id},event);
 }
 
-void Event_Queue::erase(s2 id)
+void Event_Queue::erase(u2 id)
 {
 	events.erase({time[id],id});
 	time.erase(id);
@@ -34,5 +34,6 @@ void Event_Queue::run(s2 t)
 			time.erase(pos.second);
 			event(state);
 		}
+		else break;
 	}
 }

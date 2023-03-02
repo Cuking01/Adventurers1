@@ -3,7 +3,7 @@
 
 //static_assert(0); //防止被include
 
-hero[0x000]=
+hero[0x101]=
 {
 	.name=L"王者铜",
 	.description=L"",
@@ -21,7 +21,7 @@ hero[0x000]=
 		.MP_init={100,0},
 		.AP_init={50,0},
 
-		.ATK={40,2.4},
+		.ATK={80,4.8},
 		
 		.P_res={40,0.35},
 		.M_res={25,0.2},
@@ -46,28 +46,80 @@ hero[0x000]=
 			.tag={},
 			.fun_init=lambda_Skill_init
 			{
-				//I0存储层数，I4存储上次受伤时间，D8存储每层减伤比例。
+				//I0存储层数，I4存储上次受伤时间，U16存储清零事件id，D8存储每层减伤比例。
+				auto&st=skill.st;
+
 				st.I0=0;
 				st.I4=0;
 				st.D8=0.01*(3+0.1*skill.level);
+				st.U16=0;
+
 				auto&state=skill.state;
 				auto&hero=state[skill.hid];
 
+				//给自身添加减伤buff
 				hero.t_damaged.add(state.gen_id(),
 				{
-					{{.P0=(void*)&st},{BT::正面,BT::不可驱散}},
+					{
+						.st={.P0=(void*)&st},
+						.tag={BT::正面,BT::不可驱散},
+						.name=L"坚韧不屈"
+					},
 					lambda_Damage_Handler
 					{
 						damage.x.add(state.gen_id(),
 						{
-							{{.P0=st.P0}},
+							{
+								.st={.P0=st.P0}
+							},
 							lambda_Buff
 							{
-								auto*p=(Arg_t_6*)st.P0;
-								bh.gsub*=(1-p->D8*p->I0);
+								auto*p=(Arg_t_7*)st.P0;
+								bh.subp*=(1-p->D8*p->I0);
 								return 0;
 							}
 						});
+						return 0;
+					}
+				});
+
+				//受伤扳机
+				hero.t_damaged.add(state.gen_id(),
+				{
+					{
+						.st={.P0=(void*)&st},
+						.tag={BT::正面,BT::不可驱散}
+					},
+					lambda_Damage_Handler
+					{
+						if(damage.tag.直接_间接==DT::直接)
+						{
+							auto*p=(Arg_t_7*)st.P0;
+							//层数加一
+							if(p->I0<6)p->I0++;
+							//刷新受伤时间
+							p->I4=state.time;
+							//删除原先的清零事件
+							state.event_queue.erase(p->U16);
+
+							//生成新的清零事件
+							u2 id=state.gen_id();
+							p->U16=id;
+							state.event_queue.add(id,state.time+40,
+							{
+								{
+									.st={.P0=st.P0},
+									.tag={BT::负面,BT::不可驱散},
+								},
+								lambda_Event
+								{
+									auto*p=(Arg_t_7*)st.P0;
+									p->I0=0;
+									return 0;
+								}
+							});
+
+						}
 						return 0;
 					}
 				});
@@ -111,32 +163,88 @@ hero[0x000]=
 				(
 					arg.I0,
 					hero.ATK()*(1+0.02*skill.level),
-					{DT::直接,DT::物理,DT::单体,DT::普攻,0,0}
+					{DT::直接,DT::物理,DT::单体,DT::普攻,0,DT::可暴击}
 				);
 
 			}
 		},
 		//2,主动1
 		{
-			.name=L"skill2",
-			.description=L"skill2",
+			.name=L"冲锋斩",
+			.description=L"冲向目标英雄，借势斩出一击，造成20+8L+(1+0.02L)*ATK的物理伤害，并削弱其(20+2L)%的护甲，持续(3+0.1L)秒",
 			.attribute_table={},
-			.cd={1,0},
-			.cd_init={1,0},
-			.AP_use={0,0},
+			.cd={4,-0.1},
+			.cd_init={0,0},
+			.AP_use={120,-1},
 			.MP_use={0,0},
-			.tag={},
-			.fun_init=lambda_Skill_init
+			.tag=
 			{
+				.consumption_check=1,
+				.sp_state_check=1,
+				.target_check=1,
+				.group_restrict=1,
+				.target_group=1,
+				.auto_consume=1
+			},
+			.fun_init=nullptr,
+			.fun_check=nullptr,
+			.fun_use=
+			lambda_Skill_use
+			{
+				auto&state=skill.state;
+				auto&hero=state[skill.hid];
+				auto&damage=hero.make_damage
+				(
+					arg.I0,
+					20+8*skill.level+hero.ATK()*(1+0.02*skill.level),
+					{DT::直接,DT::物理,DT::单体}
+				);
+				damage.addition.add(state.gen_id(),
+				{
+					{
+						.st={.I0=skill.level}
+					},
+					lambda_Damage_Handler
+					{
+						auto&hero=state[damage.to];
+						u2 id=state.gen_id();
 
-			},
-			//被动技能的check恒返回0
-			.fun_check=lambda_Skill_check
-			{
-				return 0;
-			},
-			//被动技能的use恒为空指针.
-			.fun_use=nullptr
+						hero.P_res.add(id,
+						{
+							{
+								.st={.D0=0.2+st.I0*0.02},
+								.tag={BT::负面,BT::中驱散},
+								.hid=damage.to,
+								.name=L"比例破甲"
+							},
+							lambda_Buff
+							{
+								bh.subp*=1-st.D0;
+								return 0;
+							}
+						});
+
+						Arg_t_5 event_arg;
+						event_arg.U0=id;
+						event_arg.I4=(s2)damage.to;
+						state.event_queue.add(state.gen_id(),30+st.I0,
+						{
+							{
+								.st=event_arg
+							},
+							lambda_Event
+							{
+								state[Hid(st.I4)].P_res.erase(st.U0);
+								return 0;
+							}
+						});
+						return 0;
+					}
+				});
+
+				damage.act();
+				damage.destroy();
+			}
 		},
 		//3,主动2
 		{

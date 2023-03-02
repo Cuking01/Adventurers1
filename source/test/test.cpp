@@ -12,27 +12,27 @@ int main()
 		.hero=
 		{
 			{
-				.id=0,.level=60,
+				.id=0x101,.level=60,
 				.equipment={{0,10},{0,10},{0,10}},
 				.skill={{5},{5},{5},{5},{5}},
 			},
 			{
-				.id=0,.level=60,
+				.id=0x101,.level=60,
 				.equipment={{0,10},{0,10},{0,10}},
 				.skill={{5},{5},{5},{5},{5}},
 			},
 			{
-				.id=0,.level=60,
+				.id=0x101,.level=60,
 				.equipment={{0,10},{0,10},{0,10}},
 				.skill={{5},{5},{5},{5},{5}},
 			},
 			{
-				.id=0,.level=60,
+				.id=0x101,.level=60,
 				.equipment={{0,10},{0,10},{0,10}},
 				.skill={{5},{5},{5},{5},{5}},
 			},
 			{
-				.id=0,.level=60,
+				.id=0x101,.level=60,
 				.equipment={{0,10},{0,10},{0,10}},
 				.skill={{5},{5},{5},{5},{5}},
 			}
@@ -74,15 +74,24 @@ int main()
 
 	};
 	Player_Config::Group gc2=gc;
-	for(s2 i=0;i<5;i++)
-		gc2.hero[i].level=30;
+	//for(s2 i=0;i<5;i++)gc2.hero[i].level=30;
 
+	int t0=clock();
+	for(int i=0;i<1000;i++)
+	{
+		State::State state(gc,gc2,0ull,allocor);
+		state.start();
+	}
 	State::State state(gc,gc2,0ull,allocor);
 	state.start();
+	
+	int t1=clock();
 
-	//printf("%f\n",state.hero({0,0}).HP_lim.x);
-	//printf("%f\n",state.hero({0,0}).HP_lim());
 	FILE*fp=fopen("fight_log.txt","w");
-	state.report.save(fp);
+	for(int i=0;i<10;i++)
+		state.report.save(fp);
+	
+	int t2=clock();
+	printf("%d %d %d\n",t1-t0,t2-t1,t2);
 	puts("*****");
 }

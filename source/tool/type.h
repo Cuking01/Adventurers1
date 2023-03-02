@@ -55,7 +55,7 @@ typedef double    f3;
     struct{void *P[ARG_T_SIZE_CALC_8(k)];};                     \
 };
 
-//Arg_t_{3/4/5/6}
+//Arg_t_{3/4/5/6/7}
 CREATE_ARG_T(3)
 CREATE_ARG_T(4)
 CREATE_ARG_T(5)

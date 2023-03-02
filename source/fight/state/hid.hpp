@@ -4,6 +4,7 @@ struct Hid
 {
     s1 gid;
     s1 pos;
+    Hid(); 
     Hid(s2 x);
     Hid(s1 gid,s1 pos);
     Hid(const Arg_t_5&arg);

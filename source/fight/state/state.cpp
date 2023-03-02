@@ -9,7 +9,7 @@ State_A::State_A(Mem::SA&sa):
 {}
 
 Resource::Resource(u3 seed):
-	count(0),
+	count(1),
 	rnd(seed)
 {}
 
@@ -82,6 +82,7 @@ void State::log_hero_state()
 		for(s1 pos=0;pos<5;pos++)
 		{
 			if(hero({gid,pos}).alive)
+			{
 				report.write(fmt::format(
 					L"{:s}: HP={:.2f}/{:.2f}  MP:{:.2f}/{:.2f}  AP:{:.2f}/{:.2f}\n",
 					Base_Config::hero[hero({gid,pos}).id].name,
@@ -89,6 +90,7 @@ void State::log_hero_state()
 					hero({gid,pos}).MP,hero({gid,pos}).MP_lim(),
 					hero({gid,pos}).AP,hero({gid,pos}).AP_lim()
 				));
+			}
 			else
 				report.write(fmt::format(
 					L"{:s}: 阵亡\n",
@@ -104,27 +106,24 @@ s2 State::fight()
 	for(s1 gid=0;gid<2;gid++)
 		if(auto ret=group[gid].script.init();ret)
 			return gid^1;
-
 	log_hero_state();
 	for(time=1;time<=1000;time++)
 	{
 		recover();
-		
 		for(s2 i=0;i<5;i++)
 		{
 			s2 ret0=group[0].script.act();
 			if(auto ret=check_win();~ret)
 				return ret;
-
 			s2 ret1=group[1].script.act();
 			if(auto ret=check_win();~ret)
 				return ret;
-
 			//都没有正常释放技能则返回.
 			if(ret0&&ret1)break;
 		}
 
 		event_queue.run(time);
+
 		if(auto ret=check_win();~ret)
 			return ret;
 
