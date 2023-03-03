@@ -20,13 +20,12 @@ f3 Damage::operator()()
 {
 	f3 val=x();
 
-	auto type=tag.物理_魔法_真实;
-	if(type==DT::物理)
+	if(tag(DT::物理))
 	{
 		破甲.x=state[to].P_res();
 		val/=1+0.01*破甲();
 	}
-	else if(type==DT::魔法)
+	else if(tag(DT::魔法))
 	{
 		破魔.x=state[to].M_res();
 		val/=1+0.01*破魔();
@@ -35,6 +34,7 @@ f3 Damage::operator()()
 	{
 		//真实伤害啥也不干
 	}
+
 	return val;
 }
 

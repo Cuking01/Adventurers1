@@ -1,12 +1,8 @@
 #pragma once
 
-namespace Buff_Tag
-{
-	enum T1:u0;
-	enum T2:u0;
-}
-
 struct Buff_Helper;
+
+struct Buff_Base;
 
 struct Buff;
 struct Event;
@@ -16,4 +12,4 @@ struct Damage_Handler;
 #define lambda_Event []([[maybe_unused]] ::Fight::State::State&state,[[maybe_unused]]const Arg_t_5&st)->s2
 #define lambda_Damage_Handler []([[maybe_unused]] ::Fight::State::State&state,[[maybe_unused]] ::Fight::State::Damage&damage,[[maybe_unused]]const Arg_t_5&st)->s2
 
-#define BT ::Fight::State::Buff_Tag
+#define BT ::Fight::State::Buff_Base::Tag

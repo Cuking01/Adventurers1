@@ -87,7 +87,7 @@ hero[0x000]=
 				(
 					arg.I0,
 					hero.ATK()*(1+0.02*skill.level),
-					{DT::直接,DT::物理,DT::单体,DT::普攻,0,0}
+					{DT::直接,DT::物理,DT::单体,DT::普攻,DT::可暴击}
 				);
 
 			}

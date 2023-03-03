@@ -5,7 +5,8 @@ Report_Block::Report_Block():
 {}
 
 Report_A::Report_A(Mem::SA&sa):
-	pool(sa)
+	pool(sa),
+	buf_a(sa)
 {}
 
 Report::Report(Report_A&a):
@@ -23,22 +24,16 @@ s2 Report::length() const
 
 void Report::save(FILE*fp) const
 {
-	s2 tlen=len;
-	Report_Block*p=head;
 
-	while(tlen>bs)
-	{
-		p->s[bs]=L'\0';
-		fwprintf(fp,L"%ls",p->s);
-		p=p->next;
-		tlen-=bs;
-	}
-	
-	if(tlen>0)
-	{
-		p->s[tlen]=L'\0';
-		fwprintf(fp,L"%ls",p->s);
-	}
+	wchar_t*buf=a.buf_a.allocate(len+1);
+	save(buf);
+
+	s2 start=clock();
+	fwprintf(fp,L"%ls",buf);
+	s2 end=clock();
+	printf("%.1f\n",1000.0*(end-start)/CLOCKS_PER_SEC);
+
+	a.buf_a.deallocate(buf);
 }
 
 void Report::save(wchar_t*tp) const

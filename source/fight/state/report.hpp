@@ -13,6 +13,7 @@ struct Report_Block
 struct Report_A
 {
 	Mem::Pool<Report_Block,15> pool;
+	Mem::Allocator<wchar_t> buf_a;
 	Report_A(Mem::SA&sa);
 };
 

@@ -88,11 +88,11 @@ hero[0x101]=
 				{
 					{
 						.st={.P0=(void*)&st},
-						.tag={BT::正面,BT::不可驱散}
+						.tag={BT::不可驱散,BT::正面}
 					},
 					lambda_Damage_Handler
 					{
-						if(damage.tag.直接_间接==DT::直接)
+						if(damage.tag(DT::直接))
 						{
 							auto*p=(Arg_t_7*)st.P0;
 							//层数加一
@@ -163,7 +163,7 @@ hero[0x101]=
 				(
 					arg.I0,
 					hero.ATK()*(1+0.02*skill.level),
-					{DT::直接,DT::物理,DT::单体,DT::普攻,0,DT::可暴击}
+					{DT::直接,DT::物理,DT::单体,DT::普攻,DT::可暴击}
 				);
 
 			}
@@ -248,47 +248,53 @@ hero[0x101]=
 		},
 		//3,主动2
 		{
-			.name=L"skill3",
-			.description=L"skill3",
+			.name=L"陷阵",
+			.description=L"于敌营之中咆哮，吸引敌方攻击，自身获得嘲讽，持续2+0.2L秒",
 			.attribute_table={},
-			.cd={1,0},
-			.cd_init={1,0},
-			.AP_use={0,0},
+			.cd={6,-0.1},
+			.cd_init={0,0},
+			.AP_use={50,-1},
 			.MP_use={0,0},
-			.tag={},
-			.fun_init=lambda_Skill_init
+			.tag=
+			{
+				.consumption_check=1,
+				.sp_state_check=1,
+				.target_check=0,
+				.group_restrict=0,
+				.target_group=0,
+				.auto_consume=1
+			},
+			.fun_init=nullptr,
+			.fun_check=nullptr,
+			.fun_use=lambda_Skill_use
 			{
 
-			},
-			//被动技能的check恒返回0
-			.fun_check=lambda_Skill_check
-			{
-				return 0;
-			},
-			//被动技能的use恒为空指针.
-			.fun_use=nullptr
+			}
 		},
 		//4,主动3
 		{
-			.name=L"skill4",
-			.description=L"skill4",
+			.name=L"战气罡风",
+			.description=L"释放积蓄已久的战气，凝聚在武器之上并挥出，对最多三个连续目标造成(0.4+0.015L+坚韧层数*(0.1+0.015L)*ATK的物理伤害，并消耗所有坚韧层数",
 			.attribute_table={},
-			.cd={1,0},
-			.cd_init={1,0},
-			.AP_use={0,0},
+			.cd={8,-0.2},
+			.cd_init={5,-0.1},
+			.AP_use={100,-1},
 			.MP_use={0,0},
-			.tag={},
-			.fun_init=lambda_Skill_init
+			.tag=
+			{
+				.consumption_check=1,
+				.sp_state_check=1,
+				.target_check=0,
+				.group_restrict=0,
+				.target_group=0,
+				.auto_consume=1
+			},
+			.fun_init=nullptr,
+			.fun_check=nullptr,
+			.fun_use=lambda_Skill_use
 			{
 
-			},
-			//被动技能的check恒返回0
-			.fun_check=lambda_Skill_check
-			{
-				return 0;
-			},
-			//被动技能的use恒为空指针.
-			.fun_use=nullptr
+			}
 		}
 	}
 

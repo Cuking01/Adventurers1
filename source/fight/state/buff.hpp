@@ -20,17 +20,46 @@ struct Buff_Base
 {
     struct Tag
     {
-        //pn正负面 positive or negative
-        //1正面,2负面,0非正非负,3不合法
-        u2 pn:2;
-        u2 驱散等级:2;
+        //0非buff,1正面,2负面,3中性（非正非负）
+        u0 正负面=0;
+
+        //0弱驱散，1中驱散，2强驱散，3不可驱散
+        u0 驱散等级=3;
+
+        struct Initer
+        {
+            u0 val;
+            void operator()(Tag&tag)=delete;
+        };
+
+        struct 正负面_t:Initer
+        {
+            void operator()(Tag&tag){tag.正负面=val;}
+        };
+        struct 驱散等级_t:Initer
+        {
+            void operator()(Tag&tag){tag.驱散等级=val;}
+        };
+
+        s2 operator()(正负面_t x){return 正负面==x.val;}
+        s2 operator()(驱散等级_t x){return 驱散等级==x.val;}
+
+        static constexpr 正负面_t 非buff{0u},正面{1u},负面{2u},中性{3u};
+        static constexpr 驱散等级_t 弱驱散{0u},中驱散{1u},强驱散{2u},不可驱散{3u};
+
+        template<typename... Initers>
+        Tag(Initers... initers)
+        {
+            static_assert((std::is_base_of_v<Initer,Initers>&&...));
+            ((initers(*this)),...);
+        }
     };
+
     Arg_t_5 st;
     Tag tag;
-    Hid hid;
-    const wchar_t*name;
+    Hid hid=Hid();
+    const wchar_t*name=nullptr;
 };
-
 
 struct Buff:Buff_Base
 {

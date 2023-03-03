@@ -2,6 +2,7 @@
 
 int main()
 {
+	
 	setlocale(LC_ALL,"");
 	Mem::SA allocor(Mem::ra);
 	
@@ -83,6 +84,7 @@ int main()
 		state.start();
 	}
 	State::State state(gc,gc2,0ull,allocor);
+	printf("%d\n",(int)sizeof(state));
 	state.start();
 	
 	int t1=clock();
