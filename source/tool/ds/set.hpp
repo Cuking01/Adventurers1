@@ -38,4 +38,5 @@ struct Set
     iterator begin() const noexcept;
     iterator end() const noexcept;
     u3 size() const noexcept;
+    void clear() noexcept;
 };

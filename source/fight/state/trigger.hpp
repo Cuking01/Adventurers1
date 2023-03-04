@@ -17,7 +17,7 @@ struct Trigger
     void add(u2 key,const T&e);
     void erase(u2 key);
     T* find(u2 key);
-    
+    s2 size() const;
     template<typename...Arg>
     s2 operator()(Arg&...arg);
 };

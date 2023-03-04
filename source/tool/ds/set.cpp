@@ -94,9 +94,7 @@ void Set<T>::destroy(Node*p)
 template<typename T>
 Set<T>::~Set()
 {
-	destroy(root);
-	root=nullptr;
-	sz=0;
+	clear();
 }
 template<typename T>
 void Set<T>::splay(Node*p)
@@ -223,4 +221,12 @@ template<typename T>
 u3 Set<T>::size() const noexcept
 {
 	return sz;
+}
+
+template<typename T>
+void Set<T>::clear() noexcept
+{
+	destroy(root);
+	root=nullptr;
+	sz=0;
 }

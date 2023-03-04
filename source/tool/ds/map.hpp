@@ -28,4 +28,5 @@ struct Map
     Set<T>::iterator end() const noexcept;
 
     u3 size() const noexcept;
+    void clear() noexcept;
 };

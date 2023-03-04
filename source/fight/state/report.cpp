@@ -25,13 +25,21 @@ s2 Report::length() const
 void Report::save(FILE*fp) const
 {
 
+	//s2 start=clock();
 	wchar_t*buf=a.buf_a.allocate(len+1);
+	//s2 end=clock();
+	//fwprintf(stdout,L">>>>>%.1f\n",1000.0*(end-start)/CLOCKS_PER_SEC);
 	save(buf);
-
-	s2 start=clock();
+	//static s2 Start;
+	//static s2 End=clock();
+	//fwprintf(fp,L"<<<<<%.1f\n",1000.0*(End-Start)/CLOCKS_PER_SEC);
+	//start=clock();
 	fwprintf(fp,L"%ls",buf);
-	s2 end=clock();
-	printf("%.1f\n",1000.0*(end-start)/CLOCKS_PER_SEC);
+	//end=clock();
+	//fwprintf(stdout,L">>>>>%.1f\n",1000.0*(end-start)/CLOCKS_PER_SEC);
+
+	
+	//Start=clock();
 
 	a.buf_a.deallocate(buf);
 }

@@ -4,7 +4,7 @@
 
 struct Report_Block
 {
-	static constexpr s2 bs=59;
+	static constexpr s2 bs=123;
 	wchar_t s[bs+1];
 	Report_Block*next;
 	Report_Block();

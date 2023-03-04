@@ -52,3 +52,9 @@ u3 Map<TK,TV>::size() const noexcept
 {
 	return set.size();
 }
+
+template<typename TK,typename TV>
+void Map<TK,TV>::clear() noexcept
+{
+	set.clear();
+}

@@ -134,8 +134,8 @@ hero[0x101]=
 		},
 		//1,普攻
 		{
-			.name=L"skill1",
-			.description=L"skill1",
+			.name=L"普通攻击",
+			.description=L"对单个目标造成(1+0.02L)*ATK的物理伤害",
 			.attribute_table={},
 			.cd={0.5,0},
 			.cd_init={0,0},
@@ -249,7 +249,7 @@ hero[0x101]=
 		//3,主动2
 		{
 			.name=L"陷阵",
-			.description=L"于敌营之中咆哮，吸引敌方攻击，自身获得嘲讽，持续2+0.2L秒",
+			.description=L"于敌阵之中咆哮，吸引敌方攻击，自身获得嘲讽，持续2+0.2L秒",
 			.attribute_table={},
 			.cd={6,-0.1},
 			.cd_init={0,0},
@@ -268,7 +268,7 @@ hero[0x101]=
 			.fun_check=nullptr,
 			.fun_use=lambda_Skill_use
 			{
-
+				
 			}
 		},
 		//4,主动3

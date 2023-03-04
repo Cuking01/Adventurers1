@@ -1,9 +1,10 @@
 #include "../head.h"
-
+#include<windows.h>
 int main()
 {
 	
-	setlocale(LC_ALL,"");
+	setlocale(LC_ALL,"chinese");
+
 	Mem::SA allocor(Mem::ra);
 	
 	using namespace Fight;
@@ -78,19 +79,18 @@ int main()
 	//for(s2 i=0;i<5;i++)gc2.hero[i].level=30;
 
 	int t0=clock();
-	for(int i=0;i<1000;i++)
-	{
-		State::State state(gc,gc2,0ull,allocor);
-		state.start();
-	}
+	// for(int i=0;i<1000000;i++)
+	// {
+	// 	State::State state(gc,gc2,0ull,allocor);
+	// 	state.start();
+	// }
 	State::State state(gc,gc2,0ull,allocor);
-	printf("%d\n",(int)sizeof(state));
 	state.start();
 	
 	int t1=clock();
 
 	FILE*fp=fopen("fight_log.txt","w");
-	for(int i=0;i<10;i++)
+	for(int i=0;i<1;i++)
 		state.report.save(fp);
 	
 	int t2=clock();

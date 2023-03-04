@@ -4,16 +4,38 @@ Sp_State_A::Sp_State_A(Mem::SA&sa):
 	attribute_a(sa)
 {}
 
-Sp_State::Sp_State(Sp_State_A&a):
+Sp_State::Sp_State(State&state,Sp_State_A&a):
+	state(state),
+
 	眩晕(a.attribute_a),
 	沉默(a.attribute_a),
 	致盲(a.attribute_a),
 	潜行(a.attribute_a),
 	嘲讽(a.attribute_a),
 	重伤(a.attribute_a),
-	免疫(a.attribute_a),
-	霸体(a.attribute_a)
+	霸体(a.attribute_a),
+
+	t_眩晕(a.trigger_a),
+	t_沉默(a.trigger_a),
+	t_致盲(a.trigger_a),
+	t_潜行(a.trigger_a),
+	t_嘲讽(a.trigger_a),
+	t_重伤(a.trigger_a),
+	t_霸体(a.trigger_a)
 {}
+
+
+u2 Sp_State::en_眩晕(s2 t)
+{
+	if(t_霸体()>eps)return 0;
+	
+	s2 num=t_眩晕.size();
+
+	u2 id=state.gen_id();
+
+
+}
+
 
 Hero_A::Hero_A(Mem::SA&sa):
 	attribute_table_a(sa),
@@ -27,7 +49,7 @@ Hero_A::Hero_A(Mem::SA&sa):
 
 Hero::Hero(State&state,Hid hid,const Player_Config::Hero&hero,Hero_A&a):
 	Attribute_Table(hero,a.attribute_table_a),
-	Sp_State(a.sp_state_a),
+	Sp_State(state,a.sp_state_a),
 	state(state),
 	id(hero.id),
 	hid(hid),

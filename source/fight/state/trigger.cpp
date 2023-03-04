@@ -22,7 +22,17 @@ T* Trigger<T>::find(u2 key)
 		return nullptr;
 	return &it->value;
 }
+template<typename T>
+s2 Trigger<T>::size() const
+{
+	return map.size();
+}
 
+template<typename T>
+void Trigger<T>::clear()
+{
+	map.clear();
+}
 
 template<typename T>
 template<typename...Arg>
