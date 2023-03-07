@@ -9,8 +9,6 @@ struct Sp_State_A
 
 struct Sp_State
 {
-    State&state;
-
     Attribute 眩晕;
     Attribute 沉默;
     Attribute 致盲;
@@ -19,24 +17,14 @@ struct Sp_State
     Attribute 重伤;
     Attribute 霸体;
 
-    Sp_State(State&state,Sp_State_A&a);
+    Sp_State(Sp_State_A&a);
 
-    #define t_sp(name) Trigger<Event> t_##name;
-    #define en_sp(name) u2 en_##name(s2 t);
-    #define cls_sp(name) void cls_##name(s2 t);
-    #define del_sp(name) void del_##name(u2 id);
-    
-
+    #define t_sp(name) Trigger<Event> t_##name;    //进入某状态时触发
+    #define tq_sp(name) Trigger<Event> tq_##name;  //状态消失时触发
     PP_FOR_EACH(t_sp,眩晕,沉默,致盲,潜行,嘲讽,重伤,霸体)
-    PP_FOR_EACH(en_sp,眩晕,沉默,致盲,潜行,嘲讽,霸体)
-    u2 en重伤(s2 t,f3 p);
-    PP_FOR_EACH(cls_sp,眩晕,沉默,致盲,潜行,嘲讽,重伤,霸体)
-    PP_FOR_EACH(del_sp,眩晕,沉默,致盲,潜行,嘲讽,重伤,霸体)
-    
+    PP_FOR_EACH(tq_sp,眩晕,沉默,致盲,潜行,嘲讽,重伤,霸体)
     #undef t_sp
-    #undef en_sp
-    #undef cls_sp
-    #undef del_sp
+    #undef tq_sp
 };
 
 struct Hero_A
@@ -53,7 +41,7 @@ struct Hero_A
 
 struct Hero:Attribute_Table,Sp_State
 {
-    //State&state;
+    State&state;
     s2 id;
     Hid hid;
     s2 alive;
@@ -69,6 +57,20 @@ struct Hero:Attribute_Table,Sp_State
 
 
     Hero(State&state,Hid hid,const Player_Config::Hero&hero,Hero_A&a);
+
+    #define en_sp(name) u2 en_##name(s2 t,BT::驱散等级_t);
+    #define cls_sp(name) void cls_##name(BT::驱散等级_t);
+    #define del_sp(name) void del_##name(u2 id);
+    
+
+    PP_FOR_EACH(en_sp,眩晕,沉默,致盲,潜行,嘲讽,霸体)
+    u2 en_重伤(s2 t,f3 p,BT::驱散等级_t);
+    PP_FOR_EACH(cls_sp,眩晕,沉默,致盲,潜行,嘲讽,重伤,霸体)
+    PP_FOR_EACH(del_sp,眩晕,沉默,致盲,潜行,嘲讽,重伤,霸体)
+    
+    #undef en_sp
+    #undef cls_sp
+    #undef del_sp
 
     void init();
 

@@ -17,7 +17,7 @@ void Attribute::erase(u2 key)
 }
 Buff* Attribute::find(u2 key)
 {
-	return trigger.find(key);
+	return &trigger.find(key)->value;
 }
 
 f3 Attribute::operator()()

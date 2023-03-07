@@ -24,11 +24,15 @@ void Map<TK,TV>::insert(TKp&&key,TVp&&value)
 	set.insert({std::forward<TKp>(key),std::forward<TVp>(value)});
 }
 template<typename TK,typename TV>
-void Map<TK,TV>::erase(const TK&key) noexcept
+Set<typename Map<TK,TV>::T>::iterator Map<TK,TV>::erase(const TK&key) noexcept
 {
-	set.erase({key,TV()});
+	return set.erase({key,TV()});
 }
-
+template<typename TK,typename TV>
+Set<typename Map<TK,TV>::T>::iterator Map<TK,TV>::erase(Set<T>::iterator it) noexcept
+{
+	return set.erase(it);
+}
 
 template<typename TK,typename TV>
 Set<typename Map<TK,TV>::T>::iterator Map<TK,TV>::find(const TK&key) noexcept
@@ -48,7 +52,7 @@ Set<typename Map<TK,TV>::T>::iterator Map<TK,TV>::end() const noexcept
 }
 
 template<typename TK,typename TV>
-u3 Map<TK,TV>::size() const noexcept
+s3 Map<TK,TV>::size() const noexcept
 {
 	return set.size();
 }

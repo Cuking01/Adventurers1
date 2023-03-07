@@ -55,7 +55,7 @@ struct Buff_Base
         }
     };
 
-    Arg_t_5 st;
+    Arg_t_5 st={};
     Tag tag;
     Hid hid=Hid();
     const wchar_t*name=nullptr;

@@ -6,39 +6,16 @@ Trigger_A<T>::Trigger_A(Mem::SA&sa):
 {}
 
 template<typename T>
-Trigger<T>::Trigger(A&a):map(a.map_a){}
+Trigger<T>::Trigger(Trigger_A<T>&a):DS::Map<u2,T>(a.map_a){}
 
 template<typename T>
-void Trigger<T>::add(u2 key,const T&e){map.insert(key,e);}
-
-template<typename T>
-void Trigger<T>::erase(u2 key){map.erase(key);}
-
-template<typename T>
-T* Trigger<T>::find(u2 key)
-{
-	auto it=map.find(key);
-	if(it==map.end())
-		return nullptr;
-	return &it->value;
-}
-template<typename T>
-s2 Trigger<T>::size() const
-{
-	return map.size();
-}
-
-template<typename T>
-void Trigger<T>::clear()
-{
-	map.clear();
-}
+void Trigger<T>::add(u2 key,const T&e){this->insert(key,e);}
 
 template<typename T>
 template<typename...Arg>
 s2 Trigger<T>::operator()(Arg&...arg)
 {
-	for(auto&[k,v]:map)
+	for(auto&[k,v]:*this)
 		if(s2 ret=v(arg...);ret)
 			return ret;
 	return 0;

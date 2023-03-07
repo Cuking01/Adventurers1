@@ -171,18 +171,27 @@ Set<T>::iterator Set<T>::find(const T&e) noexcept
 	return {nullptr};
 }
 template<typename T>
-void Set<T>::erase(const T&e)
+Set<T>::iterator Set<T>::erase(const T&e)
 {
-	Node*p=find(e).t;
-	if(!p)return;
+	return erase(find(e));
+}
+
+template<typename T>
+Set<T>::iterator Set<T>::erase(iterator it)
+{
+	Node*p=it.t;
+	if(!p)return end();
+	Node*next=nullptr;
 	if(p->l&&p->r)
 	{
-		Node*t=p->l;
+		Node*t=p->r;
 		root=t;
-		while(t->r)t=t->r;
+		while(t->l)t=t->l;
 		splay(t);
-		t->r=p->r;
-		p->r->f=t;
+		t->l=p->l;
+		p->l->f=t;
+
+		next=t;
 	}
 	else if(p->l)
 	{
@@ -197,6 +206,7 @@ void Set<T>::erase(const T&e)
 		Node*t=root;
 		while(t->l)t=t->l;
 		_begin.t=t;
+		next=t;
 	}
 	else
 	{
@@ -205,7 +215,9 @@ void Set<T>::erase(const T&e)
 	}
 	sz--;
 	allocator<<p;
+	return {next};
 }
+
 template<typename T>
 Set<T>::iterator Set<T>::begin() const noexcept
 {
@@ -218,7 +230,7 @@ Set<T>::iterator Set<T>::end() const noexcept
 }
 
 template<typename T>
-u3 Set<T>::size() const noexcept
+s3 Set<T>::size() const noexcept
 {
 	return sz;
 }

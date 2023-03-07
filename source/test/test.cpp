@@ -1,5 +1,4 @@
 #include "../head.h"
-#include<windows.h>
 int main()
 {
 	

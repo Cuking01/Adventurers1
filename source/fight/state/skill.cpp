@@ -10,7 +10,8 @@ Skill::Tag::Tag(Base_Config::Skill::Tag tag):
 			target_check(tag.target_check),
 			group_restrict(tag.group_restrict),
 			target_group(tag.target_group),
-			auto_consume(tag.auto_consume)
+			auto_consume(tag.auto_consume),
+			cancel_潜行(tag.cancel_潜行)
 		{}
 
 Skill::Skill(State&state,Hid hid,const Base_Config::Skill&skill,s2 level,Skill_A&a):

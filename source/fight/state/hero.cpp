@@ -1,11 +1,11 @@
 #pragma once
 
 Sp_State_A::Sp_State_A(Mem::SA&sa):
-	attribute_a(sa)
+	attribute_a(sa),
+	trigger_a(sa)
 {}
 
-Sp_State::Sp_State(State&state,Sp_State_A&a):
-	state(state),
+Sp_State::Sp_State(Sp_State_A&a):
 
 	眩晕(a.attribute_a),
 	沉默(a.attribute_a),
@@ -21,20 +21,93 @@ Sp_State::Sp_State(State&state,Sp_State_A&a):
 	t_潜行(a.trigger_a),
 	t_嘲讽(a.trigger_a),
 	t_重伤(a.trigger_a),
-	t_霸体(a.trigger_a)
+	t_霸体(a.trigger_a),
+
+	tq_眩晕(a.trigger_a),
+	tq_沉默(a.trigger_a),
+	tq_致盲(a.trigger_a),
+	tq_潜行(a.trigger_a),
+	tq_嘲讽(a.trigger_a),
+	tq_重伤(a.trigger_a),
+	tq_霸体(a.trigger_a)
 {}
 
+#define en_sp(sp_name,正负面)                                                        \
+	u2 Hero::en_##sp_name(s2 t,BT::驱散等级_t 驱散等级=BT::中驱散)                     \
+	{                                                                                \
+		if(正负面.val==BT::负面.val&&霸体()>eps)return 0;                             \
+		s2 num=sp_name.trigger.size();                                               \
+                                                                                     \
+		u2 id=state.gen_id();                                                        \
+		sp_name.add(id,                                                              \
+		{                                                                            \
+			{.tag={正负面,驱散等级},.hid=hid,.name=PP_CONCAT(L,#sp_name)},            \
+			lambda_Buff{bh.add+=1;return 0;}                                         \
+		});                                                                          \
+                                                                                     \
+		state.event_queue.add(state.gen_id(),state.time+t,                           \
+		{                                                                            \
+			{.st={.I0=(s2)hid,.I4=(s2)id}},                                          \
+			lambda_Event{state[Hid(st.I0)].sp_name.erase(st.U4);return 0;}           \
+		});                                                                          \
+                                                                                     \
+		if(num==0)t_##sp_name(state);                                                \
+                                                                                     \
+		return id;                                                                   \
+	}
 
-u2 Sp_State::en_眩晕(s2 t)
+#define en_正面(sp_name) en_sp(sp_name,BT::正面)
+#define en_负面(sp_name) en_sp(sp_name,BT::负面)
+
+PP_FOR_EACH(en_负面,眩晕,沉默,致盲)
+PP_FOR_EACH(en_正面,潜行,嘲讽,霸体)
+
+u2 Hero::en_重伤(s2 t,f3 p,BT::驱散等级_t 驱散等级=BT::中驱散)
 {
-	if(t_霸体()>eps)return 0;
-	
-	s2 num=t_眩晕.size();
+	if(霸体()>eps)return 0;
+	s2 num=重伤.trigger.size();
 
 	u2 id=state.gen_id();
+	重伤.add(id,
+	{
+		{.st={.D0=p},.tag={BT::负面,驱散等级},.hid=hid,.name=L"重伤"},
+		lambda_Buff{if(st.D0>bh.add)bh.add=st.D0;return 0;}
+	});
 
+	state.event_queue.add(state.gen_id(),state.time+t,
+	{
+		{.st={.I0=(s2)hid,.I4=(s2)id}},
+		lambda_Event{state[Hid(st.I0)].重伤.erase(st.U4);return 0;}
+	});
 
+	if(num==0)t_重伤(state);
+
+	return id;
 }
+
+#undef en_负面
+#undef en_正面
+#undef en_sp
+
+#define cls_sp(sp_name)                                                         \
+	void Hero::cls_##sp_name(BT::驱散等级_t 驱散等级=BT::强驱散)                  \
+	{                                                                           \
+		s2 num=sp_name.trigger.size();                                          \
+		for(auto it=sp_name.trigger.begin();it!=sp_name.trigger.end();)         \
+		{                                                                       \
+			auto& buff=it->value;                                               \
+			if(buff.tag.驱散等级<=驱散等级.val)                                  \
+				it=sp_name.trigger.erase(it);                                   \
+			else                                                                \
+				++it;                                                           \
+		}                                                                       \
+		if(num&&sp_name.trigger.size()==0)                                      \
+			tq_##sp_name(state);                                                \
+	}
+
+PP_FOR_EACH(cls_sp,眩晕,沉默,致盲,潜行,嘲讽,重伤,霸体)
+
+#undef cls_sp
 
 
 Hero_A::Hero_A(Mem::SA&sa):
@@ -49,7 +122,7 @@ Hero_A::Hero_A(Mem::SA&sa):
 
 Hero::Hero(State&state,Hid hid,const Player_Config::Hero&hero,Hero_A&a):
 	Attribute_Table(hero,a.attribute_table_a),
-	Sp_State(state,a.sp_state_a),
+	Sp_State(a.sp_state_a),
 	state(state),
 	id(hero.id),
 	hid(hid),

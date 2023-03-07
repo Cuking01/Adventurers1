@@ -25,7 +25,7 @@ struct Skill
         u2 group_restrict:1;
         u2 target_group:1;
         u2 auto_consume:1;
-
+        u2 cancel_潜行:1;
         Tag(Base_Config::Skill::Tag tag);
     };
     Tag tag;

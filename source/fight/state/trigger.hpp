@@ -8,16 +8,10 @@ struct Trigger_A
 };
 
 template<typename T>
-struct Trigger
-{
-    DS::Map<u2,T> map;
-    using A=Trigger_A<T>;
-    
-    Trigger(A&a);
+struct Trigger:DS::Map<u2,T>
+{   
+    Trigger(Trigger_A<T>&a);
     void add(u2 key,const T&e);
-    void erase(u2 key);
-    T* find(u2 key);
-    s2 size() const;
     template<typename...Arg>
     s2 operator()(Arg&...arg);
 };

@@ -15,7 +15,7 @@ struct Set
     using A=Mem::Pool<Node,31>;
     A&allocator;
     Node*root;
-    u3 sz;
+    s3 sz;
 
     struct iterator
     {
@@ -34,9 +34,10 @@ struct Set
     void splay(Node*p);
     iterator insert(const T&e);
     iterator find(const T&e) noexcept;
-    void erase(const T&e);
+    iterator erase(const T&e);
+    iterator erase(iterator it);
     iterator begin() const noexcept;
     iterator end() const noexcept;
-    u3 size() const noexcept;
+    s3 size() const noexcept;
     void clear() noexcept;
 };

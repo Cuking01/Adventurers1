@@ -10,12 +10,13 @@ struct Skill
 
     struct Tag
     {
-        u2 consumption_check:1;  //默认消耗资源检查（MP AP cd）
-        u2 sp_state_check:1;     //默认特殊状态检查（自身眩晕，致盲，致盲）
-        u2 target_check:1;       //默认目标检查（参数值是否合法，是否符合阵营限制，是否被嘲讽保护）
-        u2 group_restrict:1;     //默认目标检查-是否有阵营限制
-        u2 target_group:1;       //默认目标检查-阵营限制
-        u2 auto_consume:1;       //是否自动消耗AP MP，计算cd
+        u2 consumption_check:1=1;  //默认消耗资源检查（MP AP cd）
+        u2 sp_state_check:1=1;     //默认特殊状态检查（自身眩晕，致盲，致盲）
+        u2 target_check:1;         //默认目标检查（参数值是否合法，是否符合阵营限制，是否被嘲讽保护）
+        u2 group_restrict:1;       //默认目标检查-是否有阵营限制
+        u2 target_group:1;         //默认目标检查-阵营限制
+        u2 auto_consume:1=1;       //是否自动消耗AP MP，计算cd
+        u2 cancel_潜行:1=1;        //自动取消潜行
     };
     Tag tag;
 
