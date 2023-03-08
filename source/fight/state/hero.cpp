@@ -33,7 +33,7 @@ Sp_State::Sp_State(Sp_State_A&a):
 {}
 
 #define en_sp(sp_name,正负面)                                                        \
-	u2 Hero::en_##sp_name(s2 t,BT::驱散等级_t 驱散等级=BT::中驱散)                     \
+	u2 Hero::en_##sp_name(s2 t,BT::驱散等级_t 驱散等级)                               \
 	{                                                                                \
 		if(正负面.val==BT::负面.val&&霸体()>eps)return 0;                             \
 		s2 num=sp_name.trigger.size();                                               \
@@ -62,7 +62,7 @@ Sp_State::Sp_State(Sp_State_A&a):
 PP_FOR_EACH(en_负面,眩晕,沉默,致盲)
 PP_FOR_EACH(en_正面,潜行,嘲讽,霸体)
 
-u2 Hero::en_重伤(s2 t,f3 p,BT::驱散等级_t 驱散等级=BT::中驱散)
+u2 Hero::en_重伤(s2 t,f3 p,BT::驱散等级_t 驱散等级)
 {
 	if(霸体()>eps)return 0;
 	s2 num=重伤.trigger.size();
@@ -90,7 +90,7 @@ u2 Hero::en_重伤(s2 t,f3 p,BT::驱散等级_t 驱散等级=BT::中驱散)
 #undef en_sp
 
 #define cls_sp(sp_name)                                                         \
-	void Hero::cls_##sp_name(BT::驱散等级_t 驱散等级=BT::强驱散)                  \
+	void Hero::cls_##sp_name(BT::驱散等级_t 驱散等级)                            \
 	{                                                                           \
 		s2 num=sp_name.trigger.size();                                          \
 		for(auto it=sp_name.trigger.begin();it!=sp_name.trigger.end();)         \

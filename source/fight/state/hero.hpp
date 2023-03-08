@@ -58,13 +58,13 @@ struct Hero:Attribute_Table,Sp_State
 
     Hero(State&state,Hid hid,const Player_Config::Hero&hero,Hero_A&a);
 
-    #define en_sp(name) u2 en_##name(s2 t,BT::驱散等级_t);
-    #define cls_sp(name) void cls_##name(BT::驱散等级_t);
+    #define en_sp(name) u2 en_##name(s2 t,BT::驱散等级_t=BT::中驱散);
+    #define cls_sp(name) void cls_##name(BT::驱散等级_t=BT::强驱散);
     #define del_sp(name) void del_##name(u2 id);
     
 
     PP_FOR_EACH(en_sp,眩晕,沉默,致盲,潜行,嘲讽,霸体)
-    u2 en_重伤(s2 t,f3 p,BT::驱散等级_t);
+    u2 en_重伤(s2 t,f3 p,BT::驱散等级_t=BT::中驱散);
     PP_FOR_EACH(cls_sp,眩晕,沉默,致盲,潜行,嘲讽,重伤,霸体)
     PP_FOR_EACH(del_sp,眩晕,沉默,致盲,潜行,嘲讽,重伤,霸体)
     

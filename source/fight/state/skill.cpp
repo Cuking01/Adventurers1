@@ -94,4 +94,6 @@ void Skill::use(const Arg_t_6&arg)
 	if(tag.auto_consume)
 		auto_consume();
 	fun_use(*this,arg);
+	if(tag.cancel_潜行)
+		state[hid].cls_潜行();
 }

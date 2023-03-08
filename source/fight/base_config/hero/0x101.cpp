@@ -143,12 +143,9 @@ hero[0x101]=
 			.MP_use={0,0},
 			.tag=
 			{
-				.consumption_check=1,
-				.sp_state_check=1,
 				.target_check=1,
 				.group_restrict=1,
 				.target_group=1,
-				.auto_consume=1
 			},
 			.fun_init=lambda_Skill_init{},
 			.fun_check=nullptr,
@@ -179,12 +176,9 @@ hero[0x101]=
 			.MP_use={0,0},
 			.tag=
 			{
-				.consumption_check=1,
-				.sp_state_check=1,
 				.target_check=1,
 				.group_restrict=1,
 				.target_group=1,
-				.auto_consume=1
 			},
 			.fun_init=nullptr,
 			.fun_check=nullptr,
@@ -255,45 +249,48 @@ hero[0x101]=
 			.cd_init={0,0},
 			.AP_use={50,-1},
 			.MP_use={0,0},
-			.tag=
-			{
-				.consumption_check=1,
-				.sp_state_check=1,
-				.target_check=0,
-				.group_restrict=0,
-				.target_group=0,
-				.auto_consume=1
-			},
+			.tag={},
 			.fun_init=nullptr,
 			.fun_check=nullptr,
 			.fun_use=lambda_Skill_use
 			{
-				
+				auto&state=skill.state;
+				auto&hero=state[skill.hid];
+				s2 L=skill.level;
+				hero.en_嘲讽(20+2*L);
 			}
 		},
 		//4,主动3
 		{
 			.name=L"战气罡风",
-			.description=L"释放积蓄已久的战气，凝聚在武器之上并挥出，对最多三个连续目标造成(0.4+0.015L+坚韧层数*(0.1+0.015L)*ATK的物理伤害，并消耗所有坚韧层数",
+			.description=L"释放积蓄已久的战气，凝聚在武器之上并挥出，对最多三个连续目标造成(0.4+0.015L+坚韧层数*(0.1+0.015L)*ATK的物理伤害，并消耗所有坚韧层数\n参数格式:SH0存最左英雄位置，可以不在0~4内，然后对I0~I0+2的英雄造成伤害，不合法位置不会产生伤害",
 			.attribute_table={},
 			.cd={8,-0.2},
 			.cd_init={5,-0.1},
 			.AP_use={100,-1},
 			.MP_use={0,0},
-			.tag=
-			{
-				.consumption_check=1,
-				.sp_state_check=1,
-				.target_check=0,
-				.group_restrict=0,
-				.target_group=0,
-				.auto_consume=1
-			},
+			.tag={},
 			.fun_init=nullptr,
 			.fun_check=nullptr,
 			.fun_use=lambda_Skill_use
 			{
-
+				auto&state=skill.state;
+				auto&hero=state[skill.hid];
+				s2 L=skill.level;
+				auto&I0=hero.skill[0].st.I0;
+				s1 pos=arg.SH0;
+				for(s1 i=0;i<3;i++)
+				{
+					s1 tp=pos+i;
+					if(tp>=0&&tp<5)
+						hero.cause_damage
+						(
+							{(s1)(skill.hid.gid^1),tp},
+							(0.4+0.02*L+(0.1+0.02*L)*I0)*hero.ATK(),
+							{DT::直接,DT::物理,DT::群体}
+						);
+				}
+				I0=0;
 			}
 		}
 	}
