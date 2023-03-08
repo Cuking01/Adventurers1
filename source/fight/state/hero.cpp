@@ -66,7 +66,7 @@ u2 Hero::en_重伤(s2 t,f3 p,BT::驱散等级_t 驱散等级=BT::中驱散)
 {
 	if(霸体()>eps)return 0;
 	s2 num=重伤.trigger.size();
-
+	t=round(t*(1.0-Con_res()));
 	u2 id=state.gen_id();
 	重伤.add(id,
 	{
@@ -109,6 +109,18 @@ PP_FOR_EACH(cls_sp,眩晕,沉默,致盲,潜行,嘲讽,重伤,霸体)
 
 #undef cls_sp
 
+#define del_sp(sp_name)                                    \
+	void Hero::del_##sp_name(u2 id)                        \
+	{                                                      \
+		s2 num=sp_name.trigger.size();                     \
+		sp_name.erase(id);                                 \
+		if(num&&sp_name.trigger.size()==0)                 \
+			tq_##sp_name(state);                           \
+	}
+
+PP_FOR_EACH(del_sp,眩晕,沉默,致盲,潜行,嘲讽,重伤,霸体)
+
+#undef del_sp
 
 Hero_A::Hero_A(Mem::SA&sa):
 	attribute_table_a(sa),

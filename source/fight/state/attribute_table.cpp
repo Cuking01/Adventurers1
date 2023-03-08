@@ -21,7 +21,10 @@ Attribute_Table_A::Attribute_Table_A(Mem::SA&sa):
 Attribute_Table::Attribute_Table(const Player_Config::Hero&hero,Attribute_Table_A&a):
 	PP_FOR_EACH(attr_init,HP_lim,MP_lim,AP_lim,HP_re,MP_re,AP_re,MP_init,AP_init,ATK,P_res,M_res,Crt,CrtD,exAPre_profit)
 	attr_init_end(Con_res)
-{}
+{
+	Crt.max=1;
+	Con_res.max=1;
+}
 
 #undef attr_init
 #undef attr_init_end

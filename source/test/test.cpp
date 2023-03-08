@@ -84,6 +84,9 @@ int main()
 	// 	state.start();
 	// }
 	State::State state(gc,gc2,0ull,allocor);
+
+	printf("sizeof(State):%d\n",(int)sizeof(state));
+
 	state.start();
 	
 	int t1=clock();
