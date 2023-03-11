@@ -187,6 +187,9 @@ hero[0x101]=
 			{
 				auto&state=skill.state;
 				auto&hero=state[skill.hid];
+
+				report_A对B使用了X(skill.hid,State::Hid(arg.I0),L"冲锋斩");
+
 				auto&damage=hero.make_damage
 				(
 					arg.I0,
@@ -202,7 +205,7 @@ hero[0x101]=
 					{
 						auto&hero=state[damage.to];
 						u2 id=state.gen_id();
-
+						report_X(fmt::format(L"{:s} 的护甲降低了\n",hero.report_name()));
 						hero.P_res.add(id,
 						{
 							{
@@ -256,6 +259,8 @@ hero[0x101]=
 			{
 				auto&state=skill.state;
 				auto&hero=state[skill.hid];
+
+				report_A使用了X(skill.hid,L"陷阵");
 				s2 L=skill.level;
 				hero.en_嘲讽(20+2*L);
 			}
@@ -266,7 +271,7 @@ hero[0x101]=
 			.description=L"释放积蓄已久的战气，凝聚在武器之上并挥出，对最多三个连续目标造成(0.4+0.015L+坚韧层数*(0.1+0.015L)*ATK的物理伤害，并消耗所有坚韧层数\n参数格式:SH0存最左英雄位置，可以不在0~4内，然后对I0~I0+2的英雄造成伤害，不合法位置不会产生伤害",
 			.attribute_table={},
 			.cd={8,-0.2},
-			.cd_init={5,-0.1},
+			.cd_init={1,-0.1},
 			.AP_use={100,-1},
 			.MP_use={0,0},
 			.tag={},
@@ -276,9 +281,13 @@ hero[0x101]=
 			{
 				auto&state=skill.state;
 				auto&hero=state[skill.hid];
+
+
 				s2 L=skill.level;
 				auto&I0=hero.skill[0].st.I0;
-				s1 pos=arg.SH0;
+				s1 pos=arg.SH2;
+
+				report_A于位置B使用了X(skill.hid,pos,L"战气罡风");
 				for(s1 i=0;i<3;i++)
 				{
 					s1 tp=pos+i;

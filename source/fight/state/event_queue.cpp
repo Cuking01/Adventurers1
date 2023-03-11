@@ -22,11 +22,11 @@ void Event_Queue::erase(u2 id)
 	events.erase({time[id],id});
 	time.erase(id);
 }
-
 void Event_Queue::run(s2 t)
 {
 	while(events.size())
 	{
+
 		auto [pos,event]=*events.begin();
 		if(pos.first<=t)
 		{

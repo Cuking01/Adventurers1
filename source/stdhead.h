@@ -6,3 +6,5 @@
 #include<stdlib.h>
 #include<vector>
 #include<random>
+using std::cerr;
+

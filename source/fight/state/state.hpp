@@ -46,4 +46,5 @@ struct State:State_A,Resource
 	//0,1表示对应队伍获胜，2表示平局.
 	s2 fight();
 	s2 start();
+
 };

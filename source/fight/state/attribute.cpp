@@ -21,7 +21,7 @@ Buff* Attribute::find(u2 key)
 }
 
 f3 Attribute::operator()()
-{
+{	
 	Buff_Helper bh;
 	trigger(*this,bh);
 	f3 tmp=bh(x);

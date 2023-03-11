@@ -42,8 +42,8 @@ s2 Skill::consumption_check()
 	if(!tag.consumption_check)return 0;
 	auto& hero=state[hid];
 	if(CD>eps)return 0x01;
-	if(AP_use()>hero.AP)return 0x02;
-	if(MP_use()*hero.MP_lim()>hero.MP)return 0x03;
+	if(AP_use()-eps>hero.AP)return 0x02;
+	if(MP_use()*hero.MP_lim()-eps>hero.MP)return 0x03;
 	return 0;
 }
 

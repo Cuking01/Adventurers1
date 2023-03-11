@@ -42,7 +42,10 @@ s2 Damage::act()
 {
 	if(s2 ret=state[to].t_before_damaged(state,*this);ret)
 		return ret;
-	return state[to].damaged(*this);
+	auto ret=state[to].damaged(*this);
+	if(ret)return ret;
+	addition(state,*this);
+	return 0;
 }
 
 void Damage::destroy()

@@ -181,6 +181,7 @@ Set<T>::iterator Set<T>::erase(iterator it)
 {
 	Node*p=it.t;
 	if(!p)return end();
+	splay(p);
 	Node*next=nullptr;
 	if(p->l&&p->r)
 	{

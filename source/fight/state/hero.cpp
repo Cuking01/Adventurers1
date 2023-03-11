@@ -236,7 +236,7 @@ s2 Hero::damaged(Damage&damage)
 
 	val=damage_tmp();
 
-	state.report.write(fmt::format(L"[第{:4.1f}秒] {:s} 受到了 {:.2f} 点伤害\n",state.time*0.1,report_name(),val));
+	state.report.write(fmt::format(L"{:s} 受到了 {:.2f} 点伤害\n",report_name(),val));
 	HP-=val;
 	if(HP<eps)die();
 	return 0;

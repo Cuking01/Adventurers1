@@ -121,9 +121,7 @@ s2 State::fight()
 			//都没有正常释放技能则返回.
 			if(ret0&&ret1)break;
 		}
-
 		event_queue.run(time);
-
 		if(auto ret=check_win();~ret)
 			return ret;
 

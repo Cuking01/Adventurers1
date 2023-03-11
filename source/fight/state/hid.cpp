@@ -20,7 +20,7 @@ Hid::Hid(const Arg_t_7&arg):
 
 Hid::operator s2() const
 {
-    return ((s2)gid)<<16|pos;
+    return *(int*)this;
 }
 s2 Hid::check() const
 {
