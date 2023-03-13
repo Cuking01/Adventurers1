@@ -35,6 +35,7 @@ struct Hero_A
     Equipment_A equipment_a;
     Trigger_A<Event> trigger_event_a;
     Trigger_A<Damage_Handler> trigger_damage_handler_a;
+    Trigger_A<Skill_Handler> trigger_skill_handler_a;
     Damage_A damage_a;
     Hero_A(Mem::SA&sa);
 };
@@ -52,6 +53,7 @@ struct Hero:Attribute_Table,Sp_State
     Trigger<Damage_Handler> t_damage;
     Trigger<Damage_Handler> t_before_damaged;
     Trigger<Damage_Handler> t_damaged;
+    Trigger<Skill_Handler> t_use_skill;
     Trigger<Event> t_die;
     
 

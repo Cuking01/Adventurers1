@@ -78,3 +78,9 @@ struct Damage_Handler:Buff_Base
     s2 (*fun)(State&,Damage&,const Arg_t_5&);
     s2 operator()(State&state,Damage&damage);
 };
+
+struct Skill_Handler:Buff_Base
+{
+    s2 (*fun)(State&,Hid,s2,const Arg_t_6&,const Arg_t_5&);
+    s2 operator()(State&state,Hid hid,s2 skill_id,const Arg_t_6&arg);
+};

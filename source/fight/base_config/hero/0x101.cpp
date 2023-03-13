@@ -291,7 +291,7 @@ hero[0x101]=
 				for(s1 i=0;i<3;i++)
 				{
 					s1 tp=pos+i;
-					if(tp>=0&&tp<5)
+					if(tp>=0&&tp<5&&state[skill.hid.gid^1][tp].alive)
 						hero.cause_damage
 						(
 							{(s1)(skill.hid.gid^1),tp},

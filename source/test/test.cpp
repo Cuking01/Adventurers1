@@ -5,7 +5,6 @@ int main()
 	
 	setlocale(LC_ALL,"chinese");
 	puts("一二三");
-	freopen("debug_log.txt","w",stderr);
 	Mem::SA allocor(Mem::ra);
 	
 	using namespace Fight;
@@ -100,7 +99,7 @@ int main()
 							s1 target=-1,num=0;
 							for(s1 pos=0;pos<3;pos++)
 							{
-								s1 tc=g[pos].alive+g[pos+1].alive+g[pos+2].alive;
+								s1 tc=G[pos].alive+G[pos+1].alive+G[pos+2].alive;
 								if(tc>num)
 								{
 									num=tc;

@@ -18,3 +18,7 @@ s2 Damage_Handler::operator()(State&state,Damage&damage)
 {
 	return fun(state,damage,st);
 }
+s2 Skill_Handler::operator()(State&state,Hid hid,s2 skill_id,const Arg_t_6&arg)
+{
+	return fun(state,hid,skill_id,arg,st);
+}

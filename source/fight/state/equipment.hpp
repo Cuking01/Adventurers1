@@ -8,6 +8,7 @@ struct Equipment_A
 
 struct Equipment:Skill
 {
+    s2 id;
     Equipment(State&state,Hid hid,const Player_Config::Equipment &equipment,Equipment_A&a);
     void init();
     
