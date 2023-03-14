@@ -60,6 +60,10 @@ struct Hero:Attribute_Table,Sp_State
 
     Hero(State&state,Hid hid,const Player_Config::Hero&hero,Hero_A&a);
 
+    Hero(const Hero&)=delete;
+    Hero& operator=(const Hero&)=delete;
+    Hero& operator=(Hero&&)=delete;
+
     #define en_sp(name) u2 en_##name(s2 t,BT::驱散等级_t=BT::中驱散);
     #define cls_sp(name) void cls_##name(BT::驱散等级_t=BT::强驱散);
     #define del_sp(name) void del_##name(u2 id);
@@ -78,14 +82,20 @@ struct Hero:Attribute_Table,Sp_State
 
     std::wstring report_name() const;
 
+    //仅：对应值增加，并且判断是否超过上限
+    void HP_add(f3 x);
+    void MP_add(f3 x);
+    void AP_add(f3 x);
+
+    //每帧的自动回复
     void HP_recover(f3 x);
     void MP_recover(f3 x);
     void AP_recover(f3 x);
-
     void recover();
 
     s2 die();
     s2 damaged(Damage&damage);
+    s2 healed();
     Damage& make_damage(Hid to,f3 x,Damage::Tag tag);
     s2 cause_damage(Hid to,f3 x,Damage::Tag tag);
 

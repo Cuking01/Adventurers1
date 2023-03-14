@@ -12,7 +12,7 @@ Sp_State::Sp_State(Sp_State_A&a):
 	致盲(a.attribute_a),
 	潜行(a.attribute_a),
 	嘲讽(a.attribute_a),
-	重伤(a.attribute_a),
+	重伤(0.0,0.0,1.0,a.attribute_a),
 	霸体(a.attribute_a),
 
 	t_眩晕(a.trigger_a),
@@ -180,26 +180,29 @@ std::wstring Hero::report_name() const
 	return fmt::format(L"{:s}({:c},{:d})",Base_Config::hero[id].name,(wchar_t)('A'+hid.gid),hid.pos);
 };
 
-void Hero::HP_recover(f3 x)
+void Hero::HP_add(f3 x)
 {
 	HP+=x;
 	f3 lim=HP_lim();
 	if(HP>lim)HP=lim;
 }
-
-void Hero::MP_recover(f3 x)
+void Hero::MP_add(f3 x)
 {
 	MP+=x;
 	f3 lim=MP_lim();
 	if(MP>lim)MP=lim;
 }
-
-void Hero::AP_recover(f3 x)
+void Hero::AP_add(f3 x)
 {
 	AP+=x;
 	f3 lim=AP_lim();
 	if(AP>lim)AP=lim;
 }
+
+
+void Hero::HP_recover(f3 x){HP_add(x*(1-重伤()));}
+void Hero::MP_recover(f3 x){MP_add(x);}
+void Hero::AP_recover(f3 x){AP_add(x);}
 
 
 void Hero::recover()

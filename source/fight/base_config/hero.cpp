@@ -30,10 +30,11 @@ s2 hero_init()
 	
 	using ::Fight::State::Hid;
 
-	#include "hero/!pattern.cpp"
 	#include "hero/0x011_test1.cpp"
 	#include "hero/0x012_test2.cpp"
-	#include "hero/0x101.cpp"
+	#include "hero/0x101.cpp"	//王者铜
+	#include "hero/0x102.cpp"	//冰棍
+
 
 	#undef report_A对B使用了X
 	#undef report_A使用了X

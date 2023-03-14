@@ -28,7 +28,10 @@ struct State:State_A,Resource
 	s2 time;
 
 	State(const Player_Config::Group&ga,const Player_Config::Group&gb,u3 seed,Mem::SA&sa);
-
+	State(const State&)=delete;
+	State& operator=(const State&)=delete;
+	State& operator=(State&&)=delete;
+	
 	void init();
 
 	Group& operator[](s1 gid);

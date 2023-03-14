@@ -37,6 +37,10 @@ struct Skill
     Skill(State&state,Hid hid,const Base_Config::Skill&skill,s2 level,Skill_A&a);
     void init();
     
+    //CD减少操作，判断是否低于0
+    void CD_reduce(f3 x);
+
+    //CD自动回复，可以变成负数
     void CD_recover();
 
     s2 consumption_check();

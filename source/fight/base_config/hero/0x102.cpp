@@ -1,43 +1,41 @@
 #pragma once
 
 
-static_assert(0); //防止被include
-
-hero[0x000]=
+hero[0x102]=
 {
-	.name=L"test_hero",
-	.description=L"the hero for test",
+	.name=L"冰棍",
+	.description=L"强大的冰系魔法师，拥有召唤巨大冰棍的恐怖力量，每逢其释放大招，人们常惊叹：真是冰天下之大棍！",
 	.tag={},
 	.attribute_table=
 	{
-		.HP_lim={500,30},
-		.MP_lim={100,0},
-		.AP_lim={200,0},
+		.HP_lim={400,24},
+		.MP_lim={500,32},
+		.AP_lim={150,0},
 
-		.HP_re={5,0.3},
-		.MP_re={1,0},
-		.AP_re={70,0},
+		.HP_re={3,0.18},
+		.MP_re={10,0.7},
+		.AP_re={60,0},
 
-		.MP_init={100,0},
-		.AP_init={50,0},
+		.MP_init={500,32},
+		.AP_init={40,0},
 
-		.ATK={40,2.4},
+		.ATK={20,1.1},
 		
-		.P_res={40,0.35},
+		.P_res={30,0.2},
 		.M_res={25,0.2},
 
 		.Crt={0,0},
 		.CrtD={0,0},
 
-		.exAPre_profit={0.8,0},
+		.exAPre_profit={0.7,0},
 		.Con_res={0,0}
 	},
 	.skill=
 	{
 		//0,被动
 		{
-			.name=L"skill0",
-			.description=L"skill0",
+			.name=L"彻骨之寒",
+			.description=L"冰棍的主动技能命中目标时可使其获得\"冰寒\"层数，每个英雄最多十层，持续3+0.2L秒。受冰寒影响时，每层冰寒降低(1+0.1L)%的敏捷。当具有\"冰寒\"的英雄死亡时，冰棍可以汲取其中的力量并恢复法力值，每层可以恢复2%的法力值。",
 			.attribute_table={},
 			.cd={1,0},
 			.cd_init={1,0},
@@ -46,6 +44,22 @@ hero[0x000]=
 			.tag={},
 			.fun_init=lambda_Skill_init
 			{
+				//用hero.st.I0存储应该附加几层冰寒
+				auto&state=skill.state;
+				auto&hero=state[skill.hid];
+
+
+				hero.t_damage.add(state.gen_id(),
+				{
+					{
+						//.st={.P0=(void*)&hero.st.I0}
+					},
+					lambda_Damage_Handler
+					{
+
+						return 0;
+					}
+				});
 
 			},
 			//被动技能的check恒返回0

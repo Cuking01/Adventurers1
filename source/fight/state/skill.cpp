@@ -31,6 +31,15 @@ Skill::Skill(State&state,Hid hid,const Base_Config::Skill&skill,s2 level,Skill_A
 
 void Skill::init(){if(fun_init)fun_init(*this);}
 
+void Skill::CD_reduce(f3 x)
+{
+	if(CD>eps)
+	{
+		CD-=x;
+		if(CD<0)CD=0;
+	}
+}
+
 void Skill::CD_recover()
 {
 	if(CD>eps)

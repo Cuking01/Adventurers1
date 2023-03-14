@@ -1,7 +1,6 @@
 #pragma once
 
 
-//static_assert(0); //防止被include
 
 hero[0x101]=
 {
