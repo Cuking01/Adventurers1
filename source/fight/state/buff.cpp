@@ -22,3 +22,44 @@ s2 Skill_Handler::operator()(State&state,Hid hid,s2 skill_id,const Arg_t_6&arg)
 {
 	return fun(state,hid,skill_id,arg,st);
 }
+
+Timed_Val_Buff::Timed_Val_Buff(State&state,Buff_Base base,s2 t):
+	Buff_Base(base),
+	state(state)
+{
+	//I0记录层数
+    //I4记录上一次增加的时间
+    //U8记录删除事件的句柄
+    //I12存持续时间
+    st.I0=0;
+    st.I4=0;
+    st.U8=0;
+    st.I12=t;
+}
+
+void Timed_Val_Buff::add(s2 x)
+{
+	st.I0+=x;
+    st.I4=state.time;
+    state.event_queue.erase(st.U8);
+    st.U8=state.gen_id();
+    state.event_queue.add(st.U8,state.time+st.I12,
+    {
+        {.st={.P0=(void*)&st.I0}},
+        lambda_Event
+        {
+            *(s2*)st.P0=0;
+            return 0;
+        }
+    });
+}
+void Timed_Val_Buff::cls(BT::驱散等级_t 驱散等级)
+{
+    if(驱散等级.val>=tag.驱散等级)
+        st.I0=0;
+}
+
+s2& Timed_Val_Buff::operator()() noexcept
+{
+    return st.I0;
+}

@@ -130,7 +130,8 @@ Hero_A::Hero_A(Mem::SA&sa):
 	trigger_event_a(sa),
 	trigger_damage_handler_a(sa),
 	trigger_skill_handler_a(sa),
-	damage_a(sa)
+	damage_a(sa),
+	map_timed_val_buff_a(sa)
 {}
 
 Hero::Hero(State&state,Hid hid,const Player_Config::Hero&hero,Hero_A&a):
@@ -159,7 +160,8 @@ Hero::Hero(State&state,Hid hid,const Player_Config::Hero&hero,Hero_A&a):
 	t_before_damaged(a.trigger_damage_handler_a),
 	t_damaged(a.trigger_damage_handler_a),
 	t_use_skill(a.trigger_skill_handler_a),
-	t_die(a.trigger_event_a)
+	t_die(a.trigger_event_a),
+	timed_val_buff_table(a.map_timed_val_buff_a)
 {}
 
 void Hero::init()

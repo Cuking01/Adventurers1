@@ -20,7 +20,7 @@ struct Map
 
     TV& operator[](const TK&key);
     template<typename TKp,typename TVp>
-    void insert(TKp&&key,TVp&&value);
+    Set<T>::iterator insert(TKp&&key,TVp&&value);
     Set<T>::iterator erase(const TK&key) noexcept;
     Set<T>::iterator erase(Set<T>::iterator it) noexcept;
     Set<T>::iterator find(const TK&key) noexcept;

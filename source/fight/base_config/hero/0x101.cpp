@@ -46,35 +46,37 @@ hero[0x101]=
 			.fun_init=lambda_Skill_init
 			{
 				//I0存储层数，I4存储上次受伤时间，U16存储清零事件id，D8存储每层减伤比例。
+				//P0存timed_val_buff的地址
+
 				auto&st=skill.st;
-
-				st.I0=0;
-				st.I4=0;
-				st.D8=0.01*(3+0.1*skill.level);
-				st.U16=0;
-
 				auto&state=skill.state;
 				auto&hero=state[skill.hid];
+
+				u2 id=state.gen_id();
+
+				auto it=hero.timed_val_buff_table.insert(id,State::Timed_Val_Buff{state,{.tag={BT::正面,BT::强驱散},.hid=hero.hid,.name=L"坚韧不屈"},40});
+
+				st.P0=(void*)&it->value();
+				st.D8=(3+0.1*skill.level)*0.01;
+				st.P16=(void*)&it->value;
 
 				//给自身添加减伤buff
 				hero.t_damaged.add(state.gen_id(),
 				{
 					{
 						.st={.P0=(void*)&st},
-						.tag={BT::正面,BT::不可驱散},
-						.name=L"坚韧不屈"
 					},
 					lambda_Damage_Handler
 					{
 						damage.x.add(state.gen_id(),
 						{
 							{
-								.st={.P0=st.P0}
+								.st={.P0=(void*)st.P0}
 							},
 							lambda_Buff
 							{
 								auto*p=(Arg_t_7*)st.P0;
-								bh.subp*=(1-p->D8*p->I0);
+								bh.subp*=1.0-p->D8*(*(s2*)p->P0);
 								return 0;
 							}
 						});
@@ -86,38 +88,14 @@ hero[0x101]=
 				hero.t_damaged.add(state.gen_id(),
 				{
 					{
-						.st={.P0=(void*)&st},
-						.tag={BT::不可驱散,BT::正面}
+						.st={.P0=st.P16}
 					},
 					lambda_Damage_Handler
 					{
 						if(damage.tag(DT::直接))
 						{
-							auto*p=(Arg_t_7*)st.P0;
-							//层数加一
-							if(p->I0<6)p->I0++;
-							//刷新受伤时间
-							p->I4=state.time;
-							//删除原先的清零事件
-							state.event_queue.erase(p->U16);
-
-							//生成新的清零事件
-							u2 id=state.gen_id();
-							p->U16=id;
-							state.event_queue.add(id,state.time+40,
-							{
-								{
-									.st={.P0=st.P0},
-									.tag={BT::负面,BT::不可驱散},
-								},
-								lambda_Event
-								{
-									auto*p=(Arg_t_7*)st.P0;
-									p->I0=0;
-									return 0;
-								}
-							});
-
+							auto*p=(State::Timed_Val_Buff*)st.P0;
+							p->add(1);
 						}
 						return 0;
 					}

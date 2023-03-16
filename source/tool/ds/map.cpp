@@ -19,9 +19,9 @@ TV& Map<TK,TV>::operator[](const TK&key)
 
 template<typename TK,typename TV>
 template<typename TKp,typename TVp>
-void Map<TK,TV>::insert(TKp&&key,TVp&&value)
+Set<typename Map<TK,TV>::T>::iterator Map<TK,TV>::insert(TKp&&key,TVp&&value)
 {
-	set.insert({std::forward<TKp>(key),std::forward<TVp>(value)});
+	return set.insert({std::forward<TKp>(key),std::forward<TVp>(value)});
 }
 template<typename TK,typename TV>
 Set<typename Map<TK,TV>::T>::iterator Map<TK,TV>::erase(const TK&key) noexcept
