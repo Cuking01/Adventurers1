@@ -23,6 +23,8 @@ s2 Skill_Handler::operator()(State&state,Hid hid,s2 skill_id,const Arg_t_6&arg)
 	return fun(state,hid,skill_id,arg,st);
 }
 
+Timed_Val_Buff::Timed_Val_Buff():state(*(State*)0){}
+
 Timed_Val_Buff::Timed_Val_Buff(State&state,Buff_Base base,s2 t):
 	Buff_Base(base),
 	state(state)

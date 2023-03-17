@@ -9,6 +9,7 @@ constexpr f3 eps=1e-6;
 #include "state/hid.h"
 #include "state/state.h"
 #include "state/group.h"
+#include "state/timed_val_buff_table.h"
 #include "state/hero.h"
 #include "state/event_queue.h"
 #include "state/skill.h"

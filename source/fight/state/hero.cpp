@@ -131,7 +131,7 @@ Hero_A::Hero_A(Mem::SA&sa):
 	trigger_damage_handler_a(sa),
 	trigger_skill_handler_a(sa),
 	damage_a(sa),
-	map_timed_val_buff_a(sa)
+	timed_val_buff_table_a(sa)
 {}
 
 Hero::Hero(State&state,Hid hid,const Player_Config::Hero&hero,Hero_A&a):
@@ -161,7 +161,7 @@ Hero::Hero(State&state,Hid hid,const Player_Config::Hero&hero,Hero_A&a):
 	t_damaged(a.trigger_damage_handler_a),
 	t_use_skill(a.trigger_skill_handler_a),
 	t_die(a.trigger_event_a),
-	timed_val_buff_table(a.map_timed_val_buff_a)
+	timed_val_buff_table(state,hid,a.timed_val_buff_table_a)
 {}
 
 void Hero::init()
@@ -238,14 +238,12 @@ s2 Hero::damaged(Damage&damage)
 	f3 val=damage();
 	Damage damage_tmp(state,val,damage.from,damage.to,damage.crt,damage.tag,state.damage_a);
 
-	if(s2 ret=t_damaged(state,damage_tmp);ret)
-		return ret;
-
 	val=damage_tmp();
 
 	state.report.write(fmt::format(L"{:s} 受到了 {:.2f} 点伤害\n",report_name(),val));
 	HP-=val;
 	if(HP<eps)die();
+	else t_damaged(state,damage_tmp);
 	return 0;
 }
 

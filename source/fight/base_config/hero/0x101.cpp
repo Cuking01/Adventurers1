@@ -52,16 +52,15 @@ hero[0x101]=
 				auto&state=skill.state;
 				auto&hero=state[skill.hid];
 
-				u2 id=state.gen_id();
+				u2 id=hero.timed_val_buff_table.add({BT::正面,BT::强驱散},40,L"坚韧不屈");
+				auto&buff=hero.timed_val_buff_table[id];
 
-				auto it=hero.timed_val_buff_table.insert(id,State::Timed_Val_Buff{state,{.tag={BT::正面,BT::强驱散},.hid=hero.hid,.name=L"坚韧不屈"},40});
-
-				st.P0=(void*)&it->value();
+				st.P0=(void*)&buff();
 				st.D8=(3+0.1*skill.level)*0.01;
-				st.P16=(void*)&it->value;
+				st.P16=(void*)&buff;
 
 				//给自身添加减伤buff
-				hero.t_damaged.add(state.gen_id(),
+				hero.t_before_damaged.add(state.gen_id(),
 				{
 					{
 						.st={.P0=(void*)&st},
@@ -261,7 +260,7 @@ hero[0x101]=
 
 
 				s2 L=skill.level;
-				auto&I0=hero.skill[0].st.I0;
+				auto&I0=*(s2*)hero.skill[0].st.P0;
 				s1 pos=arg.SH2;
 
 				report_A于位置B使用了X(skill.hid,pos,L"战气罡风");

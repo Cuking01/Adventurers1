@@ -48,7 +48,8 @@ hero[0x102]=
 				auto&state=skill.state;
 				auto&hero=state[skill.hid];
 
-
+				//for(s1 pos=0;pos<5;pos++)
+					//state[skill.hid.gid][pos].timed_val_buff_table.add(,)
 				hero.t_damage.add(state.gen_id(),
 				{
 					{

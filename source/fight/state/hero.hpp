@@ -37,7 +37,7 @@ struct Hero_A
     Trigger_A<Damage_Handler> trigger_damage_handler_a;
     Trigger_A<Skill_Handler> trigger_skill_handler_a;
     Damage_A damage_a;
-    DS::Map<u2,Timed_Val_Buff>::A map_timed_val_buff_a;
+    Timed_Val_Buff_Table_A timed_val_buff_table_a;
     Hero_A(Mem::SA&sa);
 };
 
@@ -56,7 +56,7 @@ struct Hero:Attribute_Table,Sp_State
     Trigger<Damage_Handler> t_damaged;
     Trigger<Skill_Handler> t_use_skill;
     Trigger<Event> t_die;
-    DS::Map<u2,Timed_Val_Buff> timed_val_buff_table;
+    Timed_Val_Buff_Table timed_val_buff_table;
 
 
     Hero(State&state,Hid hid,const Player_Config::Hero&hero,Hero_A&a);

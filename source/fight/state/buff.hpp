@@ -88,6 +88,7 @@ struct Skill_Handler:Buff_Base
 struct Timed_Val_Buff:Buff_Base
 {
     State&state;
+    Timed_Val_Buff();
     Timed_Val_Buff(State&state,Buff_Base base,s2 t);
 
     void add(s2 x);

@@ -12,6 +12,7 @@ namespace State
 #include "state/damage.hpp"
 #include "state/skill.hpp"
 #include "state/equipment.hpp"
+#include "state/timed_val_buff_table.hpp"
 #include "state/hero.hpp"
 #include "state/group.hpp"
 #include "state/report.hpp"
