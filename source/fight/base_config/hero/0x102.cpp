@@ -47,21 +47,64 @@ hero[0x102]=
 				//用hero.st.I0存储应该附加几层冰寒
 				auto&state=skill.state;
 				auto&hero=state[skill.hid];
+				auto&st=skill.st;
+				for(s1 pos=0;pos<5;pos++)
+				{
+					auto&hero=state[skill.hid.gid^1][pos];
+					
+					st.P[pos]=(void*)hero.timed_val_buff_table.add({BT::负面,BT::中驱散},30+skill.level,10,L"冰寒");
+					Arg_t_5 buff_st;
+					buff_st.P0=(void*)&(((State::Timed_Val_Buff*)st.P[pos])->st.I0);
+					buff_st.D8=(1+0.1*skill.level)*0.01;
+					hero.AP_re.add(state.gen_id(),
+					{
+						{.st=buff_st},
+						lambda_Buff
+						{
+							bh.subp*=(1-st.D8*(*(s2*)st.P0));
+							return 0;
+						}
+					});
+				}
 
-				//for(s1 pos=0;pos<5;pos++)
-					//state[skill.hid.gid][pos].timed_val_buff_table.add(,)
 				hero.t_damage.add(state.gen_id(),
 				{
 					{
-						//.st={.P0=(void*)&hero.st.I0}
+						//P0指向冰寒层数，P8指向st
+						.st={.P0=(void*)&hero.st.I0,.P8=(void*)&st}
 					},
 					lambda_Damage_Handler
 					{
-
+						damage.addition.add(state.gen_id(),
+						{
+							{
+								.st={.P0=st.P0,.P8=(void*)((Arg_t_7*)st.P8)->P[damage.to.pos]}
+							},
+							lambda_Damage_Handler
+							{
+								s2 x=*(s2*)st.P0;
+								if(x>0)
+									((State::Timed_Val_Buff*)st.P8)->add(x);
+								return 0;
+							}				
+						});
 						return 0;
 					}
 				});
 
+				hero.t_use_skill.add(state.gen_id(),
+				{
+					{},
+					lambda_Skill_Handler
+					{
+						s2 x;
+						if(sid==2||sid==4)x=2;
+						else if(sid==3)x=1;
+						else x=0;
+						state[hid].st.I0=x;
+						return 0;
+					}
+				});
 			},
 			//被动技能的check恒返回0
 			.fun_check=lambda_Skill_check

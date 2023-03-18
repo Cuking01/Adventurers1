@@ -44,6 +44,7 @@ struct Hero_A
 struct Hero:Attribute_Table,Sp_State
 {
     State&state;
+    Arg_t_7 st;
     s2 id;
     Hid hid;
     s2 alive;

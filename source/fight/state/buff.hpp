@@ -82,14 +82,14 @@ struct Damage_Handler:Buff_Base
 struct Skill_Handler:Buff_Base
 {
     s2 (*fun)(State&,Hid,s2,const Arg_t_6&,const Arg_t_5&);
-    s2 operator()(State&state,Hid hid,s2 skill_id,const Arg_t_6&arg);
+    s2 operator()(State&state,Hid hid,s2 sid,const Arg_t_6&arg);
 };
 
 struct Timed_Val_Buff:Buff_Base
 {
     State&state;
     Timed_Val_Buff();
-    Timed_Val_Buff(State&state,Buff_Base base,s2 t);
+    Timed_Val_Buff(State&state,Buff_Base base,s2 t,s2 max_x);
 
     void add(s2 x);
     void cls(BT::驱散等级_t 驱散等级);

@@ -10,9 +10,9 @@ Timed_Val_Buff_Table::Timed_Val_Buff_Table(State&state,Hid hid,Timed_Val_Buff_Ta
 	hid(hid)
 {}
 
-u2 Timed_Val_Buff_Table::add(BT tag,s2 t,const wchar_t*name)
+Timed_Val_Buff*Timed_Val_Buff_Table::add(BT tag,s2 t,s2 max_x,const wchar_t*name)
 {
 	u2 id=state.gen_id();
-	insert(id,Timed_Val_Buff{state,{.tag=tag,.hid=hid,.name=name},t});
-	return id;
+	auto &buff=insert(id,Timed_Val_Buff{state,{.tag=tag,.hid=hid,.name=name},t,max_x})->value;
+	return &buff;
 }

@@ -52,12 +52,12 @@ hero[0x101]=
 				auto&state=skill.state;
 				auto&hero=state[skill.hid];
 
-				u2 id=hero.timed_val_buff_table.add({BT::正面,BT::强驱散},40,L"坚韧不屈");
-				auto&buff=hero.timed_val_buff_table[id];
+				auto*buff=hero.timed_val_buff_table.add({BT::正面,BT::强驱散},40,6,L"坚韧不屈");
 
-				st.P0=(void*)&buff();
+
+				st.P0=(void*)&buff->st.I0;
 				st.D8=(3+0.1*skill.level)*0.01;
-				st.P16=(void*)&buff;
+				st.P16=(void*)buff;
 
 				//给自身添加减伤buff
 				hero.t_before_damaged.add(state.gen_id(),
