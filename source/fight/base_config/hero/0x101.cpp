@@ -263,7 +263,12 @@ hero[0x101]=
 				auto&I0=*(s2*)hero.skill[0].st.P0;
 				s1 pos=arg.SH2;
 
+				f3 damage_val=(0.4+0.02*L+(0.1+0.02*L)*I0)*hero.ATK();
+
 				report_A于位置B使用了X(skill.hid,pos,L"战气罡风");
+
+
+
 				for(s1 i=0;i<3;i++)
 				{
 					s1 tp=pos+i;
@@ -271,7 +276,7 @@ hero[0x101]=
 						hero.cause_damage
 						(
 							{(s1)(skill.hid.gid^1),tp},
-							(0.4+0.02*L+(0.1+0.02*L)*I0)*hero.ATK(),
+							damage_val,
 							{DT::直接,DT::物理,DT::群体}
 						);
 				}

@@ -116,8 +116,8 @@ hero[0x102]=
 		},
 		//1,普攻
 		{
-			.name=L"skill1",
-			.description=L"skill1",
+			.name=L"普通攻击",
+			.description=L"普通攻击",
 			.attribute_table={},
 			.cd={0.5,0},
 			.cd_init={0,0},
@@ -152,53 +152,127 @@ hero[0x102]=
 		},
 		//2,主动1
 		{
-			.name=L"skill2",
-			.description=L"skill2",
+			.name=L"寒冰箭",
+			.description=L"消耗15%的法力值，对单个目标造成(1+0.02L)倍消耗量的伤害，并附加两层冰寒效果。",
 			.attribute_table={},
-			.cd={1,0},
-			.cd_init={1,0},
-			.AP_use={0,0},
-			.MP_use={0,0},
-			.tag={},
+			.cd={3,-0.1},
+			.cd_init={0,0},
+			.AP_use={50,-1},
+			.MP_use={0.15,0},
+			.tag=
+			{
+				.consumption_check=1,
+				.sp_state_check=1,
+				.target_check=1,
+				.group_restrict=1,
+				.target_group=1,
+				.auto_consume=1
+			},
 			.fun_init=nullptr,
 			.fun_check=nullptr,
 			.fun_use=lambda_Skill_use
 			{
+				auto&state=skill.state;
+				auto&hero=state[skill.hid];
 
+				report_A对B使用了X(skill.hid,State::Hid(arg.I0),L"寒冰箭");
+
+				hero.cause_damage
+				(
+					arg.I0,
+					hero.MP_lim()*skill.MP_use()*(1+0.02*skill.level),
+					{DT::直接,DT::魔法,DT::单体}
+				);
 			}
 		},
 		//3,主动2
 		{
-			.name=L"skill3",
-			.description=L"skill3",
+			.name=L"冰雨术",
+			.description=L"可对相邻的最多三个英雄同时造成0.5+0.009L倍消耗法力的魔法伤害，并附加一层冰寒效果。",
 			.attribute_table={},
-			.cd={1,0},
-			.cd_init={1,0},
-			.AP_use={0,0},
-			.MP_use={0,0},
+			.cd={7,-0.15},
+			.cd_init={0,0},
+			.AP_use={60,-1},
+			.MP_use={0.18,0},
 			.tag={},
 			.fun_init=nullptr,
 			.fun_check=nullptr,
 			.fun_use=lambda_Skill_use
 			{
-				
+				auto&state=skill.state;
+				auto&hero=state[skill.hid];
+
+
+				s2 L=skill.level;
+				s1 pos=arg.SH2;
+
+				report_A于位置B使用了X(skill.hid,pos,L"冰雨术");
+
+				f3 damage_val=(0.5+0.01*L)*hero.MP_lim()*skill.MP_use();
+
+				for(s1 i=0;i<3;i++)
+				{
+					s1 tp=pos+i;
+					if(tp>=0&&tp<5&&state[skill.hid.gid^1][tp].alive)
+						hero.cause_damage
+						(
+							{(s1)(skill.hid.gid^1),tp},
+							damage_val,
+							{DT::直接,DT::魔法,DT::群体}
+						);
+				}
 			}
 		},
 		//4,主动3
 		{
-			.name=L"skill4",
-			.description=L"skill4",
+			.name=L"真是冰天下之大棍！",
+			.description=L"召唤巨大的冰棍从天而降， 砸向所有敌方英雄，对所有敌方英雄造成0.4倍消耗的魔法伤害，眩晕0.5秒，并附加两层冰寒效果",
 			.attribute_table={},
-			.cd={1,0},
-			.cd_init={1,0},
-			.AP_use={0,0},
-			.MP_use={0,0},
+			.cd={20,-0.5},
+			.cd_init={10,-1},
+			.AP_use={80,-1},
+			.MP_use={0.4,0},
 			.tag={},
 			.fun_init=nullptr,
 			.fun_check=nullptr,
 			.fun_use=lambda_Skill_use
 			{
-				
+				auto&state=skill.state;
+				auto&hero=state[skill.hid];
+
+
+				s2 L=skill.level;
+
+				report_A使用了X(skill.hid,L"真是冰天下之大棍");
+
+				f3 damage_val=(0.5+0.01)*hero.MP_lim()*skill.MP_use();
+
+				for(s1 i=0;i<5;i++)
+				{
+					s1 tp=i;
+					if(tp>=0&&tp<5&&state[skill.hid.gid^1][tp].alive)
+					{
+						Hid target={(s1)(skill.hid.gid^1),tp};
+						auto &damage=hero.make_damage
+						(
+							target,
+							damage_val,
+							{DT::直接,DT::魔法,DT::群体}
+						);
+
+						damage.addition.add(state.gen_id(),
+						{
+							{.st={.I0=(s2)target,.I4=L}},
+							lambda_Damage_Handler
+							{
+								auto&hero=state[Hid(st.I0)];
+								hero.en_眩晕(5+3*st.I4/10);
+								return 0;
+							}
+						});
+					}
+					
+				}
 			}
 		}
 	}
