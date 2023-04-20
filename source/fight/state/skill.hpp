@@ -10,12 +10,14 @@ struct Skill
 {
     State&state;
     Hid hid;
+    s2 sid;
     s2 level;
     Attribute AP_use,MP_use;
     Attribute CD_lim;
     Arg_t_7 st;
 
     f3 CD;
+    
 
     struct Tag
     {

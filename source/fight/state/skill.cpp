@@ -17,6 +17,7 @@ Skill::Tag::Tag(Base_Config::Skill::Tag tag):
 Skill::Skill(State&state,Hid hid,const Base_Config::Skill&skill,s2 level,Skill_A&a):
 	state(state),
 	hid(hid),
+	sid(this-state[hid].skill),
 	level(level),
 	AP_use(skill.AP_use(level),a.attribute_a),
 	MP_use(skill.MP_use(level),a.attribute_a),
@@ -75,7 +76,11 @@ s2 Skill::target_check(Hid target)
 	{
 		s2 cnt_嘲讽=0;
 		for(s1 i=0;i<5;i++)
-			cnt_嘲讽+=state[target.gid][i].嘲讽()>eps;
+		{
+			auto&hero=state[target.gid][i];
+			if(hero.alive)
+				cnt_嘲讽+=hero.嘲讽()>eps;
+		}
 		if(cnt_嘲讽&&state[target].嘲讽()<eps)return 0x23;
 	}
 	return 0;
@@ -84,7 +89,9 @@ s2 Skill::target_check(Hid target)
 void Skill::auto_consume()
 {
 	auto& hero=state[hid];
+	//f3 x;
 	hero.MP-=MP_use()*hero.MP_lim();
+	//printf("%.2f\n",x);
 	hero.AP-=AP_use();
 	CD+=CD_lim();
 }
@@ -102,6 +109,7 @@ void Skill::use(const Arg_t_6&arg)
 {
 	if(tag.auto_consume)
 		auto_consume();
+	state[hid].t_use_skill(state,hid,sid,arg);
 	fun_use(*this,arg);
 	if(tag.cancel_潜行)
 		state[hid].cls_潜行();

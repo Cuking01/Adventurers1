@@ -9,14 +9,14 @@ hero[0x102]=
 	.attribute_table=
 	{
 		.HP_lim={400,24},
-		.MP_lim={500,32},
+		.MP_lim={650,40},
 		.AP_lim={150,0},
 
 		.HP_re={3,0.18},
 		.MP_re={10,0.7},
 		.AP_re={60,0},
 
-		.MP_init={500,32},
+		.MP_init={650,40},
 		.AP_init={40,0},
 
 		.ATK={20,1.1},
@@ -53,15 +53,29 @@ hero[0x102]=
 					auto&hero=state[skill.hid.gid^1][pos];
 					
 					st.P[pos]=(void*)hero.timed_val_buff_table.add({BT::负面,BT::中驱散},30+skill.level,10,L"冰寒");
+
 					Arg_t_5 buff_st;
 					buff_st.P0=(void*)&(((State::Timed_Val_Buff*)st.P[pos])->st.I0);
 					buff_st.D8=(1+0.1*skill.level)*0.01;
+					buff_st.I16=(s2)skill.hid;
 					hero.AP_re.add(state.gen_id(),
 					{
 						{.st=buff_st},
 						lambda_Buff
 						{
 							bh.subp*=(1-st.D8*(*(s2*)st.P0));
+							return 0;
+						}
+					});
+
+					hero.t_die.add(state.gen_id(),
+					{
+						{.st=buff_st},
+						lambda_Event
+						{
+							auto&hero=state[Hid(st.I16)];
+							hero.MP_add(hero.MP_lim()*(*(s2*)st.P0)*0.01);
+							printf("%d\n",*(s2*)st.P0);
 							return 0;
 						}
 					});
@@ -243,7 +257,7 @@ hero[0x102]=
 
 				s2 L=skill.level;
 
-				report_A使用了X(skill.hid,L"真是冰天下之大棍");
+				report_A使用了X(skill.hid,L"真是冰天下之大棍！");
 
 				f3 damage_val=(0.5+0.01)*hero.MP_lim()*skill.MP_use();
 
@@ -270,6 +284,9 @@ hero[0x102]=
 								return 0;
 							}
 						});
+
+						damage.act();
+						damage.destroy();
 					}
 					
 				}

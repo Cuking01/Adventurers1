@@ -68,7 +68,7 @@ void Report::save(wchar_t*tp) const
 void Report::write(const wchar_t* sp)
 {
 	//最长10万
-	if(len>=100000)return;
+	if(len>=500000)return;
 
 	s2 l=wcslen(sp);
 
