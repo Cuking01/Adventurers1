@@ -74,16 +74,16 @@ void State::recover()
 
 void State::log_hero_state()
 {
-	report.write(fmt::format(L"<------------------------第{:4.1f}秒------------------------>\n\n",time*0.1));
+	report.write(std::format(L"<------------------------第{:4.1f}秒------------------------>\n\n",time*0.1));
 	for(s1 gid=0;gid<2;gid++)
 	{
-		report.write(fmt::format(L"<-------------------------队伍 {:c}------------------------->\n\n",(wchar_t)('A'+gid)));
+		report.write(std::format(L"<-------------------------队伍 {:c}------------------------->\n\n",(wchar_t)('A'+gid)));
 
 		for(s1 pos=0;pos<5;pos++)
 		{
 			if(hero({gid,pos}).alive)
 			{
-				report.write(fmt::format(
+				report.write(std::format(
 					L"{:s}: HP={:.2f}/{:.2f}  MP:{:.2f}/{:.2f}  AP:{:.2f}/{:.2f}\n",
 					Base_Config::hero[hero({gid,pos}).id].name,
 					hero({gid,pos}).HP,hero({gid,pos}).HP_lim(),
@@ -92,7 +92,7 @@ void State::log_hero_state()
 				));
 			}
 			else
-				report.write(fmt::format(
+				report.write(std::format(
 					L"{:s}: 阵亡\n",
 					Base_Config::hero[hero({gid,pos}).id].name
 				));
@@ -138,6 +138,6 @@ s2 State::start()
 	if(ret>=0&&ret<=2)
 		log_hero_state();
 
-	report.write(fmt::format(L"战斗结束，{:s}\n",ret==0?L"队伍 A 获胜！":ret==1?L"队伍 B 获胜！":ret==2?L"双方势均力敌，战成平手！":fmt::format(L"内部错误:{:d}。\n",ret)));
+	report.write(std::format(L"战斗结束，{:s}\n",ret==0?L"队伍 A 获胜！":ret==1?L"队伍 B 获胜！":ret==2?L"双方势均力敌，战成平手！":std::format(L"内部错误:{:d}。\n",ret)));
 	return ret;
 }

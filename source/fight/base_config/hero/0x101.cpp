@@ -181,7 +181,7 @@ hero[0x101]=
 					{
 						auto&hero=state[damage.to];
 						u2 id=state.gen_id();
-						report_X(fmt::format(L"{:s} 的护甲降低了\n",hero.report_name()));
+						report_X(std::format(L"{:s} 的护甲降低了\n",hero.report_name()));
 						hero.P_res.add(id,
 						{
 							{

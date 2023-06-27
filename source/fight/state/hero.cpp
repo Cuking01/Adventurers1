@@ -180,7 +180,7 @@ void Hero::init()
 //战报中使用的名称
 std::wstring Hero::report_name() const
 {
-	return fmt::format(L"{:s}({:c},{:d})",Base_Config::hero[id].name,(wchar_t)('A'+hid.gid),hid.pos);
+	return std::format(L"{:s}({:c},{:d})",Base_Config::hero[id].name,(wchar_t)('A'+hid.gid),hid.pos);
 };
 
 void Hero::HP_add(f3 x)
@@ -241,7 +241,7 @@ s2 Hero::damaged(Damage&damage)
 
 	val=damage_tmp();
 
-	state.report.write(fmt::format(L"{:s} 受到了 {:.2f} 点伤害\n",report_name(),val));
+	state.report.write(std::format(L"{:s} 受到了 {:.2f} 点伤害\n",report_name(),val));
 	HP-=val;
 	if(HP<eps)die();
 	else t_damaged(state,damage_tmp);
