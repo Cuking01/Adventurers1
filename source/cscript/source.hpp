@@ -18,11 +18,13 @@ struct Unit
 
 struct Symbol:Unit
 {
+	s2 x;        //存储具体符号
 	Unit_T type() const noexcept;
 };
 
 struct Literal:Unit
 {
+	
 	Unit_T type() const noexcept;
 };
 

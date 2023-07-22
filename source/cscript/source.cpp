@@ -17,7 +17,7 @@ s2 Compiler::compile_init()
 
 s2 Compiler::pre_process()
 {
-	//去注释
+	//去注释+
 	//执行预处理命令
 	return 0;
 }
