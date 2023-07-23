@@ -91,6 +91,58 @@ s2 Compiler::merge_line()     //翻译阶段2，合并斜杠和换行符号为�
 
 s2 Compiler::remove_note()    //去注释    翻译阶段3
 {
+	s2 len=code.length();
+	s2 j=0,i=0;
+	while(i<len)
+	{
+		if(i<len-1&&code[i]==L'/'&&code[i+1]==L'/')
+		{
+			code[j++]=' ';
+			i+=2;
+			while(i<len&&code[i]!=L'\n')
+				i++;
+		}
+		else if(i<len-1&&code[i]==L'/'&&code[i+1]==L'*')
+		{
+			code[j++]=' ';
+			i+=2;
+			while(i<len-1&&!(code[i]==L'*'&&code[i+1]==L'/'))
+				i++;
+			if(i==len-1)     //错误，注释符号没有匹配
+			{
+				/*报错*/
+				return 1;
+			}
+
+			i+=2;
+		}
+		else if(code[i]==L'\"')
+		{
+			code[j++]=code[i++];
+			while(i<len&&!(code[i-1]!=L'\\'&&code[i]==L'\"'))
+				code[j++]=code[i++];
+			if(i==len)   //错误，双引号不匹配
+			{
+				/*报错*/
+				return 1;
+			}
+
+			code[j++]=code[i++];
+		}
+		else if(code[i]==L'\'')
+		{
+			code[j++]=code[i++];
+			while(i<len&&!(code[i-1]!=L'\\'&&code[i]==L'\''))
+				code[j++]=code[i++];
+			if(i==len)   //错误，单引号不匹配
+			{
+				/*报错*/
+				return 1;
+			}
+
+			code[j++]=code[i++];
+		}
+	}
 	return 0;
 }
 
