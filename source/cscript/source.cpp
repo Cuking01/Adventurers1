@@ -15,26 +15,111 @@ s2 Compiler::compile_init()
 	return 0;
 }
 
-s2 Compiler::pre_process()
+s2 Compiler::extract()         //翻译阶段1，提取合法字符，不考虑三标符
 {
-	//去注释+
-	//执行预处理命令
+	struct Check
+	{
+		s0 ok[128];
+		constexpr Check()
+		{
+			//清空表
+			for(s2 i=0;i<128;i++)ok[i]=0;  
+
+			//数字，字母
+			for(s2 i='0';i<='9';i++)
+				ok[i]=1;
+			for(s2 i='a';i<='z';i++)
+				ok[i]=1;
+			for(s2 i='A';i<='Z';i++)
+				ok[i]=1;
+
+			//空白字符：空格，水平制表符，垂直制表符，换行，换页
+			ok[32]=ok[9]=ok[11]=ok[10]=ok[12]=1;
+
+			//其他：_{}[]#()<>%:;.?*+-/^&|~!=,\"'
+			ok['_']=ok['{']=ok['}']=ok['[']=ok[']']=
+			ok['#']=ok['(']=ok[')']=ok['<']=ok['>']=
+			ok['%']=ok[':']=ok[';']=ok['.']=ok['?']=
+			ok['*']=ok['+']=ok['-']=ok['/']=ok['^']=
+			ok['&']=ok['|']=ok['~']=ok['!']=ok['=']=
+			ok[',']=ok['\\']=ok['\"']=ok['\'']=1;
+
+		}
+
+		//检查是否是合法字符
+		s2 operator()(wchar_t c) const
+		{
+			if(c>=0&&c<=127)return ok[c];
+			//非ASCII字符一律合法
+			else return 1;
+		}
+	};
+	static constexpr Check check;
+
+	s2 len=code.length();
+	s2 j=0;
+
+	for(s2 i=0;i<len;i++)
+	{
+		auto c=code[i];
+		if(check(c))code[j++]=c;
+		else {/*报警告*/};
+	}
+
+	code.resize(j);
+
 	return 0;
 }
+
+s2 Compiler::merge_line()     //翻译阶段2，合并斜杠和换行符号为空
+{
+	s2 len=code.length();
+	s2 j=0;
+	for(s2 i=0;i<len;i++)
+	{
+		//删掉斜杠换行组合
+		if(i+1<len&&code[i]==L'\\'&&code[i+1]==L'\n')
+			i++;
+		else
+			code[j++]=code[i];
+	}
+
+	code.resize(j);
+
+	return 0;
+}
+
+s2 Compiler::remove_note()    //去注释    翻译阶段3
+{
+	return 0;
+}
+
 
 s2 Compiler::split()
 {
 	//拆分成单元
 	return 0;
 }
-s2 Compiler::compile()
+
+
+s2 Compiler::compile() try
 {
+
 	//初始化
 	compile_init();
-	//预处理
-	pre_process();
+
+	//提取合法字符
+	extract();
+
+
+
 	//拆分成单元
 	split();
 
 	return 0;
 }
+catch(...)
+{
+	return 0;
+}
+

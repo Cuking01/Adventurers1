@@ -47,8 +47,15 @@ struct Compiler
 	Compiler(std::wstring code,Compiler_A&a);
 
 	s2 compile_init();
+
+	s2 extract();        //翻译阶段1，提取合法字符
+	s2 merge_line();     //翻译阶段2，合并斜杠和换行符号为空
+
+	s2 remove_note();    //去注释    翻译阶段3
+	s2 split();          //拆分      翻译阶段3
+	
 	s2 pre_process();
-	s2 split();
+	
 	s2 compile();
 };
 
