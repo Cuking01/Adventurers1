@@ -1,13 +1,25 @@
 #pragma once
 
 
-Unit_T Symbol::type() const noexcept {return Unit_T::symbol;}
-Unit_T Literal::type() const noexcept {return Unit_T::literal;}
-Unit_T Identifier::type() const noexcept {return Unit_T::identifier;}
 
-Compiler::Compiler(std::wstring code,Compiler_A&a):
-	a(&a),code(code)
-{}
+Code_Char::operator wchar_t () const noexcept
+{
+	return c;
+}
+
+Compiler::Compiler(std::wstring code_,Compiler_A&a):
+	a(&a)
+{
+	code.reserve(code_.length());
+	s2 line=1;
+	s2 col=1;
+	for(wchar_t c:code_)
+	{
+		code.emplace_back(c,line,col);
+		if(c==L'\n')line++,col=1;
+		else col++;
+	}
+}
 
 s2 Compiler::compile_init()
 {
@@ -56,7 +68,7 @@ s2 Compiler::extract()         //翻译阶段1，提取合法字符，不考虑�
 	};
 	static constexpr Check check;
 
-	s2 len=code.length();
+	s2 len=code.size();
 	s2 j=0;
 
 	for(s2 i=0;i<len;i++)
@@ -67,13 +79,12 @@ s2 Compiler::extract()         //翻译阶段1，提取合法字符，不考虑�
 	}
 
 	code.resize(j);
-
 	return 0;
 }
 
 s2 Compiler::merge_line()     //翻译阶段2，合并斜杠和换行符号为空
 {
-	s2 len=code.length();
+	s2 len=code.size();
 	s2 j=0;
 	for(s2 i=0;i<len;i++)
 	{
@@ -91,20 +102,20 @@ s2 Compiler::merge_line()     //翻译阶段2，合并斜杠和换行符号为�
 
 s2 Compiler::remove_note()    //去注释    翻译阶段3
 {
-	s2 len=code.length();
+	s2 len=code.size();
 	s2 j=0,i=0;
 	while(i<len)
 	{
 		if(i<len-1&&code[i]==L'/'&&code[i+1]==L'/')
 		{
-			code[j++]=' ';
+			code[j++]={L' ',0,0};
 			i+=2;
 			while(i<len&&code[i]!=L'\n')
 				i++;
 		}
 		else if(i<len-1&&code[i]==L'/'&&code[i+1]==L'*')
 		{
-			code[j++]=' ';
+			code[j++]={L' ',0,0};
 			i+=2;
 			while(i<len-1&&!(code[i]==L'*'&&code[i+1]==L'/'))
 				i++;
@@ -163,7 +174,8 @@ s2 Compiler::compile() try
 	//提取合法字符
 	extract();
 
-
+	//去注释
+	remove_note();
 
 	//拆分成单元
 	split();
