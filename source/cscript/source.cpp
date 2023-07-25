@@ -7,6 +7,14 @@ Code_Char::operator wchar_t () const noexcept
 	return c;
 }
 
+Compiler_A::Compiler_A(Mem::SA&sa):
+	symbol_a(sa),
+	integer_a(sa),
+	float_a(sa),
+	string_a(sa),
+	char_a(sa)
+{}
+
 Compiler::Compiler(std::wstring code_,Compiler_A&a):
 	a(&a)
 {

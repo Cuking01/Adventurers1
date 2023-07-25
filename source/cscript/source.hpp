@@ -117,7 +117,12 @@ struct Code_Char
 
 struct Compiler_A
 {
-
+	Mem::Pool<Symbol,32> symbol_a;
+	Mem::Pool<Integer_Literal,32> integer_a;
+	Mem::Pool<Float_Literal,32> float_a;
+	Mem::Pool<String_Literal,32> string_a;
+	Mem::Pool<Char_Literal,32> char_a;
+	Compiler_A(Mem::SA&sa);
 };
 
 struct Compiler
