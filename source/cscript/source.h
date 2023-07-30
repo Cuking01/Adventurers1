@@ -17,6 +17,7 @@ struct Integer_Literal;
 struct Float_Literal;
 struct Word;
 
+struct Code_Char_Reader;
 struct Code_Char;
 struct Compiler_A;
 struct Compiler;

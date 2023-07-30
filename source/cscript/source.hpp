@@ -52,11 +52,23 @@ struct Unit
 
 };
 
+struct Code_Char_Reader
+{
+	const Code_Char*begin;
+	const Code_Char*end;
+
+	Code_Char_Reader(const Code_Char*begin,const Code_Char* end) noexcept;
+
+	s2 empty() const noexcept;
+
+	wchar_t operator()();
+
+};
+
 struct Symbol:Unit
 {
 	s2 x;        //存储具体符号
-	template<typename It_T>
-	Symbol(It_T begin,It_T end);
+	Symbol(const Code_Char*begin,const Code_Char* end);
 };
 
 struct Literal:Unit
@@ -74,8 +86,7 @@ struct String_Literal:Literal
 		Data(){}
 		~Data(){}
 	}x;
-	template<typename It_T>
-	String_Literal(It_T begin,It_T end);
+	String_Literal(const Code_Char* begin,const Code_Char* end);
 };
 
 struct Char_Literal:Literal
@@ -86,8 +97,7 @@ struct Char_Literal:Literal
 		char c;
 		wchar_t wc;
 	}x;
-	template<typename It_T>
-	Char_Literal(It_T begin,It_T end);
+	Char_Literal(const Code_Char* begin,const Code_Char* end);
 };
 
 struct Integer_Literal:Literal
@@ -98,8 +108,7 @@ struct Integer_Literal:Literal
 		u3 u;
 		s3 s;
 	}x;
-	template<typename It_T>
-	Integer_Literal(It_T begin,It_T end);
+	Integer_Literal(const Code_Char* begin,const Code_Char* end);
 };
 
 struct Float_Literal:Literal
@@ -110,16 +119,14 @@ struct Float_Literal:Literal
 		f3 df;
 		f2 f;
 	}x;
-	template<typename It_T>
-	Float_Literal(It_T begin,It_T end);
+	Float_Literal(const Code_Char* begin,const Code_Char* end);
 };
 
 struct Word:Unit
 {
 	Word_T type;
 	s2 x;
-	template<typename It_T>
-	Word(It_T begin,It_T end);
+	Word(const Code_Char* begin,const Code_Char* end);
 };
 
 
@@ -147,7 +154,9 @@ struct Compiler_A
 
 
 s2 isdigit(wchar_t c);
-
+s2 isodigit(wchar_t c);
+s2 ishexdigit(wchar_t c);
+s2 hextox(wchar_t c);
 
 struct Compiler
 {

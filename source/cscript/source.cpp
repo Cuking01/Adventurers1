@@ -1,32 +1,130 @@
 #pragma once
 
-template<typename It_T>
-Symbol::Symbol(It_T begin,It_T end)
+
+Code_Char_Reader::Code_Char_Reader(const Code_Char*begin,const Code_Char* end) noexcept
+	:begin(begin),end(end)
+{}
+
+s2 Code_Char_Reader::empty() const noexcept
+{
+	return begin==end;
+}
+
+wchar_t Code_Char_Reader::operator()() 
+{
+	if(!empty())
+		throw std::runtime_error("Code_Char_Reader:empty.");
+	//非转义字符
+	if(*begin!=L'\\')
+		return *begin;
+
+	begin++;
+	if(begin==end)
+	{
+		/*报错*/
+		return 0;
+	}
+
+	
+	//特定含义转义
+
+	wchar_t c=0;
+	switch(begin->c)
+	{
+	case L'\'':c=0x27;break;
+	case L'\"':c=0x22;break;
+	case L'?':c=0x3f;break;
+	case L'a':c=0x07;break;
+	case L'b':c=0x08;break;
+	case L'f':c=0x0c;break;
+	case L'n':c=0x0a;break;
+	case L'r':c=0x0d;break;
+	case L't':c=0x09;break;
+	case L'v':c=0x0b;break;
+	}
+
+	if(c)
+	{
+		begin++;
+		return c;
+	}
+
+	//到这里一定非空
+
+	if(*begin==L'x')
+	{
+		begin++;
+		if(begin==end||!ishexdigit(*begin))
+		{
+			/*报错*/
+			return 0;
+		}
+		for(s2 i=0;i<2;i++)
+		{
+			if(begin<end&&ishexdigit(*begin))
+				c=c<<4|hextox(*begin++);
+			else
+				return c;
+		}
+		return c;
+	}
+	else if(isodigit(*begin))
+	{
+		for(s2 i=0;i<3;i++)
+		{
+			if(begin<end&&ishexdigit(*begin))
+				c=c<<3|(*begin++ -L'0');
+			else
+				return c;
+		}
+		return c;
+	}
+	else
+	{
+		/*报转义非法错误*/
+		return 0;
+	}
+	
+}
+
+Symbol::Symbol(const Code_Char* begin,const Code_Char* end)
+{
+	
+
+
+}
+String_Literal::String_Literal(const Code_Char* begin,const Code_Char* end)
+{
+	String_T type=String_T::String;
+	if(*begin==L'L')type=String_T::Wstring,begin++;
+
+	s2 len=0;
+
+	Code_Char_Reader reader{begin+1,end-1};
+
+	
+
+	while(!reader.empty())
+	{
+		reader();
+		len++;
+	}
+
+
+}
+Char_Literal::Char_Literal(const Code_Char* begin,const Code_Char* end)
 {
 
 }
-template<typename It_T>
-String_Literal::String_Literal(It_T begin,It_T end)
+Integer_Literal::Integer_Literal(const Code_Char* begin,const Code_Char* end)
 {
 
 }
-template<typename It_T>
-Char_Literal::Char_Literal(It_T begin,It_T end)
+Float_Literal::Float_Literal(const Code_Char* begin,const Code_Char* end)
 {
 
 }
-template<typename It_T>
-Integer_Literal::Integer_Literal(It_T begin,It_T end)
-{
-
-}
-template<typename It_T>
-Float_Literal::Float_Literal(It_T begin,It_T end)
-{
-
-}
-template<typename It_T>
-Word::Word(It_T begin,It_T end)
+Word::Word(const Code_Char* begin,const Code_Char* end)
 {
 
 }
@@ -48,6 +146,23 @@ Compiler_A::Compiler_A(Mem::SA&sa):
 s2 isdigit(wchar_t c)
 {
 	return c>=L'0'&&c<=L'9';
+}
+
+s2 isodigit(wchar_t c)
+{
+	return c>=L'0'&&c<=L'7';
+}
+
+s2 ishexdigit(wchar_t c)
+{
+	return isdigit(c)||c>=L'a'&&c<=L'f'||c>=L'A'||c>=L'F';
+}
+
+s2 hextox(wchar_t c)
+{
+	if(c>=L'0'&&c<=L'9')return c-L'0';
+	if(c>=L'a'&&c<=L'f')return c-L'a'+10;
+	return c-L'A'+10;
 }
 
 Compiler::Compiler(std::wstring code_,Compiler_A&a):
