@@ -68,7 +68,7 @@ wchar_t Code_Char_Reader::operator()()
 	{
 		for(s2 i=0;i<3;i++)
 		{
-			if(begin<end&&ishexdigit(*begin))
+			if(begin<end&&isodigit(*begin)&&c<16)
 				c=c<<3|(*begin++ -L'0');
 			else
 				return c;
@@ -87,7 +87,7 @@ Unit::Unit(Unit_T type,s2 line,s2 col) noexcept
 	:type(type),line(line),col(col)
 {}
 
-Symbol::Symbol(const Code_Char* begin,const Code_Char* end)
+Symbol::Symbol(const Code_Char* begin,const Code_Char* end,Compiler&compiler)
 	:Unit(Unit_T::Symbol,begin->line,begin->col)
 {
 	
@@ -99,7 +99,7 @@ Literal::Literal(Literal_T type,s2 line,s2 col) noexcept
 {}
 
 
-String_Literal::String_Literal(const Code_Char* begin,const Code_Char* end,Mem_Seg& mem_const)
+String_Literal::String_Literal(const Code_Char* begin,const Code_Char* end,Compiler&compiler)
 	:Literal(Literal_T::String,begin->line,begin->col)
 {
 	String_T type=String_T::String;
@@ -122,7 +122,7 @@ String_Literal::String_Literal(const Code_Char* begin,const Code_Char* end,Mem_S
 
 	if(type==String_T::String)
 	{
-		u0*mem=mem_const.alloc<1>(len+1);
+		u0*mem=compiler.mem_const.alloc<1>(len+1);
 		this->p=mem;
 		this->len=len+1;
 		while(!reader.empty())
@@ -136,7 +136,7 @@ String_Literal::String_Literal(const Code_Char* begin,const Code_Char* end,Mem_S
 	}
 	else
 	{
-		u0*mem=mem_const.alloc<2>(2*(len+1));
+		u0*mem=compiler.mem_const.alloc<2>(2*(len+1));
 		this->p=mem;
 		this->len=len+1;
 		while(!reader.empty())
@@ -149,7 +149,7 @@ String_Literal::String_Literal(const Code_Char* begin,const Code_Char* end,Mem_S
 	
 
 }
-Char_Literal::Char_Literal(const Code_Char* begin,const Code_Char* end)
+Char_Literal::Char_Literal(const Code_Char* begin,const Code_Char* end,Compiler&compiler)
 	:Literal(Literal_T::Char,begin->line,begin->col)
 {
 	Char_T type=Char_T::Char;
@@ -184,17 +184,135 @@ Char_Literal::Char_Literal(const Code_Char* begin,const Code_Char* end)
 	}
 	
 }
-Integer_Literal::Integer_Literal(const Code_Char* begin,const Code_Char* end)
+Integer_Literal::Integer_Literal(const Code_Char* begin,const Code_Char* end,Compiler&compiler)
 	:Literal(Literal_T::Integer,begin->line,begin->col)
 {
+	//可以假设第一个字符一定是十进制数字
 
+	auto read_val=[this,&compiler](const Code_Char*&begin,const Code_Char*end)->__uint128_t
+	{
+
+		__uint128_t x=0;
+
+		//普通十进制
+		if(*begin!=L'0')
+		{
+			while(begin<end&&isdigit(*begin))
+			{
+				if((x>>64)==0)
+					x=x*10+begin->c-L'0';
+				begin++;
+			}
+			return x;
+		}
+
+		//到此*begin一定是'0'
+
+		begin++;
+		//0的情况
+		if(begin==end)
+			return 0;
+
+		//二进制
+		if(*begin==L'b'||*begin==L'B')
+		{
+			begin++;
+			if(begin==end)
+			{
+				/*报错*/
+				return 0;
+			}
+			while(begin<end&&isbdigit(*begin))
+			{
+				if((x>>64)==0)
+					x=x*2+begin->c-L'0';
+				begin++;
+			}
+		}
+		//十六进制
+		else if(*begin==L'x'||*begin==L'X')
+		{
+			begin++;
+			if(begin==end)
+			{
+				/*报错*/
+				return 0;
+			}
+			while(begin<end&&ishexdigit(*begin))
+			{
+				if((x>>64)==0)
+					x=x*16+hextox(*begin);
+				begin++;
+			}
+		}
+		//八进制
+		else
+		{
+			while(begin<end&&isodigit(*begin))
+			{
+				if((x>>64)==0)
+					x=x*8+begin->c-L'0';;
+				begin++;
+			}
+		}
+		return x;
+	};
+
+	auto read_type=[this,&compiler](const Code_Char*begin,const Code_Char*end)->Integer_T
+	{
+		if(end-begin!=3)
+		{
+			/*报错*/
+			return Integer_T::Int16;
+		}
+
+		auto cmp=[begin](const wchar_t*str)->s2
+		{
+			for(s2 i=0;i<3;i++)
+				if(begin[i]!=str[i])
+					return 0;
+			return 1;
+		};
+
+		if(cmp(L"s16"))return Integer_T::Int16;
+		if(cmp(L"s32"))return Integer_T::Int32;
+		if(cmp(L"s64"))return Integer_T::Int64;
+		if(cmp(L"u16"))return Integer_T::Uint16;
+		if(cmp(L"u32"))return Integer_T::Uint32;
+		if(cmp(L"u64"))return Integer_T::Uint64;
+
+		/*报错*/
+
+		return Integer_T::Int16;
+	};
+
+	auto auto_type=[this,&compiler](__uint128_t x)->Integer_T
+	{
+		if((x>>31)==0)return Integer_T::Int32;
+		if((x>>63)==0)return Integer_T::Int64;
+		return Integer_T::Uint64;
+	};
+
+	__uint128_t x=read_val(begin,end);
+
+	if(x>>64)
+	{
+		/*数值过大，报错*/
+		x=0;
+	}
+
+	if(begin==end)
+		this->type=auto_type(x);
+	else
+		this->type=read_type(begin,end);
+	this->x=x;
 }
-Float_Literal::Float_Literal(const Code_Char* begin,const Code_Char* end)
+Float_Literal::Float_Literal(const Code_Char* begin,const Code_Char* end,Compiler&compiler)
 	:Literal(Literal_T::Float,begin->line,begin->col)
 {
 
 }
-Word::Word(const Code_Char* begin,const Code_Char* end)
+Word::Word(const Code_Char* begin,const Code_Char* end,Compiler&compiler)
 	:Unit(Unit_T::Word,begin->line,begin->col)
 {
 
@@ -217,6 +335,11 @@ Compiler_A::Compiler_A(Mem::SA&sa):
 s2 isdigit(wchar_t c)
 {
 	return c>=L'0'&&c<=L'9';
+}
+
+s2 isbdigit(wchar_t c)
+{
+	return c>=L'0'&&c<=L'1';
 }
 
 s2 isodigit(wchar_t c)
@@ -515,10 +638,19 @@ s2 Compiler::split()
 		};
 		static constexpr Check check;
 
+		s2 ti=i;
+
 		if(!isdigit(code[i]))return i;
 
 		i++;
-		while(i<len&&check(code[i]))i++;
+		while(i<len&&check(code[i]))
+		{
+			if(check(code[i]))
+				i++;
+			else if(code[i]==L'.')
+				return ti;
+			else break;
+		}
 
 		return i;
 	};
@@ -605,12 +737,12 @@ s2 Compiler::split()
 	};
 
 	s2 i=0;
-	auto scan=[this,&i](auto&scaner,auto&allocor,auto&... args)->s2
+	auto scan=[this,&i](auto&scaner,auto&allocor)->s2
 	{
 		s2 j=scaner(i);
 		if(j>i)
 		{
-			units.push_back(allocor(&code[i],&code[j],args...));
+			units.push_back(allocor(&code[i],&code[j],*this));
 			return 1;
 		}
 		return 0;
@@ -625,12 +757,12 @@ s2 Compiler::split()
 		}
 
 		scan(scan_word,a->word_a)||
-		scan(scan_string_literal,a->string_a,mem_const)||
+		scan(scan_string_literal,a->string_a)||
 		scan(scan_char_literal,a->char_a)||
 		scan(scan_integer_literal,a->integer_a)||
 		scan(scan_float_literal,a->float_a)||
 		scan(scan_symbol,a->symbol_a)||
-		(/*报错*/ 1);
+		(/*报错*/ i++);
 
 	}
 

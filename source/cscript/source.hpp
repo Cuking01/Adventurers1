@@ -68,7 +68,7 @@ struct Unit
 struct Symbol:Unit
 {
 	s2 x;        //存储具体符号
-	Symbol(const Code_Char*begin,const Code_Char* end);
+	Symbol(const Code_Char*begin,const Code_Char* end,Compiler&compiler);
 };
 
 struct Literal:Unit
@@ -82,7 +82,7 @@ struct String_Literal:Literal
 	String_T type;
 	u0*p;
 	s2 len;
-	String_Literal(const Code_Char* begin,const Code_Char* end,Mem_Seg& mem_const);
+	String_Literal(const Code_Char* begin,const Code_Char* end,Compiler&compiler);
 };
 
 struct Char_Literal:Literal
@@ -93,18 +93,14 @@ struct Char_Literal:Literal
 		char c;
 		wchar_t wc;
 	};
-	Char_Literal(const Code_Char* begin,const Code_Char* end);
+	Char_Literal(const Code_Char* begin,const Code_Char* end,Compiler&compiler);
 };
 
 struct Integer_Literal:Literal
 {
 	Integer_T type;
-	union
-	{
-		u3 u;
-		s3 s;
-	};
-	Integer_Literal(const Code_Char* begin,const Code_Char* end);
+	u3 x;
+	Integer_Literal(const Code_Char* begin,const Code_Char* end,Compiler&compiler);
 };
 
 struct Float_Literal:Literal
@@ -115,14 +111,14 @@ struct Float_Literal:Literal
 		f3 df;
 		f2 f;
 	}x;
-	Float_Literal(const Code_Char* begin,const Code_Char* end);
+	Float_Literal(const Code_Char* begin,const Code_Char* end,Compiler&compiler);
 };
 
 struct Word:Unit
 {
 	Word_T type;
 	s2 x;
-	Word(const Code_Char* begin,const Code_Char* end);
+	Word(const Code_Char* begin,const Code_Char* end,Compiler&compiler);
 };
 
 
@@ -148,8 +144,8 @@ struct Compiler_A
 	Compiler_A(Mem::SA&sa);
 };
 
-
 s2 isdigit(wchar_t c);
+s2 isbdigit(wchar_t c);
 s2 isodigit(wchar_t c);
 s2 ishexdigit(wchar_t c);
 s2 hextox(wchar_t c);
