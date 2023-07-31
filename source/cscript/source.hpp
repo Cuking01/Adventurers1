@@ -4,7 +4,7 @@ enum class Unit_T:u2
 {
 	Symbol,      //各种特殊符号，括号，逗号，运算符等
 	Literal,     //字面量(字符串，字符，浮点数，整数)
-	Identifier   //标识符(关键字，类型名，变量名，函数名，结构体名，跳转标签名)
+	Word   //标识符(关键字，类型名，变量名，函数名，结构体名，跳转标签名)
 };
 
 enum class Literal_T:u2
@@ -44,14 +44,6 @@ enum class Word_T:u2
 	Indentifer
 };
 
-struct Unit
-{
-	Unit_T type;
-	s2 line;
-	s2 col;
-
-};
-
 struct Code_Char_Reader
 {
 	const Code_Char*begin;
@@ -65,6 +57,14 @@ struct Code_Char_Reader
 
 };
 
+struct Unit
+{
+	Unit_T type;
+	s2 line;
+	s2 col;
+	Unit(Unit_T type,s2 line,s2 col) noexcept;
+};
+
 struct Symbol:Unit
 {
 	s2 x;        //存储具体符号
@@ -74,40 +74,36 @@ struct Symbol:Unit
 struct Literal:Unit
 {
 	Literal_T type;
+	Literal(Literal_T type,s2 line,s2 col) noexcept;
 };
 
 struct String_Literal:Literal
 {
 	String_T type;
-	union Data
-	{
-		std::string str;
-		std::wstring wstr;
-		Data(){}
-		~Data(){}
-	}x;
-	String_Literal(const Code_Char* begin,const Code_Char* end);
+	u0*p;
+	s2 len;
+	String_Literal(const Code_Char* begin,const Code_Char* end,Mem_Seg& mem_const);
 };
 
 struct Char_Literal:Literal
 {
 	Char_T type;
-	union Data
+	union
 	{
 		char c;
 		wchar_t wc;
-	}x;
+	};
 	Char_Literal(const Code_Char* begin,const Code_Char* end);
 };
 
 struct Integer_Literal:Literal
 {
 	Integer_T type;
-	union Data
+	union
 	{
 		u3 u;
 		s3 s;
-	}x;
+	};
 	Integer_Literal(const Code_Char* begin,const Code_Char* end);
 };
 
@@ -158,12 +154,25 @@ s2 isodigit(wchar_t c);
 s2 ishexdigit(wchar_t c);
 s2 hextox(wchar_t c);
 
+
+struct Mem_Seg
+{
+	alignas(std::max_align_t) u0 mem[max_mem_size];
+	s2 p_mem;
+
+	Mem_Seg() noexcept;
+
+	template<s2 align>
+	u0* alloc(s2 sz);
+};
+
 struct Compiler
 {
 	Compiler_A*a;
 	std::vector<Code_Char> code;
 	std::vector<Unit*> units;
 
+	Mem_Seg mem_code,mem_const,mem_static;
 
 
 	Compiler(std::wstring code,Compiler_A&a);

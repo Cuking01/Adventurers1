@@ -24,10 +24,7 @@ wchar_t Code_Char_Reader::operator()()
 		/*报错*/
 		return 0;
 	}
-
-	
 	//特定含义转义
-
 	wchar_t c=0;
 	switch(begin->c)
 	{
@@ -50,7 +47,6 @@ wchar_t Code_Char_Reader::operator()()
 	}
 
 	//到这里一定非空
-
 	if(*begin==L'x')
 	{
 		begin++;
@@ -87,44 +83,119 @@ wchar_t Code_Char_Reader::operator()()
 	
 }
 
+Unit::Unit(Unit_T type,s2 line,s2 col) noexcept
+	:type(type),line(line),col(col)
+{}
+
 Symbol::Symbol(const Code_Char* begin,const Code_Char* end)
+	:Unit(Unit_T::Symbol,begin->line,begin->col)
 {
 	
-
-
 }
-String_Literal::String_Literal(const Code_Char* begin,const Code_Char* end)
+
+
+Literal::Literal(Literal_T type,s2 line,s2 col) noexcept
+	:Unit(Unit_T::Literal,line,col),type(type)
+{}
+
+
+String_Literal::String_Literal(const Code_Char* begin,const Code_Char* end,Mem_Seg& mem_const)
+	:Literal(Literal_T::String,begin->line,begin->col)
 {
 	String_T type=String_T::String;
 	if(*begin==L'L')type=String_T::Wstring,begin++;
 
 	s2 len=0;
 
-	Code_Char_Reader reader{begin+1,end-1};
-
-	
-
-	while(!reader.empty())
+	for(Code_Char_Reader reader{begin+1,end-1};!reader.empty();)
 	{
-		reader();
-		len++;
+		wchar_t c=reader();
+		if(c>=0&&c<=127||type==String_T::Wstring)
+			len++;
+		else
+			len+=2;
 	}
 
+	Code_Char_Reader reader{begin+1,end-1};
+
+	this->type=type;
+
+	if(type==String_T::String)
+	{
+		u0*mem=mem_const.alloc<1>(len+1);
+		this->p=mem;
+		this->len=len+1;
+		while(!reader.empty())
+		{
+			wchar_t c=reader();
+			if(c>=0&&c<=127)
+				*mem++=c;
+			else
+				*mem++=c&255u,*mem++=(c>>8)&255u;
+		}
+	}
+	else
+	{
+		u0*mem=mem_const.alloc<2>(2*(len+1));
+		this->p=mem;
+		this->len=len+1;
+		while(!reader.empty())
+		{
+			wchar_t c=reader();
+			*(u1*)mem=c&65535u;
+			mem+=2;
+		}
+	}
+	
 
 }
 Char_Literal::Char_Literal(const Code_Char* begin,const Code_Char* end)
+	:Literal(Literal_T::Char,begin->line,begin->col)
 {
+	Char_T type=Char_T::Char;
+	if(*begin==L'L')type=Char_T::Wchar,begin++;
 
+	s2 len=0;
+	wchar_t c=0;
+	for(Code_Char_Reader reader{begin+1,end-1};!reader.empty();)
+	{
+		c=reader();
+		if(c>=0&&c<=127||type==Char_T::Wchar)
+			len++;
+		else
+			len+=2;
+		if(len>=2)break;
+	}
+
+	if(len!=1){/*报错*/}
+
+
+	this->type=type;
+	if(type==Char_T::Char)
+	{
+		if(c>=0&&c<=127)
+			this->c=c;
+		else
+			/*报错*/;
+	}
+	else
+	{
+		this->wc=c&65535u;
+	}
+	
 }
 Integer_Literal::Integer_Literal(const Code_Char* begin,const Code_Char* end)
+	:Literal(Literal_T::Integer,begin->line,begin->col)
 {
 
 }
 Float_Literal::Float_Literal(const Code_Char* begin,const Code_Char* end)
+	:Literal(Literal_T::Float,begin->line,begin->col)
 {
 
 }
 Word::Word(const Code_Char* begin,const Code_Char* end)
+	:Unit(Unit_T::Word,begin->line,begin->col)
 {
 
 }
@@ -163,6 +234,32 @@ s2 hextox(wchar_t c)
 	if(c>=L'0'&&c<=L'9')return c-L'0';
 	if(c>=L'a'&&c<=L'f')return c-L'a'+10;
 	return c-L'A'+10;
+}
+
+
+Mem_Seg::Mem_Seg() noexcept
+	:p_mem(0)
+{
+	memset(mem,0,sizeof mem);
+}
+
+template<s2 align>
+u0* Mem_Seg::alloc(s2 sz)
+{
+	static_assert(align==1||align==2||align==4||align==8);
+
+	p_mem=(p_mem+align-1)/align;
+	s2 res=max_mem_size-p_mem;
+	if(res>=sz)
+	{
+		p_mem+=sz;
+		return mem+p_mem-sz;
+	}
+	else
+	{
+		/*报错：内存超限*/
+		return mem;
+	}
 }
 
 Compiler::Compiler(std::wstring code_,Compiler_A&a):
@@ -508,12 +605,12 @@ s2 Compiler::split()
 	};
 
 	s2 i=0;
-	auto scan=[this,&i](auto&scaner,auto&allocor)->s2
+	auto scan=[this,&i](auto&scaner,auto&allocor,auto&... args)->s2
 	{
 		s2 j=scaner(i);
 		if(j>i)
 		{
-			units.push_back(allocor(&code[i],&code[j]));
+			units.push_back(allocor(&code[i],&code[j],args...));
 			return 1;
 		}
 		return 0;
@@ -528,7 +625,7 @@ s2 Compiler::split()
 		}
 
 		scan(scan_word,a->word_a)||
-		scan(scan_string_literal,a->string_a)||
+		scan(scan_string_literal,a->string_a,mem_const)||
 		scan(scan_char_literal,a->char_a)||
 		scan(scan_integer_literal,a->integer_a)||
 		scan(scan_float_literal,a->float_a)||

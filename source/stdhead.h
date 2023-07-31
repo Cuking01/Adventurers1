@@ -7,5 +7,7 @@
 #include<vector>
 #include<random>
 #include<format>
+#include<string.h>
+
 using std::cerr;
 
