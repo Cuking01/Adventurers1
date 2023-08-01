@@ -20,6 +20,8 @@ constexpr s2 Symbol_Str<N>::operator==(const char*b) const
     return 1;
 }
 
+
+
 template<Symbol_Str symbol>
 consteval s2 symbol_map_helper()
 {
@@ -41,3 +43,28 @@ consteval s2 symbol_map()
     return symbol_map_helper<symbol>();
 }
 
+Symbol_Trie_Status Symbol_Trie::init_status() const noexcept
+{
+    return {0,this};
+}
+
+Symbol_Trie_Status::operator bool() const noexcept
+{
+    return p!=0;
+}
+
+
+Symbol_Trie_Status Symbol_Trie_Status::operator()(wchar_t c) const noexcept
+{
+    s2 np;
+    if(c>=0&&c<=127)
+        np=trie->node[p].next[(s2)c];
+    else
+        np=0;
+    return {np,trie};
+}
+
+s2 Symbol_Trie_Status::ok() const noexcept
+{
+    return trie->node[p].ok;
+}

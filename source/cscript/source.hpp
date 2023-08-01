@@ -162,6 +162,8 @@ struct Mem_Seg
 	u0* alloc(s2 sz);
 };
 
+
+
 struct Compiler
 {
 	Compiler_A*a;
@@ -169,7 +171,6 @@ struct Compiler
 	std::vector<Unit*> units;
 
 	Mem_Seg mem_code,mem_const,mem_static;
-
 
 	Compiler(std::wstring code,Compiler_A&a);
 

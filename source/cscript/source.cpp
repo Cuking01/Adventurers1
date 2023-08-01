@@ -731,8 +731,14 @@ s2 Compiler::split()
 			}
 		};
 		static constexpr Check check;
+		auto dfa_status=symbol_dfa.init_status();
 
-		while(check(code[i]))i++;
+		while(check(code[i])&&dfa_status(code[i]))
+		{
+			dfa_status=dfa_status(code[i]);
+			i++;
+		}
+
 		return i;
 	};
 
