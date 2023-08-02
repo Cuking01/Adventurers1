@@ -1,8 +1,8 @@
 #pragma once
 
 
-Code_Char_Reader::Code_Char_Reader(const Code_Char*begin,const Code_Char* end) noexcept
-	:begin(begin),end(end)
+Code_Char_Reader::Code_Char_Reader(const Code_Char*begin,const Code_Char* end,Compiler&compiler) noexcept
+	:begin(begin),end(end),compiler(&compiler)
 {}
 
 s2 Code_Char_Reader::empty() const noexcept
@@ -18,10 +18,12 @@ wchar_t Code_Char_Reader::operator()()
 	if(*begin!=L'\\')
 		return *begin;
 
+	s2 line=begin->line,col=begin->col;
+
 	begin++;
 	if(begin==end)
 	{
-		/*报错*/
+		compiler->report_error(line,col,L"转义格式错误");
 		return 0;
 	}
 	//特定含义转义
@@ -52,7 +54,7 @@ wchar_t Code_Char_Reader::operator()()
 		begin++;
 		if(begin==end||!ishexdigit(*begin))
 		{
-			/*报错*/
+			compiler->report_error(line,col,L"转义格式错误");
 			return 0;
 		}
 		for(s2 i=0;i<2;i++)
@@ -77,7 +79,7 @@ wchar_t Code_Char_Reader::operator()()
 	}
 	else
 	{
-		/*报转义非法错误*/
+		compiler->report_error(line,col,L"转义格式错误");
 		return 0;
 	}
 	
@@ -90,7 +92,16 @@ Unit::Unit(Unit_T type,s2 line,s2 col) noexcept
 Symbol::Symbol(const Code_Char* begin,const Code_Char* end,Compiler&compiler)
 	:Unit(Unit_T::Symbol,begin->line,begin->col)
 {
-	
+	auto dfa_status=symbol_dfa.init_status();
+
+	while(begin<end)
+		dfa_status=dfa_status(*begin++);
+
+
+	if(!(this->x=dfa_status.id()))
+	{
+		compiler.report_error(line,col,L"非法符号");
+	}
 }
 
 
@@ -107,7 +118,7 @@ String_Literal::String_Literal(const Code_Char* begin,const Code_Char* end,Compi
 
 	s2 len=0;
 
-	for(Code_Char_Reader reader{begin+1,end-1};!reader.empty();)
+	for(Code_Char_Reader reader{begin+1,end-1,compiler};!reader.empty();)
 	{
 		wchar_t c=reader();
 		if(c>=0&&c<=127||type==String_T::Wstring)
@@ -116,7 +127,7 @@ String_Literal::String_Literal(const Code_Char* begin,const Code_Char* end,Compi
 			len+=2;
 	}
 
-	Code_Char_Reader reader{begin+1,end-1};
+	Code_Char_Reader reader{begin+1,end-1,compiler};
 
 	this->type=type;
 
@@ -157,7 +168,7 @@ Char_Literal::Char_Literal(const Code_Char* begin,const Code_Char* end,Compiler&
 
 	s2 len=0;
 	wchar_t c=0;
-	for(Code_Char_Reader reader{begin+1,end-1};!reader.empty();)
+	for(Code_Char_Reader reader{begin+1,end-1,compiler};!reader.empty();)
 	{
 		c=reader();
 		if(c>=0&&c<=127||type==Char_T::Wchar)
@@ -167,7 +178,7 @@ Char_Literal::Char_Literal(const Code_Char* begin,const Code_Char* end,Compiler&
 		if(len>=2)break;
 	}
 
-	if(len!=1){/*报错*/}
+	if(len!=1){compiler.report_error(line,col,L"字符字面量长度错误");}
 
 
 	this->type=type;
@@ -176,7 +187,7 @@ Char_Literal::Char_Literal(const Code_Char* begin,const Code_Char* end,Compiler&
 		if(c>=0&&c<=127)
 			this->c=c;
 		else
-			/*报错*/;
+			compiler.report_error(line,col,L"字符字面量长度错误");
 	}
 	else
 	{
@@ -262,7 +273,7 @@ Integer_Literal::Integer_Literal(const Code_Char* begin,const Code_Char* end,Com
 	{
 		if(end-begin!=3)
 		{
-			/*报错*/
+			compiler.report_error(line,col,L"整数字面量后缀格式错误");
 			return Integer_T::Int16;
 		}
 
@@ -281,7 +292,7 @@ Integer_Literal::Integer_Literal(const Code_Char* begin,const Code_Char* end,Com
 		if(cmp(L"u32"))return Integer_T::Uint32;
 		if(cmp(L"u64"))return Integer_T::Uint64;
 
-		/*报错*/
+		compiler.report_error(line,col,L"整数字面量后缀格式错误");
 
 		return Integer_T::Int16;
 	};
@@ -297,7 +308,7 @@ Integer_Literal::Integer_Literal(const Code_Char* begin,const Code_Char* end,Com
 
 	if(x>>64)
 	{
-		/*数值过大，报错*/
+		compiler.report_error(line,col,L"整数字面量数值过大");
 		x=0;
 	}
 
@@ -310,11 +321,80 @@ Integer_Literal::Integer_Literal(const Code_Char* begin,const Code_Char* end,Com
 Float_Literal::Float_Literal(const Code_Char* begin,const Code_Char* end,Compiler&compiler)
 	:Literal(Literal_T::Float,begin->line,begin->col)
 {
+	if(end-begin>1000)
+	{
+		compiler.report_error(line,col,L"浮点字面量过长");
+		this->type=Float_T::F32;
+		this->f32=0;
+		return;
+	}
+
+	auto type=Float_T::F64;
+	if(*(end-1)==L'f')
+	{
+		type=Float_T::F32;
+		end--;
+	}
+
+	s2 cnt_point=0;
+	s2 flag_other=0;
+	char tmp[1001];
+
+	for(s2 i=0;begin+i<end;i++)
+	{
+		if(begin[i]==L'.')cnt_point++;
+		else if(!isdigit(begin[i]))flag_other=1;
+		tmp[i]=(char)begin[i].c;
+	}
+
+	if(flag_other)
+	{
+		compiler.report_error(line,col,L"浮点字面量格式错误");
+	}
+
+	this->type=type;
+	if(type==Float_T::F64)
+		sscanf(tmp,"%lf",&this->f64);
+	else
+		sscanf(tmp,"%f",&this->f32);
 
 }
 Word::Word(const Code_Char* begin,const Code_Char* end,Compiler&compiler)
 	:Unit(Unit_T::Word,begin->line,begin->col)
 {
+	s2 len=end-begin;
+	if(len>100)
+	{
+		compiler.report_error(line,col,L"标识符过长");
+		this->type=Word_T::Identifier;
+		this->x=0;
+		return;
+	}
+
+	auto dfa_status=symbol_dfa.init_status();
+
+	while(begin<end)
+		dfa_status=dfa_status(*begin++);
+	
+	if(dfa_status.id())
+	{
+		this->type=Word_T::Key;
+		this->x=dfa_status;
+		return;
+	}
+
+	std::wstring word{begin,end};
+
+	auto it=compiler.identifier_map.find(word);
+	if(it==compiler.identifier_map.end())
+	{
+		s2 id=compiler.identifier_map.size();
+		compiler.identifier_map[word]=id;
+		compiler.identifier_name.push_back(word);
+	}
+
+	this->type=Word_T::Identifier;
+	this->x=compiler.identifier_map[word];
 
 }
 
@@ -360,8 +440,8 @@ s2 hextox(wchar_t c)
 }
 
 
-Mem_Seg::Mem_Seg() noexcept
-	:p_mem(0)
+Mem_Seg::Mem_Seg(Compiler*compiler) noexcept
+	:compiler(compiler),p_mem(0)
 {
 	memset(mem,0,sizeof mem);
 }
@@ -380,13 +460,13 @@ u0* Mem_Seg::alloc(s2 sz)
 	}
 	else
 	{
-		/*报错：内存超限*/
+		compiler->report_error(L"内存超限");
 		return mem;
 	}
 }
 
 Compiler::Compiler(std::wstring code_,Compiler_A&a):
-	a(&a)
+	a(&a),mem_code(this),mem_const(this),mem_static(this)
 {
 	code.reserve(code_.length());
 	s2 line=1;
@@ -397,6 +477,16 @@ Compiler::Compiler(std::wstring code_,Compiler_A&a):
 		if(c==L'\n')line++,col=1;
 		else col++;
 	}
+}
+
+void Compiler::report_error(s2 line,s2 col,std::wstring err)
+{
+	error.push_back(std::format(L"{}{}{}",line,col,err));
+}
+
+void Compiler::report_error(std::wstring err)
+{
+	error.push_back(err);
 }
 
 s2 Compiler::compile_init()
@@ -453,7 +543,7 @@ s2 Compiler::extract()         //翻译阶段1，提取合法字符，不考虑�
 	{
 		auto c=code[i];
 		if(check(c))code[j++]=c;
-		else {/*报警告*/};
+		else {report_error(code[i].line,code[i].col,L"非法字符");};
 	}
 
 	code.resize(j);
@@ -484,6 +574,8 @@ s2 Compiler::remove_note()    //去注释    翻译阶段3
 	s2 j=0,i=0;
 	while(i<len)
 	{
+		s2 err_line=code[i].line;
+		s2 err_col=code[i].col;
 		if(i<len-1&&code[i]==L'/'&&code[i+1]==L'/')
 		{
 			code[j++]={L' ',0,0};
@@ -499,7 +591,7 @@ s2 Compiler::remove_note()    //去注释    翻译阶段3
 				i++;
 			if(i==len-1)     //错误，注释符号没有匹配
 			{
-				/*报错*/
+				report_error(err_line,err_col,L"注释符号不匹配");
 				return 1;
 			}
 
@@ -512,7 +604,7 @@ s2 Compiler::remove_note()    //去注释    翻译阶段3
 				code[j++]=code[i++];
 			if(i==len)   //错误，双引号不匹配
 			{
-				/*报错*/
+				report_error(err_line,err_col,L"双引号不匹配");
 				return 1;
 			}
 
@@ -525,7 +617,7 @@ s2 Compiler::remove_note()    //去注释    翻译阶段3
 				code[j++]=code[i++];
 			if(i==len)   //错误，单引号不匹配
 			{
-				/*报错*/
+				report_error(err_line,err_col,L"单引号不匹配");
 				return 1;
 			}
 
@@ -587,24 +679,28 @@ s2 Compiler::split()
 	};
 	auto scan_string_literal=[this,len](s2 i)
 	{
+		s2 err_line=code[i].line;
+		s2 err_col=code[i].col;
 		if(!(code[i]==L'\"'||i+1<len&&code[i]==L'L'&&code[i+1]=='\"'))return i;
 
 		if(code[i]==L'L')i+=2;
 		else i++;
 
 		while(i<len&&code[i]!=L'\"')i++;
-		if(code[i]!=L'\"'){/*报错*/};
+		if(code[i]!=L'\"'){report_error(err_line,err_col,L"双引号不匹配");};
 		return i;
 	};
 	auto scan_char_literal=[this,len](s2 i)
 	{
+		s2 err_line=code[i].line;
+		s2 err_col=code[i].col;
 		if(!(code[i]==L'\''||i+1<len&&code[i]==L'L'&&code[i+1]=='\''))return i;
 
 		if(code[i]==L'L')i+=2;
 		else i++;
 
 		while(i<len&&code[i]!=L'\'')i++;
-		if(code[i]!=L'\''){/*报错*/};
+		if(code[i]!=L'\''){report_error(err_line,err_col,L"单引号不匹配");};
 		return i;
 	};
 	auto scan_integer_literal=[this,len](s2 i)
@@ -733,13 +829,16 @@ s2 Compiler::split()
 		static constexpr Check check;
 		auto dfa_status=symbol_dfa.init_status();
 
+		s2 max_i=i;
+
 		while(check(code[i])&&dfa_status(code[i]))
 		{
 			dfa_status=dfa_status(code[i]);
 			i++;
+			if(dfa_status.id())max_i=i;
 		}
 
-		return i;
+		return max_i;
 	};
 
 	s2 i=0;

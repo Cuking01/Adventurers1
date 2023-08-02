@@ -2,10 +2,82 @@
 
 constexpr char symbol_table[][20]=
 {
+    "=",
+    "+=",
+    "-=",
+    "*=",
+    "/=",
+    "%=",
+    "&=",
+    "|=",
+    "^="
+    "<<=",
+    ">>=",
+    "++",
+    "--",
     "+",
     "-",
     "*",
-    "/"
+    "/",
+    "%",
+    "~",
+    "&",
+    "|",
+    "^",
+    "<<",
+    ">>",
+    "!",
+    "&&",
+    "||",
+    "==",
+    "!=",
+    "<",
+    ">",
+    "<=",
+    ">=",
+    "[",
+    "]",
+    "->",
+    ".",
+    "(",
+    ")",
+    ",",
+    "?",
+    ":",
+    "{",
+    "}",
+    ";",
+    "break",
+    "case",
+    "char",
+    "const",
+    "continue",
+    "default",
+    "do",
+    "else",
+    "float",
+    "double",
+    "for",
+    "goto",
+    "if",
+    "int8",
+    "int16",
+    "int32",
+    "int64",
+    "return",
+    "sizeof",
+    "static",
+    "struct",
+    "switch",
+    "typedef",
+    "uint8",
+    "uint16",
+    "uint32",
+    "uint64",
+    "union",
+    "void",
+    "wchar",
+    "while"
 };
 
 
@@ -27,7 +99,7 @@ struct Symbol_Trie
 {
     struct Node
     {
-        s2 ok;
+        s2 id;
         s2 next[128];
     };
     Node node[600];
@@ -37,6 +109,7 @@ struct Symbol_Trie
     constexpr Symbol_Trie() noexcept
         :node{},cnt(2)
     {
+        s2 id_cnt=0;
         for(const char*str:symbol_table)
         {
             s2 p=1;
@@ -46,7 +119,7 @@ struct Symbol_Trie
                 if(!pt)pt=cnt++;
                 p=pt;
             }
-            node[p].ok=1;
+            node[p].id=++id_cnt;
         }
     }
 
@@ -64,7 +137,7 @@ struct Symbol_Trie_Status
 
     Symbol_Trie_Status operator()(wchar_t c) const noexcept;
 
-    s2 ok() const noexcept;
+    s2 id() const noexcept;
 };
 
 

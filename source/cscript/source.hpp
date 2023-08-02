@@ -41,15 +41,16 @@ enum class Float_T:u2
 enum class Word_T:u2
 {
 	Key,
-	Indentifer
+	Identifier
 };
 
 struct Code_Char_Reader
 {
 	const Code_Char*begin;
 	const Code_Char*end;
+	Compiler*compiler;
 
-	Code_Char_Reader(const Code_Char*begin,const Code_Char* end) noexcept;
+	Code_Char_Reader(const Code_Char*begin,const Code_Char* end,Compiler&compiler) noexcept;
 
 	s2 empty() const noexcept;
 
@@ -106,11 +107,11 @@ struct Integer_Literal:Literal
 struct Float_Literal:Literal
 {
 	Float_T type;
-	union Data
+	union
 	{
-		f3 df;
-		f2 f;
-	}x;
+		f3 f64;
+		f2 f32;
+	};
 	Float_Literal(const Code_Char* begin,const Code_Char* end,Compiler&compiler);
 };
 
@@ -153,10 +154,11 @@ s2 hextox(wchar_t c);
 
 struct Mem_Seg
 {
+	Compiler*compiler;
 	alignas(std::max_align_t) u0 mem[max_mem_size];
 	s2 p_mem;
 
-	Mem_Seg() noexcept;
+	Mem_Seg(Compiler*compiler) noexcept;
 
 	template<s2 align>
 	u0* alloc(s2 sz);
@@ -170,7 +172,16 @@ struct Compiler
 	std::vector<Code_Char> code;
 	std::vector<Unit*> units;
 
+	std::map<std::wstring,s2> identifier_map;
+	std::vector<std::wstring> identifier_name;
+
+	std::vector<std::wstring> error;
+	void report_error(s2 line,s2 col,std::wstring err);
+	void report_error(std::wstring err);
+
 	Mem_Seg mem_code,mem_const,mem_static;
+
+
 
 	Compiler(std::wstring code,Compiler_A&a);
 
@@ -184,7 +195,7 @@ struct Compiler
 	s2 split();          //拆分      翻译阶段3
 	
 	s2 pre_process();
-	
+
 	s2 compile();
 };
 

@@ -8,6 +8,7 @@
 #include<random>
 #include<format>
 #include<string.h>
+#include<map>
 
 using std::cerr;
 

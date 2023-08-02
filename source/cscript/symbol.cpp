@@ -64,7 +64,7 @@ Symbol_Trie_Status Symbol_Trie_Status::operator()(wchar_t c) const noexcept
     return {np,trie};
 }
 
-s2 Symbol_Trie_Status::ok() const noexcept
+s2 Symbol_Trie_Status::id() const noexcept
 {
-    return trie->node[p].ok;
+    return trie->node[p].id;
 }
