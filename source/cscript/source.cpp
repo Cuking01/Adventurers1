@@ -629,8 +629,25 @@ s2 Compiler::remove_note()    //去注释    翻译阶段3
 
 s2 Compiler::empty_char()
 {
-	for(auto& c:code)
-		if(c>=9&&c<=12)c.c=32;
+	s2 len=code.size();
+	s2 i=0;
+	while(i<len)
+	{
+		if(code[i]==L'\"')
+		{
+			i++;
+			while(i<len&&!(code[i-1]!=L'\\'&&code[i]==L'\"'))i++;
+		}
+		else if(code[i]==L'\'')
+		{
+			i++;
+			while(i<len&&!(code[i-1]!=L'\\'&&code[i]==L'\''))i++;
+		}
+		else if(code[i]>=9&&code[i]<=12)
+		{
+			code[i++].c=32;
+		}
+	}
 	return 0;
 }
 

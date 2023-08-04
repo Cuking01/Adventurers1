@@ -25,22 +25,21 @@ constexpr s2 Symbol_Str<N>::operator==(const char*b) const
 template<Symbol_Str symbol>
 consteval s2 symbol_map_helper()
 {
-    constexpr s2 start=__COUNTER__;
-
-    if constexpr(symbol=="+")return __COUNTER__-start;
-    if constexpr(symbol=="-")return __COUNTER__-start;
-    if constexpr(symbol=="*")return __COUNTER__-start;
-    if constexpr(symbol=="/")return __COUNTER__-start;
-    
-    
-    return 0;
+    s2 p=1;
+    char c;
+    for(s2 i=0;c=symbol.s[i];i++)
+    {
+        p=symbol_dfa.node[p].next[(s2)c];
+    }
+    return symbol_dfa.node[p].id;
 }
 
 template<Symbol_Str symbol>
 consteval s2 symbol_map()
 {
-    static_assert(symbol_map_helper<symbol>()>0,"symbol don't exist.");
-    return symbol_map_helper<symbol>();
+    constexpr s2 ret=symbol_map_helper<symbol>();
+    static_assert(ret>0,"symbol don't exist.");
+    return ret;
 }
 
 Symbol_Trie_Status Symbol_Trie::init_status() const noexcept
