@@ -41,7 +41,7 @@
 | -------- | ------- | ------- | ------ |
 | break    | case    | char    | const  |
 | continue | default | do      | else   |
-| float32  | float64 | for     | goto   |
+| float    | double  | for     | goto   |
 | if       | int8    | int16   | int32  |
 | int64    | return  | sizeof  | static |
 | struct   | switch  | typedef | uint8  |

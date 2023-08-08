@@ -2,6 +2,7 @@
 
 constexpr char symbol_table[][20]=
 {
+    "",   //仅占位，无实际作用
     "=",
     "+=",
     "-=",
@@ -119,7 +120,7 @@ struct Symbol_Trie
                 if(!pt)pt=cnt++;
                 p=pt;
             }
-            node[p].id=++id_cnt;
+            node[p].id=id_cnt++;
         }
     }
 

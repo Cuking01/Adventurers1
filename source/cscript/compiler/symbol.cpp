@@ -44,7 +44,7 @@ consteval s2 symbol_map()
 
 Symbol_Trie_Status Symbol_Trie::init_status() const noexcept
 {
-    return {0,this};
+    return {1,this};
 }
 
 Symbol_Trie_Status::operator bool() const noexcept

@@ -2,7 +2,7 @@
 
 int main()
 {
-	
+	puts("*****");
 	setlocale(LC_ALL,"chinese");
 	puts("一二三");
 	Mem::SA allocor(Mem::ra);
@@ -527,6 +527,8 @@ int main()
 
 	printf("sizeof(State):%d\n",(int)sizeof(state));
 
+	/*
+
 	state.start();
 	
 	int t1=clock();
@@ -538,4 +540,29 @@ int main()
 	int t2=clock();
 	printf("%d %d %d\n",t1-t0,t2-t1,t2);
 	puts("*****");
+	*/
+
+	puts("******");
+
+	FILE*fp=fopen("test_in.c","r");
+
+	wchar_t code[10000];
+	s2 len=0;
+	while(~fscanf(fp,"%lc",code+len))
+		len++;
+	code[len]=0;
+	fclose(fp);
+
+	printf("%ls\n\n",code);
+
+	Cscript::Compiler_A compiler_a(allocor);
+	Cscript::Compiler compiler(code,compiler_a);
+	compiler.compile();
+
+	printf(">>>>>>>>>>>%d\n",(s2)compiler.units.size());
+
+	for(auto&unit:compiler.units)
+	{
+		printf("%d %d %d\n",unit->type,unit->line,unit->col);
+	}
 }
