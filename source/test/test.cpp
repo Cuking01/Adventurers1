@@ -26,33 +26,6 @@ int main()
 
 	Mem::SA allocor(Mem::ra);
 
-	using A_x1=Mem::MTU_Allocor<A,B,C>;
-    using A_x2=Mem::MTU_Allocor<char,int,long long>;
-    using A_x31=Mem::MTU_Allocor<float,signed char>;
-    using A_x32=Mem::MTU_Allocor<float,unsigned char>;
-    using A_x3=Mem::MTU_merge<A_x31,A_x32>;
-    using A_x=Mem::MTU_merge<A_x1,A_x2,A_x3>;
-
-    Mem::MTU_SA<A_x> sa{allocor};
-
-    A_x ax(sa);
-    A_x1 ax1(sa);
-    A_x2 ax2(sa);
-    A_x3 ax3(sa);
-    A_x31 ax31(sa);
-    A_x32 ax32(sa);
-    
-
-    A*p1=ax.construct<A>(1,2);
-    A*p2=ax.construct<B>(1,2,3);
-    A*p3=ax.construct<C>(1,2,3,4,5);
-
-
-    printf("%p %p %p\n",p1,p2,p3);
-
-    ax.virtual_destruct(p1);
-    ax.virtual_destruct(p2);
-    ax.virtual_destruct(p3);
 
 	puts("*****");
 	setlocale(LC_ALL,"chinese");
@@ -607,8 +580,7 @@ int main()
 
 	printf("%ls\n\n",code);
 
-	Cscript::Compiler_A compiler_a(allocor);
-	Cscript::Compiler compiler(code,compiler_a);
+	Cscript::Compiler compiler(code,allocor);
 	compiler.compile();
 
 	printf(">>>>>>>>>>>%d\n",(s2)compiler.units.size());

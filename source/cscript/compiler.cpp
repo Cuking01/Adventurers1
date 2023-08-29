@@ -6,17 +6,16 @@
 #include "compiler/mem_seg.cpp"
 #include "compiler/unit.cpp"
 
-Compiler_A::Compiler_A(Mem::SA&sa):
-	symbol_a(sa),
-	integer_a(sa),
-	float_a(sa),
-	string_a(sa),
-	char_a(sa),
-	word_a(sa)
-{}
 
-Compiler::Compiler(std::wstring code_,Compiler_A&a):
-	a(&a),mem_code(this),mem_const(this),mem_static(this)
+s2 hextox(wchar_t c)
+{
+	if(c>=L'0'&&c<=L'9')return c-L'0';
+	if(c>=L'a'&&c<=L'f')return c-L'a'+10;
+	return c-L'A'+10;
+}
+
+Compiler::Compiler(std::wstring code_,Mem::SA&sa):
+	mtu_sa(sa),a(mtu_sa),mem_code(this),mem_const(this),mem_static(this)
 {
 	code.reserve(code_.length());
 	s2 line=1;
@@ -45,21 +44,31 @@ s2 Compiler::compile_init()
 	return 0;
 }
 
+s2 Compiler::add_identifier(std::wstring word)
+{
+	auto it=identifier_map.find(word);
+	if(it==identifier_map.end())
+	{
+		s2 id=identifier_map.size()+1000;
+		identifier_map[word]=id;
+		identifier_name_table.push_back(word);
+		return id;
+	}
+	return it->second;
+}
+
+std::wstring Compiler::identifier_name(s2 id) const
+{
+	return identifier_name_table.at(id-1000);
+}
+
 #include "compiler/lexer.cpp"
 
 
 s2 Compiler::compile() try
 {
-	//初始化
-	compile_init();
-	//提取合法字符
-	extract();
-	//去注释
-	remove_note();
-	//空白字符变空格
-	empty_char();
-	//拆分成单元
-	split();
+	lex();
+
 	return 0;
 }
 catch(const std::exception&ep)

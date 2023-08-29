@@ -147,7 +147,7 @@ struct MTU_Allocor    //Multi_Type_Union_Allocor
     {
         return [allocor=source_ref.template find<T>()]<typename... Args>(Args&&... args)
         {
-            return new(allocor->alloc()) T{std::forward<Args&&>(args)...};
+            return new(allocor->allocate()) T{std::forward<Args&&>(args)...};
         };
     }
 

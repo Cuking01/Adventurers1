@@ -1,12 +1,5 @@
 #pragma once
 
-s2 hextox(wchar_t c)
-{
-	if(c>=L'0'&&c<=L'9')return c-L'0';
-	if(c>=L'a'&&c<=L'f')return c-L'a'+10;
-	return c-L'A'+10;
-}
-
 s2 Compiler::extract()         //翻译阶段1，提取合法字符，不考虑三标符
 {
 	s2 len=code.size();
@@ -220,12 +213,12 @@ s2 Compiler::split()
 	};
 
 	s2 i=0;
-	auto scan=[this,&i](auto&scaner,auto&allocor)->s2
+	auto scan=[this,&i](auto scaner,auto constructor)->s2
 	{
 		s2 j=scaner(i);
 		if(j>i)
 		{
-			units.push_back(allocor(&code[i],&code[j],*this));
+			units.push_back(constructor(&code[i],&code[j],*this));
 			i=j;
 			return 1;
 		}
@@ -238,15 +231,37 @@ s2 Compiler::split()
 			i++;
 			continue;
 		}
-		scan(scan_string_literal,a->string_a)||
-		scan(scan_char_literal,a->char_a)||
-		scan(scan_word,a->word_a)||
-		scan(scan_integer_literal,a->integer_a)||
-		scan(scan_float_literal,a->float_a)||
-		scan(scan_symbol,a->symbol_a)||
+		scan(scan_string_literal,a.get_constructor<String_Literal>())||
+		scan(scan_char_literal,a.get_constructor<Char_Literal>())||
+		scan(scan_word,a.get_constructor<Symbol>())||
+		scan(scan_integer_literal,a.get_constructor<Integer_Literal>())||
+		scan(scan_float_literal,a.get_constructor<Float_Literal>())||
+		scan(scan_symbol,a.get_constructor<Symbol>())||
 		(report_error(code[i].line,code[i].col,L"未知错误"),i++);
 	}
 	return 0;
 }
 
+s2 Compiler::merge_string()
+{
+	
+	return 0;
+}
 
+s2 Compiler::lex()
+{
+	//初始化
+	compile_init();
+	//提取合法字符
+	extract();
+	//去注释
+	remove_note();
+	//空白字符变空格
+	empty_char();
+	//拆分成单元
+	split();
+	//合并字符串字面量
+	merge_string();
+
+	return 0;
+}

@@ -20,6 +20,5 @@ constexpr s2 max_mem_size=1<<20;//1MiB
 #include "compiler/unit.h"
 #include "compiler/lexer.h"
 
-struct Compiler_A;
 struct Compiler;
 
