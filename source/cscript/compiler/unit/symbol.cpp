@@ -1,7 +1,7 @@
 #pragma once
 
 Symbol::Symbol(const Code_Char* begin,const Code_Char* end,Compiler&compiler)
-	:Unit(Unit_T::Symbol,begin->line,begin->col,-1)
+	:Unit(Unit_T::Symbol,Unit_T2::Key,begin->line,begin->col,-1)
 {
 	// auto dfa_status=symbol_dfa.init_status();
 
@@ -43,4 +43,9 @@ Symbol::Symbol(const Code_Char* begin,const Code_Char* end,Compiler&compiler)
 	this->type2=Unit_T2::Identifier;
 	this->id=compiler.add_identifier(word);
 	
+}
+
+std::wstring Symbol::what([[maybe_unused]] const Compiler&compiler) const
+{
+	return std::format(L"symbol:{:s}",symbol_table[id]);
 }

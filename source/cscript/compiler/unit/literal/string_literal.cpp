@@ -34,6 +34,7 @@ String_Literal::String_Literal(const Code_Char* begin,const Code_Char* end,Compi
 			else
 				*mem++=c&255u,*mem++=(c>>8)&255u;
 		}
+		*mem=0;
 	}
 	else
 	{
@@ -46,6 +47,11 @@ String_Literal::String_Literal(const Code_Char* begin,const Code_Char* end,Compi
 			*(u1*)mem=c&65535u;
 			mem+=2;
 		}
+		*(u1*)mem=0;
 	}
 }
 
+std::wstring String_Literal::what([[maybe_unused]] const Compiler&compiler) const
+{
+	return std::format(L"string literal: {:s}",(wchar_t*)p);
+}

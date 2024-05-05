@@ -5,7 +5,7 @@
 #include "compiler/code_char.cpp"
 #include "compiler/mem_seg.cpp"
 #include "compiler/unit.cpp"
-
+#include "compiler/production.cpp"
 
 s2 hextox(wchar_t c)
 {
@@ -63,7 +63,7 @@ std::wstring Compiler::identifier_name(s2 id) const
 }
 
 #include "compiler/lexer.cpp"
-
+#include "compiler/parser.cpp"
 
 s2 Compiler::compile() try
 {

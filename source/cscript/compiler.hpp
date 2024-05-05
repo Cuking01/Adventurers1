@@ -5,6 +5,7 @@
 #include "compiler/code_char.hpp"
 #include "compiler/mem_seg.hpp"
 #include "compiler/unit.hpp"
+#include "compiler/production.hpp"
 
 s2 hextox(wchar_t c);
 
@@ -18,6 +19,8 @@ struct Compiler
 	A a;
 	std::vector<Code_Char> code;
 	std::vector<Unit*> units;
+
+	u2 unit_p;
 
 	std::map<std::wstring,s2> identifier_map;
 	std::vector<std::wstring> identifier_name_table;
@@ -37,7 +40,7 @@ struct Compiler
 	std::wstring identifier_name(s2 id) const;
 
 	#include "compiler/lexer.hpp"
-
+	#include "compiler/parser.hpp"
 	
 	s2 pre_process();
 

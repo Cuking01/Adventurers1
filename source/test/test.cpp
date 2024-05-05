@@ -587,6 +587,8 @@ int main()
 
 	for(auto&unit:compiler.units)
 	{
-		printf("%d %d %d\n",unit->type,unit->line,unit->col);
+		printf("%d %d %d %d\n",(int)unit->type,(int)unit->type2,unit->line,unit->col);
 	}
+
+	compiler.parse();
 }

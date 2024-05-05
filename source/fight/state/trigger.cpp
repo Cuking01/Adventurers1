@@ -13,10 +13,10 @@ void Trigger<T>::add(u2 key,const T&e){this->insert(key,e);}
 
 template<typename T>
 template<typename...Arg>
-s2 Trigger<T>::operator()(Arg&...arg)
+s2 Trigger<T>::operator()(Arg&&...arg)
 {
 	for(auto&[k,v]:*this)
-		if(s2 ret=v(arg...);ret)
+		if(s2 ret=v(std::forward<Arg&&>(arg)...);ret)
 			return ret;
 	return 0;
 }

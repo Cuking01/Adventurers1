@@ -15,4 +15,7 @@ struct Char_Literal:Literal
 		wchar_t wc;
 	};
 	Char_Literal(const Code_Char* begin,const Code_Char* end,Compiler&compiler);
+	virtual std::wstring what(const Compiler&compiler) const;
 };
+
+

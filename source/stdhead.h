@@ -9,6 +9,7 @@
 #include<format>
 #include<string.h>
 #include<map>
+#include<memory>
 
 using std::cerr;
 

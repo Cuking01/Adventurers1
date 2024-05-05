@@ -19,6 +19,8 @@ constexpr s2 max_mem_size=1<<20;//1MiB
 #include "compiler/mem_seg.h"
 #include "compiler/unit.h"
 #include "compiler/lexer.h"
+#include "compiler/production.h"
+#include "compiler/parser.h"
 
 struct Compiler;
 

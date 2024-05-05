@@ -23,7 +23,9 @@ struct Unit
 	s2 line;
 	s2 col;
 	s2 id;         //如果是标识符，则为大于等于1000的正整数，表示标识符的id，如果是-1，是字面量，否则如果是非负整数，是关键字和标点符号
-	Unit(Unit_T type,s2 line,s2 col,s2 id) noexcept;
+	Unit(Unit_T type,Unit_T2 type2,s2 line,s2 col,s2 id) noexcept;
+
+	virtual std::wstring what(const Compiler&compiler) const=0;
 };
 
 #include "unit/symbol.hpp"

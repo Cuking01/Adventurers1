@@ -13,6 +13,6 @@ struct Trigger:DS::Map<u2,T>
     Trigger(Trigger_A<T>&a);
     void add(u2 key,const T&e);
     template<typename...Arg>
-    s2 operator()(Arg&...arg);
+    s2 operator()(Arg&&...arg);
 };
 

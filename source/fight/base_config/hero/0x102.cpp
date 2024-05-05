@@ -9,7 +9,8 @@ hero[0x102]=
 	.attribute_table=
 	{
 		.HP_lim={400,24},
-		.MP_lim={650,40},
+		//.MP_lim={650,40},
+		.MP_lim={1300,80},
 		.AP_lim={150,0},
 
 		.HP_re={3,0.18},

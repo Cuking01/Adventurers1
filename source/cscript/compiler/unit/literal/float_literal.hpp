@@ -14,4 +14,5 @@ struct Float_Literal:Literal
 		f2 f32;
 	};
 	Float_Literal(const Code_Char* begin,const Code_Char* end,Compiler&compiler);
+	virtual std::wstring what(const Compiler&compiler) const;
 };

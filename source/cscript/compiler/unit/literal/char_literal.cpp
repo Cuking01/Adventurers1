@@ -35,3 +35,16 @@ Char_Literal::Char_Literal(const Code_Char* begin,const Code_Char* end,Compiler&
 	}
 	
 }
+
+std::wstring Char_Literal::what([[maybe_unused]] const Compiler&compiler) const
+{
+	if(type==Char_T::Wchar)
+	{
+		return std::format(L"char_literal: wchar {:c}",wc);
+	}
+	else
+	{
+		return std::format(L"char_literal: char {:c}",c);
+	}
+	
+}

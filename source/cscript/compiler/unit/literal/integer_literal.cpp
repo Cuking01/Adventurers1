@@ -123,3 +123,18 @@ Integer_Literal::Integer_Literal(const Code_Char* begin,const Code_Char* end,Com
 		this->type=read_type(begin,end);
 	this->x=x;
 }
+
+std::wstring Integer_Literal::what([[maybe_unused]] const Compiler&compiler) const
+{
+	const wchar_t* t=L"NULL";
+	if(type==Integer_T::Int16)t=L"Int16";
+	if(type==Integer_T::Int32)t=L"Int32";
+	if(type==Integer_T::Int64)t=L"Int64";
+
+	if(type==Integer_T::Uint16)t=L"Uint16";
+	if(type==Integer_T::Uint32)t=L"Uint32";
+	if(type==Integer_T::Uint64)t=L"Uint64";
+
+	return std::format(L"integer_literal: {:s} {} {:d}",t,x,(s3)x);
+}
+	

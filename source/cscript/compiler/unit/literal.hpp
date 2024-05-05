@@ -13,6 +13,8 @@ struct Literal:Unit
 {
 	Literal_T type;
 	Literal(Literal_T type,s2 line,s2 col) noexcept;
+
+	virtual std::wstring what(const Compiler&compiler) const =0;
 };
 
 
