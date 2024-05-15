@@ -32,7 +32,7 @@ Symbol::Symbol(const Code_Char* begin,const Code_Char* end,Compiler&compiler)
 	if(dfa_status.id())
 	{
 		this->type2=Unit_T2::Key;
-		this->id=dfa_status;
+		this->id=dfa_status.id();
 		return;
 	}
 

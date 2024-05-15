@@ -20,7 +20,7 @@ struct Compiler
 	std::vector<Code_Char> code;
 	std::vector<Unit*> units;
 
-	u2 unit_p;
+	u2 unit_p=0;
 
 	std::map<std::wstring,s2> identifier_map;
 	std::vector<std::wstring> identifier_name_table;

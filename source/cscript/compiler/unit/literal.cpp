@@ -10,7 +10,7 @@ Unit_T2 literal_to_unit_t2(Literal_T literal)
 		return Unit_T2::String_Literal;
 	if(literal==Literal_T::Char)
 		return Unit_T2::Char_Literal;
-
+	throw std::runtime_error("error");
 }
 
 Literal::Literal(Literal_T type,s2 line,s2 col) noexcept

@@ -2,13 +2,6 @@
 
 
 template<s2 N>
-constexpr Symbol_Str<N>::Symbol_Str(const char (&str)[N])
-{
-    for(s2 i=0;i<N;i++)
-        s[i]=str[i];
-}
-
-template<s2 N>
 constexpr s2 Symbol_Str<N>::operator==(const char*b) const
 {
     const char*a=s;

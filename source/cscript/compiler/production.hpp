@@ -18,10 +18,11 @@ struct Production
 	struct Handler
 	{
 		std::unique_ptr<Production_Derived> production;
+		using Production_T=Production_Derived;
 
 		operator bool() noexcept
 		{
-			return *production;
+			return production.get()&&*production;
 		}
 
 		Production_Derived* operator->()
@@ -44,14 +45,17 @@ struct Production
 			production=nullptr;
 		}
 
-		Handler& operator=(Handler&&handler)=default;
+		Handler& operator=(Handler&&handler) noexcept =default;
 
 		Handler(){}
 
 		Handler(Compiler&compiler):production(new Production_Derived(compiler))
 		{
-
+			if(!*production)
+				destroy();
 		}
+
+		Handler(Handler&&) noexcept =default;
 
 		~Handler()
 		{
@@ -73,10 +77,24 @@ struct Production
 };
 
 
+template<typename... Handlers>
+bool multi_match(Compiler&compiler,Handlers&... handlers)
+{
+	if(((handlers=Handlers::Production_T::match(compiler))&&...))
+		return true;
+	return false;
+}
 
 namespace Productions
 {
+	#include"production/any.hpp"
+	#include"production/repeat.hpp"
+	#include"production/combination.hpp"
+	#include"production/opt.hpp"
+	#include"production/symbol_set.hpp"
+	#include"production/idt.hpp"
+	#include"production/literal.hpp"
 	#include"production/declaration.hpp"
-
+	#include"production/expression.hpp"
 };
 

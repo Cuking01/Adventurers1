@@ -1,44 +1,38 @@
 #pragma once
 
-
-
-struct Storage_Spec:Production<Storage_Spec>
-{
-	enum class Type
-	{
-		Static,
-		Typedef
-	};
-	Type type;
-
-	Storage_Spec(Compiler&compiler);
-	~Storage_Spec();
-};
-
-struct Type_Qualifier:Production<Type_Qualifier>
-{
-	enum class Type
-	{
-		Const
-	};
-	Type type;
-
-	Type_Qualifier(Compiler&compiler);
-	~Type_Qualifier();
-};
+using Storage_Spec=Symbol_Set<"static","typedef">;
+using Type_Qualifier=Symbol_Set<"const">;
 
 struct Type:Production<Type>
 {
-	u2 t;
+	s2 t;
+
+	typename Symbol_Set<"int8","int16","int32","int64","uint8","uint16","uint32","uint64","void">::Handler basic_type;
+	Idt::Handler named_type;
+
 	Type(Compiler&compiler);
-	~Type();
 };
 
 struct Declarator:Production<Declarator>
 {
-	u2 idt;
+	s2 id;
+
+	using T1=Combination<Idt>;
+	using T2=Combination<Symbol_Set<"(">,Declarator,Symbol_Set<")">>;
+	using T3=Combination<Symbol_Set<"*">,Opt<Type_Qualifier>,Declarator>;
+		
+	using Beta=Any<T1,T2,T3>;
+
+	using T4=Combination<Symbol_Set<"[">,Opt<Exp>,Symbol_Set<"]">>;
+	using T5=Combination<Symbol_Set<"(">,/*Opt<Para_List>,*/Symbol_Set<")">>;
+
+	using Alpha=Any<T4,T5>;
+
+	using Me=Combination<Beta,Repeat<Alpha>>;
+
+	Me::Handler handler;
+
 	Declarator(Compiler&compiler);
-	~Declarator();
 };
 
 
@@ -46,7 +40,7 @@ struct Declarator:Production<Declarator>
 
 struct Declaration:Production<Declaration>
 {
-	s2 idt;
+	s2 id;
 
 	s2 try_flag[3];
 

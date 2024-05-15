@@ -1,67 +1,21 @@
 #pragma once
 
-Storage_Spec::Storage_Spec(Compiler&compiler):Production(compiler)
-{
-	is_matched=compiler.match_symbol
-		<"static","typedef">
-	(
-		[this](){type=Type::Static;},
-		[this](){type=Type::Typedef;}
-	);
-}
-
-Storage_Spec::~Storage_Spec()
-{
-	if(is_matched)
-		compiler->unmatch_symbol();
-}
-
-Type_Qualifier::Type_Qualifier(Compiler&compiler):Production(compiler)
-{
-	is_matched=compiler.match_symbol<"const">([this](){type=Type::Const;});
-}
-
-Type_Qualifier::~Type_Qualifier()
-{
-	if(is_matched)
-		compiler->unmatch_symbol();
-}
-
 Type::Type(Compiler&compiler):Production(compiler)
 {
-	is_matched=compiler.match_symbol<"uint8","uint16","uint32","uint64","int8","int16","int32","int64">
-	(
-		[](){},
-		[](){},
-		[](){},
-		[](){},
-		[](){},
-		[](){},
-		[](){},
-		[](){}
-	);
-}
-
-Type::~Type()
-{
-	if(is_matched)
-		compiler->unmatch_symbol();
+	is_matched=multi_match(compiler,basic_type)||multi_match(compiler,named_type);
+	if(basic_type)t=basic_type->symbol;
+	if(named_type)t=named_type->id;
 }
 
 Declarator::Declarator(Compiler&compiler):Production(compiler)
 {
-	auto*p=compiler.match_idt();
-	if(p)
-	{
-		is_matched=true;
-		idt=p->id;
-	}
-}
+	is_matched=handler=Me::match(compiler);
 
-Declarator::~Declarator()
-{
-	if(is_matched)
-		compiler->unmatch_idt();
+	handler->get<0>().dispatch_call(
+		[this](T1&t1){id=t1.get<0>().id;},
+		[this](T2&t2){id=t2.get<1>().id;},
+		[this](T3&t3){id=t3.get<2>().id;}
+	);
 }
 
 Declaration::Declaration(Compiler&compiler):Production(compiler)
@@ -75,7 +29,7 @@ Declaration::Declaration(Compiler&compiler):Production(compiler)
 
 	if(!declarator)return;
 
-	idt=declarator->idt;
+	id=declarator->id;
 	is_matched=true;
 }
 
@@ -99,7 +53,7 @@ void Declaration::try_match(s2 order)
 		{
 			try_flag[order]=2;
 			return;
-		}
+		} 
 }
 
 void Declaration::try_unmatch(s2 order)
@@ -112,6 +66,7 @@ void Declaration::try_unmatch(s2 order)
 
 Declaration::~Declaration()
 {
-	for(s2 i=0;i<3;i++)
+	declarator.destroy();
+	for(s2 i=3;i--;)
 		try_unmatch(i);
 }

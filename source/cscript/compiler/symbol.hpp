@@ -11,7 +11,7 @@ constexpr wchar_t symbol_table[][20]=
     L"%=",
     L"&=",
     L"|=",
-    L"^="
+    L"^=",
     L"<<=",
     L">>=",
     L"++",
@@ -86,7 +86,11 @@ template<s2 N>
 struct Symbol_Str
 {
     char s[N];
-    constexpr Symbol_Str(const char (&str)[N]);
+    constexpr Symbol_Str(const char (&str)[N])
+    {
+        for(s2 i=0;i<N;i++)
+            s[i]=str[i];
+    }
     constexpr s2 operator==(const char*b) const;
 };
 

@@ -23,7 +23,6 @@ struct C:B
 
 int main()
 {
-
 	Mem::SA allocor(Mem::ra);
 
 
@@ -591,4 +590,5 @@ int main()
 	}
 
 	compiler.parse();
+	
 }
