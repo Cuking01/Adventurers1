@@ -35,8 +35,10 @@ struct Declarator:Production<Declarator>
 	Declarator(Compiler&compiler);
 };
 
-
-
+struct Type_Name:Production<Type_Name>
+{
+	
+};
 
 struct Declaration:Production<Declaration>
 {

@@ -577,7 +577,7 @@ int main()
 	code[len]=0;
 	fclose(fp);
 
-	printf("%ls\n\n",code);
+	//printf("%ls\n\n",code);
 
 	Cscript::Compiler compiler(code,allocor);
 	compiler.compile();
@@ -586,8 +586,10 @@ int main()
 
 	for(auto&unit:compiler.units)
 	{
-		printf("%d %d %d %d\n",(int)unit->type,(int)unit->type2,unit->line,unit->col);
+		//printf("%d %d %d %d\n",(int)unit->type,(int)unit->type2,unit->line,unit->col);
 	}
+
+	freopen("out.txt","w",stderr);
 
 	compiler.parse();
 	

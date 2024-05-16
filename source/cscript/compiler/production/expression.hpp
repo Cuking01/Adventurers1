@@ -171,8 +171,6 @@ struct Expk:Production<Expk<k>>,Exp_Base
 template<>
 struct Expk<13>:Production<Expk<13>>,Exp_Base
 {
-	//using Me=Any<Combination<Expk<12>,>,Expk<12>>;
-
 	using Me=Combination<Expk<12>,Repeat<Combination<Symbol_Set<"?">,Exp,Symbol_Set<":">,Expk<13>>>>;
 
 	Production<Me>::Handler handler;

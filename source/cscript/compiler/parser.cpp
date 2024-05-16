@@ -3,7 +3,7 @@
 
 void Compiler::parse() try     //语法分析
 {
-	Productions::Exp exp(*this);
+	Productions::Stat stat(*this);
 
 
 	// Productions::Declaration declaration(*this);

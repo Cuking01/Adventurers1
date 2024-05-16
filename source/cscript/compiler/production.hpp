@@ -1,13 +1,21 @@
 #pragma once
 
+int cnt_g=0;
 
 template<typename Production_Derived>
 struct Production
 {
 	Compiler*compiler;
 	bool is_matched;
+	static inline int cnt=0;
 
-	Production(Compiler&compiler):compiler(&compiler),is_matched(false){}
+	Production(Compiler&compiler);
+
+	~Production()
+	{
+		cnt--;
+		cnt_g--;
+	}
 
 	operator bool() const noexcept
 	{
@@ -96,5 +104,6 @@ namespace Productions
 	#include"production/literal.hpp"
 	#include"production/declaration.hpp"
 	#include"production/expression.hpp"
+	#include"production/statement.hpp"
 };
 

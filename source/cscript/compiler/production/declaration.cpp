@@ -10,7 +10,7 @@ Type::Type(Compiler&compiler):Production(compiler)
 Declarator::Declarator(Compiler&compiler):Production(compiler)
 {
 	is_matched=handler=Me::match(compiler);
-
+	if(!is_matched)return;
 	handler->get<0>().dispatch_call(
 		[this](T1&t1){id=t1.get<0>().id;},
 		[this](T2&t2){id=t2.get<1>().id;},

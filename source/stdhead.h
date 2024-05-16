@@ -10,6 +10,7 @@
 #include<string.h>
 #include<map>
 #include<memory>
+#include<typeinfo>
 
 using std::cerr;
 
