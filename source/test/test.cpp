@@ -586,6 +586,7 @@ int main()
 
 	for(auto&unit:compiler.units)
 	{
+		std::wcout<<unit->what(compiler)<<'\n';
 		//printf("%d %d %d %d\n",(int)unit->type,(int)unit->type2,unit->line,unit->col);
 	}
 

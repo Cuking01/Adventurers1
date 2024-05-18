@@ -1,13 +1,20 @@
 #pragma once
 
-
 template<typename Production_Derived>
 Production<Production_Derived>::Production(Compiler&compiler):compiler(&compiler),is_matched(false)
 {
 	cnt++;
 	cnt_g++;
-	fprintf(stderr,"%4u %4d %4d %s\n",compiler.unit_p,cnt_g,cnt,typeid(Production_Derived*).name());
+	//fprintf(stderr,"%4u %4d %4d %s\n",compiler.unit_p,cnt_g,cnt,typeid(Production_Derived*).name());
 }
+
+template<typename Production_Derived>
+Production<Production_Derived>::~Production()
+{
+	cnt--;
+	cnt_g--;
+}
+
 
 namespace Productions
 {

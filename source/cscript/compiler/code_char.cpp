@@ -27,7 +27,7 @@ wchar_t Code_Char_Reader::operator()()
 	begin++;
 	if(begin==end)
 	{
-		compiler->report_error(line,col,L"转义格式错误");
+		compiler->report_error(line,col,L"escape character format error");
 		return 0;
 	}
 	//特定含义转义
@@ -58,7 +58,7 @@ wchar_t Code_Char_Reader::operator()()
 		begin++;
 		if(begin==end||!hexdigit(*begin))
 		{
-			compiler->report_error(line,col,L"转义格式错误");
+			compiler->report_error(line,col,L"escape character format error");
 			return 0;
 		}
 		for(s2 i=0;i<2;i++)
@@ -83,7 +83,7 @@ wchar_t Code_Char_Reader::operator()()
 	}
 	else
 	{
-		compiler->report_error(line,col,L"转义格式错误");
+		compiler->report_error(line,col,L"escape character format error");
 		return 0;
 	}
 	

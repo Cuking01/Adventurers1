@@ -2,6 +2,7 @@
 
 Type::Type(Compiler&compiler):Production(compiler)
 {
+	
 	is_matched=multi_match(compiler,basic_type)||multi_match(compiler,named_type);
 	if(basic_type)t=basic_type->symbol;
 	if(named_type)t=named_type->id;
@@ -10,12 +11,6 @@ Type::Type(Compiler&compiler):Production(compiler)
 Declarator::Declarator(Compiler&compiler):Production(compiler)
 {
 	is_matched=handler=Me::match(compiler);
-	if(!is_matched)return;
-	handler->get<0>().dispatch_call(
-		[this](T1&t1){id=t1.get<0>().id;},
-		[this](T2&t2){id=t2.get<1>().id;},
-		[this](T3&t3){id=t3.get<2>().id;}
-	);
 }
 
 Declaration::Declaration(Compiler&compiler):Production(compiler)
@@ -25,11 +20,10 @@ Declaration::Declaration(Compiler&compiler):Production(compiler)
 
 	if(!type)return;
 
-	declarator=Declarator::match(compiler);
+	declarators=Repeat_1<Declarator>::match(compiler);
 
-	if(!declarator)return;
+	if(!declarators)return;
 
-	id=declarator->id;
 	is_matched=true;
 }
 
@@ -66,7 +60,7 @@ void Declaration::try_unmatch(s2 order)
 
 Declaration::~Declaration()
 {
-	declarator.destroy();
+	declarators.destroy();
 	for(s2 i=3;i--;)
 		try_unmatch(i);
 }

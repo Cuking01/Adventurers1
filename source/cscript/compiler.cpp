@@ -30,7 +30,7 @@ Compiler::Compiler(std::wstring code_,Mem::SA&sa):
 
 void Compiler::report_error(s2 line,s2 col,std::wstring err)
 {
-	error.push_back(std::format(L"{}{}{}",line,col,err));
+	error.push_back(std::format(L"line: {} col: {} error:{}",line,col,err));
 }
 
 void Compiler::report_error(std::wstring err)

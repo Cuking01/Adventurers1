@@ -53,5 +53,13 @@ String_Literal::String_Literal(const Code_Char* begin,const Code_Char* end,Compi
 
 std::wstring String_Literal::what([[maybe_unused]] const Compiler&compiler) const
 {
-	return std::format(L"string literal: {:s}",(wchar_t*)p);
+	std::vector<wchar_t> tmp;
+	for(int i=0;p[i];i++)
+		tmp.push_back(p[i]);
+	tmp.push_back(0);
+
+	if(type==String_T::String)
+		return std::format(L"string literal: {:s}",tmp.data());
+	else
+		return std::format(L"wstring literal: {:s}",(wchar_t*)p);
 }

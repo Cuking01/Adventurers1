@@ -9,7 +9,7 @@ s2 Compiler::extract()         //翻译阶段1，提取合法字符，不考虑�
 	{
 		auto c=code[i];
 		if(cscript_char_set(c))code[j++]=c;
-		else {report_error(code[i].line,code[i].col,L"非法字符");};
+		else {report_error(code[i].line,code[i].col,L"Illegal character");};
 	}
 
 	code.resize(j);
@@ -57,7 +57,7 @@ s2 Compiler::remove_note()    //去注释    翻译阶段3
 				i++;
 			if(i==len-1)     //错误，注释符号没有匹配
 			{
-				report_error(err_line,err_col,L"注释符号不匹配");
+				report_error(err_line,err_col,L"comment symbol mismatch");
 				return 1;
 			}
 
@@ -70,7 +70,7 @@ s2 Compiler::remove_note()    //去注释    翻译阶段3
 				code[j++]=code[i++];
 			if(i==len)   //错误，双引号不匹配
 			{
-				report_error(err_line,err_col,L"双引号不匹配");
+				report_error(err_line,err_col,L"double quotes mismatch");
 				return 1;
 			}
 
@@ -83,7 +83,7 @@ s2 Compiler::remove_note()    //去注释    翻译阶段3
 				code[j++]=code[i++];
 			if(i==len)   //错误，单引号不匹配
 			{
-				report_error(err_line,err_col,L"单引号不匹配");
+				report_error(err_line,err_col,L"single quotes mismatch");
 				return 1;
 			}
 
@@ -94,10 +94,11 @@ s2 Compiler::remove_note()    //去注释    翻译阶段3
 			code[j++]=code[i++];
 		}
 	}
+	code.resize(j);
 	return 0;
 }
 
-s2 Compiler::empty_char()
+s2 Compiler::empty_char()     //统一空白字符为空格，方便后续处理
 {
 	s2 len=code.size();
 	s2 i=0;
@@ -149,7 +150,7 @@ s2 Compiler::split()
 
 		while(i<len&&!(code[i-1]!=L'\\'&&code[i]==L'\"'))i++;
 		
-		if(code[i]!=L'\"'){report_error(err_line,err_col,L"双引号不匹配");};
+		if(code[i]!=L'\"'){report_error(err_line,err_col,L"double quotes mismatch");};
 		return i+1;
 	};
 	auto scan_char_literal=[this,len](s2 i)
@@ -162,7 +163,7 @@ s2 Compiler::split()
 		else i++;
 
 		while(i<len&&!(code[i-1]!=L'\\'&&code[i]==L'\''))i++;
-		if(code[i]!=L'\''){report_error(err_line,err_col,L"单引号不匹配");};
+		if(code[i]!=L'\''){report_error(err_line,err_col,L"single quotes mismatch");};
 		return i+1;
 	};
 	auto scan_integer_literal=[this,len](s2 i)
@@ -237,7 +238,7 @@ s2 Compiler::split()
 		scan(scan_integer_literal,a.get_constructor<Integer_Literal>())||
 		scan(scan_float_literal,a.get_constructor<Float_Literal>())||
 		scan(scan_symbol,a.get_constructor<Symbol>())||
-		(report_error(code[i].line,code[i].col,L"未知错误"),i++);
+		(report_error(code[i].line,code[i].col,L"unknown error"),i++);
 	}
 	return 0;
 }
@@ -251,17 +252,17 @@ s2 Compiler::merge_string()
 s2 Compiler::lex()
 {
 	//初始化
-	compile_init();
+	if(compile_init())return 1;
 	//提取合法字符
-	extract();
+	if(extract())return 2;
 	//去注释
-	remove_note();
+	if(remove_note())return 3;
 	//空白字符变空格
-	empty_char();
+	if(empty_char())return 4;
 	//拆分成单元
-	split();
+	if(split())return 5;
 	//合并字符串字面量
-	merge_string();
+	if(merge_string())return 6;
 
 	return 0;
 }

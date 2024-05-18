@@ -26,6 +26,8 @@ Symbol::Symbol(const Code_Char* begin,const Code_Char* end,Compiler&compiler)
 
 	auto dfa_status=symbol_dfa.init_status();
 
+	auto begin_back=begin;
+
 	while(begin<end)
 		dfa_status=dfa_status(*begin++);
 	
@@ -36,9 +38,7 @@ Symbol::Symbol(const Code_Char* begin,const Code_Char* end,Compiler&compiler)
 		return;
 	}
 
-	std::wstring word{begin,end};
-
-	
+	std::wstring word{begin_back,end};
 
 	this->type2=Unit_T2::Identifier;
 	this->id=compiler.add_identifier(word);
@@ -47,5 +47,8 @@ Symbol::Symbol(const Code_Char* begin,const Code_Char* end,Compiler&compiler)
 
 std::wstring Symbol::what([[maybe_unused]] const Compiler&compiler) const
 {
-	return std::format(L"symbol:{:s}",symbol_table[id]);
+	if(this->type2==Unit_T2::Identifier)
+		return std::format(L"identifier:{:s}",compiler.identifier_name(id));
+	else
+		return std::format(L"keyword:{:s}",symbol_table[id]);
 }

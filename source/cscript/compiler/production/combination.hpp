@@ -34,4 +34,9 @@ struct Combination:Production<Combination<Items...>>
 	{
 		destruct(std::make_index_sequence<sizeof...(Items)>());
 	}
+
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		//((print_tree(dep,o),Items->print_ast(dep,o)),...);
+	}
 };

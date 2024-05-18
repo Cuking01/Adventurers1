@@ -16,3 +16,9 @@ Idt::~Idt()
 		compiler->unmatch_idt();
 }
 
+void Idt::print_ast(u2 dep,std::wostream&o)
+{
+	print_tree(dep,o);
+	o<<L"Identifier: "<<compiler->identifier_name(id)<<'\n';	
+}
+

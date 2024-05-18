@@ -15,3 +15,8 @@ Literal::~Literal()
 	if(is_matched)
 		compiler->unmatch_literal();
 }
+
+void Literal::print_ast(u2 dep,std::wostream&o)
+{
+
+}

@@ -54,7 +54,7 @@ constexpr Char_Set operator~(Char_Set a)
     return ans;
 }
 
-constexpr Char_Set punctuation{'_','{','}','[',']','#','(',')','<','>','%',':',';','.','?','*','+','-','/','^','&','|','~','!','=',',','\\','\"','\''};
+constexpr Char_Set punctuation{'_','{','}','[',']','#','(',')','<','>','%',':',';','.','?','*','+','-','/','^','&','|','~','!','=',',','\\','\"','\'','@'};
 constexpr Char_Set symbol_punctuation=punctuation&~Char_Set{'\\','\"','\''};
 
 constexpr Char_Set bdigit('0','1');
