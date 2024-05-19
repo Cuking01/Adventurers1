@@ -87,6 +87,8 @@ using Operator=typename Exp_Config<k>::Op;
 template<>
 struct Expk<0>:Production<Primary_Exp>,Exp_Base
 {
+	static constexpr Name_Str name="primary expression";
+
 	using T1=Literal;
 	using T2=Idt;
 	using T3=Combination<Symbol_Set<"(">,Exp,Symbol_Set<")">>;
@@ -99,11 +101,18 @@ struct Expk<0>:Production<Primary_Exp>,Exp_Base
 		is_matched=handler=Me::match(compiler);
 	}
 
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
+	}
 };
 
 template<>
 struct Expk<1>:Production<Expk<1>>,Exp_Base
 {
+	static constexpr Name_Str name="expression 1";
 	using Arg_List=Combination<Expk<14>,Repeat<Any<Symbol_Set<",">,Expk<14>>>>;
 
 	using Op=Any
@@ -123,11 +132,24 @@ struct Expk<1>:Production<Expk<1>>,Exp_Base
 	{
 		is_matched=handler=Me::match(compiler);
 	}
+
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		if(handler->template get<1>().size()==0)
+		{
+			handler->template get<0>().print_ast(dep,o);
+			return;
+		}
+		print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
+	}
 };
 
 template<>
 struct Expk<2>:Production<Expk<2>>,Exp_Base
 {
+	static constexpr Name_Str name="expression 2";
 	using Op=Any
 	<
 		Symbol_Set<"++">,
@@ -151,12 +173,26 @@ struct Expk<2>:Production<Expk<2>>,Exp_Base
 	{
 		is_matched=handler=Me::match(compiler);
 	}
+
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		if(handler->template get<0>().size()==0)
+		{
+			handler->template get<1>().print_ast(dep,o);
+			return;
+		}
+		print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
+	}
 };
 
 
 template<u2 k>
 struct Expk:Production<Expk<k>>,Exp_Base
 {
+	static constexpr Name_Str name=Name_Str("expression ")+make_name<k>();
+
 	using Base=Production<Expk<k>>;
 	using Op=Operator<k>;
 	using Me=Combination<Expk<k-1>,Repeat<Combination<Op,Expk<k-1>>>>;
@@ -166,11 +202,25 @@ struct Expk:Production<Expk<k>>,Exp_Base
 	{
 		Base::is_matched=handler=Me::match(compiler);
 	}
+
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		if(handler->template get<1>().size()==0)
+		{
+			handler->template get<0>().print_ast(dep,o);
+			return;
+		}
+		Base::print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
+	}
 };
 
 template<>
 struct Expk<13>:Production<Expk<13>>,Exp_Base
 {
+	static constexpr Name_Str name="expression 13";
+
 	using Me=Combination<Expk<12>,Repeat<Combination<Symbol_Set<"?">,Exp,Symbol_Set<":">,Expk<13>>>>;
 
 	Production<Me>::Handler handler;
@@ -178,11 +228,25 @@ struct Expk<13>:Production<Expk<13>>,Exp_Base
 	{
 		is_matched=handler=Me::match(compiler);
 	}
+
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		if(handler->template get<1>().size()==0)
+		{
+			handler->template get<0>().print_ast(dep,o);
+			return;
+		}
+		print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
+	}
 };
 
 template<>
 struct Expk<14>:Production<Expk<14>>,Exp_Base
 {
+	static constexpr Name_Str name="expression 14";
+
 	using Op=Symbol_Set<"=","+=","-=","*=","/=","%=","<<=",">>=","&=","^=","|=">;
 	using Me=Combination<Repeat<Combination<Expk<13>,Op>>,Expk<13>>;
 
@@ -192,11 +256,25 @@ struct Expk<14>:Production<Expk<14>>,Exp_Base
 	{
 		is_matched=handler=Me::match(compiler);
 	}
+
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		if(handler->template get<0>().size()==0)
+		{
+			handler->template get<1>().print_ast(dep,o);
+			return;
+		}
+		print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
+	}
 };
 
 template<>
 struct Expk<15>:Production<Expk<15>>,Exp_Base
 {
+	static constexpr Name_Str name="expression 15";
+
 	using Op=Symbol_Set<",">;
 	using Me=Combination<Expk<14>,Repeat<Combination<Op,Expk<14>>>>;
 
@@ -206,15 +284,35 @@ struct Expk<15>:Production<Expk<15>>,Exp_Base
 	{
 		is_matched=handler=Me::match(compiler);
 	}
+
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		if(handler->template get<1>().size()==0)
+		{
+			handler->template get<0>().print_ast(dep,o);
+			return;
+		}
+		print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
+	}
 };
 
 struct Exp:Production<Exp>,Exp_Base
 {
+	static constexpr Name_Str name="expression";
 	using Me=Expk<15>;
 	Me::Handler handler;
 
 	Exp(Compiler&compiler):Production(compiler)
 	{
 		is_matched=handler=Me::match(compiler);
+	}
+
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
 	}
 };

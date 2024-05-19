@@ -24,6 +24,8 @@ void Compiler::parse() try     //语法分析
 
 	// #undef print
 
+	std::wofstream ofs("ast.txt");
+	stat.print_ast(0,ofs);
 	printf("%u\n",unit_p);
 }
 catch(std::exception&e)

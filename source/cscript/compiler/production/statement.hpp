@@ -11,7 +11,14 @@ struct Label:Production<Label>
 		is_matched=handler=Me::match(compiler);
 	}
 
-};	
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
+	}
+
+};
 
 
 struct Stat:Production<Stat>
@@ -23,6 +30,13 @@ struct Stat:Production<Stat>
 	Stat(Compiler&compiler):Production(compiler)
 	{
 		is_matched=handler=Me::match(compiler);
+	}
+
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
 	}
 };
 
@@ -37,6 +51,13 @@ struct Compound_Stat:Production<Compound_Stat>
 	{
 		is_matched=handler=Me::match(compiler);
 	}
+
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
+	}
 };
 
 struct Exp_Stat:Production<Exp_Stat>
@@ -47,6 +68,13 @@ struct Exp_Stat:Production<Exp_Stat>
 	Exp_Stat(Compiler&compiler):Production(compiler)
 	{
 		is_matched=handler=Me::match(compiler);
+	}
+
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
 	}
 };
 
@@ -63,6 +91,13 @@ struct Select_Stat:Production<Select_Stat>
 	{
 		is_matched=handler=Me::match(compiler);
 	}
+
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
+	}
 };
 
 struct Loop_Stat:Production<Loop_Stat>
@@ -77,6 +112,13 @@ struct Loop_Stat:Production<Loop_Stat>
 	Loop_Stat(Compiler&compiler):Production(compiler)
 	{
 		is_matched=handler=Me::match(compiler);
+	}
+
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
 	}
 };
 
@@ -94,6 +136,13 @@ struct Jump_Stat:Production<Jump_Stat>
 	Jump_Stat(Compiler&compiler):Production(compiler)
 	{
 		is_matched=handler=Me::match(compiler);
+	}
+
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
 	}
 };
 

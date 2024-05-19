@@ -12,6 +12,16 @@ struct Name_Str
 			str[i]=s[i];
 	}
 
+	constexpr Name_Str(u2 x)
+	{
+		for(u2 i=0;i<len-1;i++)
+		{
+			str[len-2-i]=x%10+'0';
+			x/=10;
+		}
+		str[len-1]='\0';
+	}
+
 	template<u2 len1,u2 len2>
 	constexpr Name_Str(const char(&s1)[len1],const char(&s2)[len2])
 	{
@@ -22,15 +32,30 @@ struct Name_Str
 			str[i+len1-1]=s2[i];
 	}
 
+
+	operator const char*() const
+	{
+		return str;
+	}
 };
 
 template<u2 len1,u2 len2>
-auto operator+(const Name_Str<len1> s1,const Name_Str<len2> s2)->Name_Str<len1+len2-1>
+constexpr auto operator+(const Name_Str<len1> s1,const Name_Str<len2> s2)->Name_Str<len1+len2-1>
 {
 	return Name_Str<len1+len2-1>(s1.str,s2.str);
 };
 
+constexpr u2 x_len(u2 k)
+{
+	if(k<10)return 1;
+	return x_len(k/10)+1;
+}
 
+template<u2 k>
+constexpr auto make_name()
+{
+	return Name_Str<x_len(k)+1>(k);
+}
 
 int cnt_g=0;
 
@@ -81,6 +106,7 @@ struct Production_Handler
 	{
 
 	}
+
 };
 
 template<typename Production_Derived>
@@ -93,11 +119,6 @@ struct Production
 	Production(Compiler&compiler);
 
 	~Production();
-
-	void print_tree(u2 dep,std::wostream&o)
-	{
-
-	}
 
 	operator bool() const noexcept
 	{
@@ -114,6 +135,14 @@ struct Production
 	static Handler match(Compiler*compiler)
 	{
 		return match(*compiler);
+	}
+
+	void print_tree(u2 dep,std::wostream&o)
+	{
+		if(dep==0)return;
+		for(u2 i=0;i<dep-1;i++)
+			o<<"|   ";
+		o<<"|---";
 	}
 
 };

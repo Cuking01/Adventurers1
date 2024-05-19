@@ -10,5 +10,7 @@ struct Opt:Production<Opt<Item>>
 		Production<Opt<Item>>::is_matched=true;
 	}
 
+	void print_ast(u2 dep,std::wostream&o);
+
 };
 

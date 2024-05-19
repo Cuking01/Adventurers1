@@ -1,18 +1,5 @@
 #pragma once
 
-Type::Type(Compiler&compiler):Production(compiler)
-{
-	
-	is_matched=multi_match(compiler,basic_type)||multi_match(compiler,named_type);
-	if(basic_type)t=basic_type->symbol;
-	if(named_type)t=named_type->id;
-}
-
-Declarator::Declarator(Compiler&compiler):Production(compiler)
-{
-	is_matched=handler=Me::match(compiler);
-}
-
 Declaration::Declaration(Compiler&compiler):Production(compiler)
 {
 	for(s2 i=0;i<3;i++)
@@ -63,4 +50,21 @@ Declaration::~Declaration()
 	declarators.destroy();
 	for(s2 i=3;i--;)
 		try_unmatch(i);
+}
+
+void Declaration::try_print_ast(u2 dep,std::wostream&o,s2 order)
+{
+	s2 flag=try_flag[order];
+	if(flag==0)storage_spec->print_ast(dep+1,o);
+	if(flag==1)type_qualifier->print_ast(dep+1,o);
+	if(flag==2)type->print_ast(dep+1,o);
+}
+
+void Declaration::print_ast(u2 dep,std::wostream&o)
+{
+	print_tree(dep,o);
+	o<<name<<'\n';
+	for(s2 i=0;i<3;i++)
+		try_print_ast(dep,o,i);
+	declarators->print_ast(dep+1,o);
 }

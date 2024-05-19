@@ -35,6 +35,8 @@ struct Any:Production<Any<Items...>>
 	{
 		return *std::get<typename T::Handler>(handler);
 	}
+
+	void print_ast(u2 dep,std::wostream&o);
 };
 
 

@@ -4,28 +4,58 @@ struct Storage_Spec:Production<Storage_Spec>
 {
 	static constexpr Name_Str name="storage_spec";
 	using Me=Symbol_Set<"static","typedef">;
+	Me::Handler handler;
+	Storage_Spec(Compiler&compiler):Production(compiler)
+	{
+		is_matched=handler=Me::match(compiler);
+	};
 
-	Storage_Spec(Compiler&compiler):Production(compiler){};
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
+	}
 };
 
 struct Type_Qualifier:Production<Type_Qualifier>
 {
 	static constexpr Name_Str name="type_qualifier";
 	using Me=Symbol_Set<"const">;
+	Me::Handler handler;
+	Type_Qualifier(Compiler&compiler):Production(compiler)
+	{
+		is_matched=handler=Me::match(compiler);
+	};
 
-	Type_Qualifier(Compiler&compiler):Production(compiler){};
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
+	}
 };
 
 struct Type:Production<Type>
 {
 	static constexpr Name_Str name="type";
 
-	s2 t;
+	using Basic_Type=Symbol_Set<"int8","int16","int32","int64","uint8","uint16","uint32","uint64","void">;
+	using Me=Any<Basic_Type,Idt>;
 
-	typename Symbol_Set<"int8","int16","int32","int64","uint8","uint16","uint32","uint64","void">::Handler basic_type;
-	Idt::Handler named_type;
+	Me::Handler handler;
 
-	Type(Compiler&compiler);
+	Type(Compiler&compiler):Production(compiler)
+	{
+		is_matched=handler=Me::match(compiler);
+	}
+
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
+	}
 };
 
 struct Declarator:Production<Declarator>
@@ -47,12 +77,29 @@ struct Declarator:Production<Declarator>
 
 	Me::Handler handler;
 
-	Declarator(Compiler&compiler);
+	Declarator(Compiler&compiler):Production(compiler)
+	{
+		is_matched=handler=Me::match(compiler);
+	}
+
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
+	}
 };
 
 struct Type_Name:Production<Type_Name>
 {
-	
+	static constexpr Name_Str name="type name";
+
+	// void print_ast(u2 dep,std::wostream&o)
+	// {
+	// 	print_tree(dep,o);
+	// 	o<<name<<'\n';
+	// 	handler->print_ast(dep+1,o);
+	// }
 };
 
 struct Declaration:Production<Declaration>
@@ -70,5 +117,8 @@ struct Declaration:Production<Declaration>
 	void try_unmatch(s2 order);
 	Declaration(Compiler&compiler);
 	~Declaration();
+
+	void try_print_ast(u2 dep,std::wostream&o,s2 order);
+	void print_ast(u2 dep,std::wostream&o);
 };
 

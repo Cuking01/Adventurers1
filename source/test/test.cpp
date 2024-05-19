@@ -1,25 +1,5 @@
 #include "../head.h"
 
-struct A
-{
-    int x,y;
-    A(int x,int y):x(x),y(y){}
-    virtual ~A(){}
-};
-
-struct B:A
-{
-    int z;
-    B(int x,int y,int z):A(x,y),z(z){}
-    virtual ~B(){}
-};
-
-struct C:B
-{
-    int a,b;
-    C(int x,int y,int z,int a,int b):B(x,y,z),a(a),b(b){}
-    virtual ~C(){}
-};
 
 int main()
 {
@@ -590,7 +570,7 @@ int main()
 		//printf("%d %d %d %d\n",(int)unit->type,(int)unit->type2,unit->line,unit->col);
 	}
 
-	freopen("out.txt","w",stderr);
+	//freopen("out.txt","w",stderr);
 
 	compiler.parse();
 	

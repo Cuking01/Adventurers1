@@ -25,6 +25,18 @@ struct Repeat:Production<Repeat<Item>>
 		for(auto it=items.rbegin();it!=items.rend();it++)
 			it->destroy();
 	}
+
+	auto size() const
+	{
+		return items.size();
+	}
+
+	Item& operator[](u2 i)
+	{
+		return items[i];
+	}
+
+	void print_ast(u2 dep,std::wostream&o);
 };
 
 template<typename Item>
@@ -56,5 +68,17 @@ struct Repeat_1:Production<Repeat_1<Item>>
 		for(auto it=items.rbegin();it!=items.rend();it++)
 			it->destroy();
 	}
+
+	auto size() const
+	{
+		return items.size();
+	}
+
+	Item& operator[](u2 i)
+	{
+		return items[i];
+	}
+
+	void print_ast(u2 dep,std::wostream&o);
 };
 
