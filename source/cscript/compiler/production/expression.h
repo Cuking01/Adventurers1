@@ -8,7 +8,7 @@ struct Exp_Config;
 
 template<u2 k>
 struct Expk;
-
+struct Function;
 struct Exp;
 
 using Primary_Exp=Expk<0>;

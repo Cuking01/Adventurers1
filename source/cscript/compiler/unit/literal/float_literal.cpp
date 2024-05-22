@@ -44,6 +44,5 @@ Float_Literal::Float_Literal(const Code_Char* begin,const Code_Char* end,Compile
 
 std::wstring Float_Literal::what([[maybe_unused]] const Compiler&compiler) const
 {
-	puts("******");
 	return std::format(L"float_literal: {:s} {:f}",type==Float_T::F32?L"F32":L"F64",type==Float_T::F32?f32:f64);
 }

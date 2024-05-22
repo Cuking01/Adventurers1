@@ -84,6 +84,31 @@ struct Exp_Config<15>
 template<u2 k>
 using Operator=typename Exp_Config<k>::Op;
 
+
+struct Function:Production<Function>
+{
+	static constexpr Name_Str name="function";
+	using Arg_List=Combination<Repeat<Combination<Function_Arg_Decl,Symbol_Set<",">>>,Declaration>;
+	using Me=Combination<Symbol_Set<"function">,Symbol_Set<"(">,Opt<Arg_List>,Symbol_Set<")">,Compound_Stat>;
+
+	Me::Handler handler;
+
+	Function(Compiler&compiler):Production(compiler)
+	{
+		is_matched=handler=Me::match(compiler);
+	}
+
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
+	}
+
+
+
+};
+
 template<>
 struct Expk<0>:Production<Primary_Exp>,Exp_Base
 {
@@ -92,7 +117,8 @@ struct Expk<0>:Production<Primary_Exp>,Exp_Base
 	using T1=Literal;
 	using T2=Idt;
 	using T3=Combination<Symbol_Set<"(">,Exp,Symbol_Set<")">>;
-	using Me=Any<T1,T2,T3>;
+	using T4=Function;
+	using Me=Any<T1,T2,T3,T4>;
 
 	Me::Handler handler;
 
@@ -165,7 +191,10 @@ struct Expk<2>:Production<Expk<2>>,Exp_Base
 		Symbol_Set<"sizeof">
 	>;
 
-	using Me=Combination<Repeat<Op>,Expk<1>>;
+	using T1=Combination<Repeat<Op>,Expk<1>>;
+	using T2=Expk<1>;
+
+	using Me=Any<T1,T2>;
 
 	Me::Handler handler;
 
@@ -176,14 +205,24 @@ struct Expk<2>:Production<Expk<2>>,Exp_Base
 
 	void print_ast(u2 dep,std::wostream&o)
 	{
-		if(handler->template get<0>().size()==0)
-		{
-			handler->template get<1>().print_ast(dep,o);
-			return;
-		}
-		print_tree(dep,o);
-		o<<name<<'\n';
-		handler->print_ast(dep+1,o);
+		handler->dispatch_call
+		(
+			[this,dep,&o](T1&t1)
+			{
+				if(t1.template get<0>().size()==0)
+				{
+					t1.template get<1>().print_ast(dep,o);
+					return;
+				}
+				print_tree(dep,o);
+				o<<name<<'\n';
+				t1.print_ast(dep+1,o);
+			},
+			[this,dep,&o](T2&t2)
+			{
+				t2.print_ast(dep,o);
+			}
+		);
 	}
 };
 
@@ -298,6 +337,8 @@ struct Expk<15>:Production<Expk<15>>,Exp_Base
 	}
 };
 
+
+
 struct Exp:Production<Exp>,Exp_Base
 {
 	static constexpr Name_Str name="expression";
@@ -316,3 +357,5 @@ struct Exp:Production<Exp>,Exp_Base
 		handler->print_ast(dep+1,o);
 	}
 };
+
+

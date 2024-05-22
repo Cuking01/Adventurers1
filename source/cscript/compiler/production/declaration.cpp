@@ -7,7 +7,7 @@ Declaration::Declaration(Compiler&compiler):Production(compiler)
 
 	if(!type)return;
 
-	declarators=Repeat_1<Declarator>::match(compiler);
+	declarators=Declarators::match(compiler);
 
 	if(!declarators)return;
 

@@ -104,9 +104,10 @@ struct Loop_Stat:Production<Loop_Stat>
 {
 	static constexpr Name_Str name="loop statement";
 	using DO_WHILE=Combination<Symbol_Set<"do">,Stat,Symbol_Set<"while">,Symbol_Set<"(">,Exp,Symbol_Set<")">,Symbol_Set<";">>;
+	using REPEAT_UNTIL=Combination<Symbol_Set<"repeat">,Stat,Symbol_Set<"until">,Symbol_Set<"(">,Exp,Symbol_Set<")">,Symbol_Set<";">>;
 	using WHILE=Combination<Symbol_Set<"while">,Symbol_Set<"(">,Exp,Symbol_Set<")">,Stat>;
 	using FOR=Combination<Symbol_Set<"for">,Symbol_Set<"(">,Opt<Any<Exp,Declaration>>,Symbol_Set<";">,Opt<Exp>,Symbol_Set<";">,Opt<Exp>,Symbol_Set<")">,Stat>;
-	using Me=Any<DO_WHILE,WHILE,FOR>;
+	using Me=Any<DO_WHILE,REPEAT_UNTIL,WHILE,FOR>;
 
 	Me::Handler handler;
 	Loop_Stat(Compiler&compiler):Production(compiler)

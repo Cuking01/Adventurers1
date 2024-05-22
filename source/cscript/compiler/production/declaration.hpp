@@ -40,7 +40,7 @@ struct Type:Production<Type>
 {
 	static constexpr Name_Str name="type";
 
-	using Basic_Type=Symbol_Set<"int8","int16","int32","int64","uint8","uint16","uint32","uint64","void">;
+	using Basic_Type=Symbol_Set<"int8","int16","int32","int64","uint8","uint16","uint32","uint64","void","integer","double">;
 	using Me=Any<Basic_Type,Idt>;
 
 	Me::Handler handler;
@@ -102,6 +102,26 @@ struct Type_Name:Production<Type_Name>
 	// }
 };
 
+struct Initialize:Production<Initialize>
+{
+	static constexpr Name_Str name="initialize";
+
+	using Me=Combination<Symbol_Set<"=">,Expk<14>>;
+
+	Me::Handler handler;
+	Initialize(Compiler&compiler):Production(compiler)
+	{
+		is_matched=handler=Me::match(compiler);
+	}
+
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
+	}
+};
+
 struct Declaration:Production<Declaration>
 {
 
@@ -111,7 +131,11 @@ struct Declaration:Production<Declaration>
 	Storage_Spec::Handler storage_spec;
 	Type_Qualifier::Handler type_qualifier;
 	Type::Handler type;
-	Repeat_1<Declarator>::Handler declarators;
+
+	using Declarator_With_Init=Combination<Declarator,Opt<Initialize>>;
+	using Declarators=Combination<Repeat<Combination<Declarator_With_Init,Symbol_Set<",">>>,Declarator_With_Init>;
+
+	Declarators::Handler declarators;
 
 	void try_match(s2 order);
 	void try_unmatch(s2 order);
@@ -122,3 +146,26 @@ struct Declaration:Production<Declaration>
 	void print_ast(u2 dep,std::wostream&o);
 };
 
+struct Function_Arg_Decl:Production<Function_Arg_Decl>
+{
+	static constexpr Name_Str name="function arg declaration";
+	using T1=Combination<Type,Type_Qualifier>;
+	using T2=Combination<Type_Qualifier,Type>;
+	using T3=Type;
+
+	using Me=Combination<Any<T1,T2,T3>,Declarator>;
+
+	Me::Handler handler;
+
+	Function_Arg_Decl(Compiler&compiler):Production(compiler)
+	{
+		is_matched=handler=Me::match(compiler);
+	}
+
+	void print_ast(u2 dep,std::wostream&o)
+	{
+		print_tree(dep,o);
+		o<<name<<'\n';
+		handler->print_ast(dep+1,o);
+	}
+};
