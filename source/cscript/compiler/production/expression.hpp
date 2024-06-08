@@ -9,7 +9,8 @@ enum class Value_Category:u2
 
 struct Exp_Base
 {
-	s2 type;
+	u2 type;
+	Addr addr;
 	Value_Category value_category;
 	bool is_const=false;
 	bool is_uneval=false;
@@ -88,7 +89,7 @@ using Operator=typename Exp_Config<k>::Op;
 struct Function:Production<Function>
 {
 	static constexpr Name_Str name="function";
-	using Arg_List=Combination<Repeat<Combination<Function_Arg_Decl,Symbol_Set<",">>>,Declaration>;
+	using Arg_List=Combination<Repeat<Combination<Function_Arg_Decl,Symbol_Set<",">>>,Function_Arg_Decl>;
 	using Me=Combination<Symbol_Set<"function">,Symbol_Set<"(">,Opt<Arg_List>,Symbol_Set<")">,Compound_Stat>;
 
 	Me::Handler handler;
@@ -97,6 +98,8 @@ struct Function:Production<Function>
 	{
 		is_matched=handler=Me::match(compiler);
 	}
+
+	void analyze();
 
 	void print_ast(u2 dep,std::wostream&o)
 	{
@@ -127,6 +130,8 @@ struct Expk<0>:Production<Primary_Exp>,Exp_Base
 		is_matched=handler=Me::match(compiler);
 	}
 
+	void analyze();
+
 	void print_ast(u2 dep,std::wostream&o)
 	{
 		print_tree(dep,o);
@@ -139,7 +144,7 @@ template<>
 struct Expk<1>:Production<Expk<1>>,Exp_Base
 {
 	static constexpr Name_Str name="expression 1";
-	using Arg_List=Combination<Expk<14>,Repeat<Any<Symbol_Set<",">,Expk<14>>>>;
+	using Arg_List=Combination<Expk<14>,Repeat<Combination<Symbol_Set<",">,Expk<14>>>>;
 
 	using Op=Any
 	<
@@ -158,6 +163,8 @@ struct Expk<1>:Production<Expk<1>>,Exp_Base
 	{
 		is_matched=handler=Me::match(compiler);
 	}
+
+	void analyze();
 
 	void print_ast(u2 dep,std::wostream&o)
 	{
@@ -203,6 +210,16 @@ struct Expk<2>:Production<Expk<2>>,Exp_Base
 		is_matched=handler=Me::match(compiler);
 	}
 
+	void analyze()
+	{
+		handler->dispatch_call
+		(
+			[this](T1&t1){t1.get<1>().analyze();this->type=t1.get<1>().type;},
+			[this](T2&t2){t2.analyze();this->type=t2.type;}
+		);
+		printf("debug:%s %u\n",(const char*)name,this->type);
+	}
+
 	void print_ast(u2 dep,std::wostream&o)
 	{
 		handler->dispatch_call
@@ -242,6 +259,15 @@ struct Expk:Production<Expk<k>>,Exp_Base
 		Base::is_matched=handler=Me::match(compiler);
 	}
 
+	void analyze()
+	{
+		this->type=0;
+		handler->template get<0>().analyze();
+		this->type=std::max(this->type,handler->template get<0>().type);
+		handler->template get<1>().for_each([this](auto&t){t.template get<1>().analyze();this->type=std::max(this->type,t.template get<1>().type);});
+		printf("debug:%s %u\n",(const char*)name,this->type);
+	}
+
 	void print_ast(u2 dep,std::wostream&o)
 	{
 		if(handler->template get<1>().size()==0)
@@ -266,6 +292,14 @@ struct Expk<13>:Production<Expk<13>>,Exp_Base
 	Expk(Compiler&compiler):Production(compiler)
 	{
 		is_matched=handler=Me::match(compiler);
+	}
+
+	void analyze()
+	{
+		handler->get<0>().analyze();
+		this->type=handler->get<0>().type;
+		handler->get<1>().for_each([](auto&t){t.template get<1>().analyze();t.template get<3>().analyze();});
+		printf("debug:%s %u\n",(const char*)name,this->type);
 	}
 
 	void print_ast(u2 dep,std::wostream&o)
@@ -296,6 +330,14 @@ struct Expk<14>:Production<Expk<14>>,Exp_Base
 		is_matched=handler=Me::match(compiler);
 	}
 
+	void analyze()
+	{
+		handler->get<0>().for_each([this](auto&t){t.template get<0>().analyze();});
+		handler->get<1>().analyze();
+		this->type=handler->get<1>().type;
+		printf("debug:%s %u\n",(const char*)name,this->type);
+	}
+
 	void print_ast(u2 dep,std::wostream&o)
 	{
 		if(handler->template get<0>().size()==0)
@@ -324,6 +366,14 @@ struct Expk<15>:Production<Expk<15>>,Exp_Base
 		is_matched=handler=Me::match(compiler);
 	}
 
+	void analyze()
+	{
+		handler->get<0>().analyze();
+		this->type=handler->get<0>().type;
+		handler->get<1>().for_each([](auto&t){t.template get<1>().analyze();});
+		printf("debug:%s %u\n",(const char*)name,this->type);
+	}
+
 	void print_ast(u2 dep,std::wostream&o)
 	{
 		if(handler->template get<1>().size()==0)
@@ -350,12 +400,14 @@ struct Exp:Production<Exp>,Exp_Base
 		is_matched=handler=Me::match(compiler);
 	}
 
-	void print_ast(u2 dep,std::wostream&o)
+	void analyze()
 	{
-		print_tree(dep,o);
-		o<<name<<'\n';
-		handler->print_ast(dep+1,o);
-	}
+		handler->analyze();
+		this->type=handler->type;
+		printf("debug:%s %u\n",(const char*)name,this->type);
+	};
+	void print_ast(u2 dep,std::wostream&o);
+	
 };
 
 

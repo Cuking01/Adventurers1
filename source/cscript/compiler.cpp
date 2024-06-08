@@ -5,6 +5,7 @@
 #include "compiler/code_char.cpp"
 #include "compiler/mem_seg.cpp"
 #include "compiler/unit.cpp"
+#include "compiler/type_system.cpp"
 #include "compiler/production.cpp"
 
 s2 hextox(wchar_t c)
@@ -55,6 +56,34 @@ s2 Compiler::add_identifier(std::wstring word)
 		return id;
 	}
 	return it->second;
+}
+
+void Compiler::add_variable(u2 id,Variable info)
+{
+	auto& stk=var_table[id];
+	if(stk.empty()||stk.top().dep<dep)
+	{
+		info.dep=dep;
+		stk.push(std::move(info));
+	}
+	else
+	{
+		report_error(L"redefined variable.");
+	}
+}
+
+void Compiler::earse_variable(u2 id)
+{
+	var_table[id].pop();
+}
+
+Variable* Compiler::get_variable(u2 id)
+{
+	printf(">>>%u\n",id);
+	auto it=var_table.find(id);
+	if(it==var_table.end())return nullptr;
+	if(it->second.empty())return nullptr;
+	return &it->second.top();
 }
 
 std::wstring Compiler::identifier_name(s2 id) const

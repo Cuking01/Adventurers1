@@ -20,7 +20,7 @@ void Compiler::parse() try     //语法分析
 	// print(type,t);
 	// print(declarator,id);
 
-
+	exp.analyze();
 
 	// #undef print
 

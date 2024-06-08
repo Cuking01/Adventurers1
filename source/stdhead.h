@@ -9,6 +9,7 @@
 #include<format>
 #include<string.h>
 #include<map>
+#include<stack>
 #include<memory>
 #include<typeinfo>
 #include<fstream>

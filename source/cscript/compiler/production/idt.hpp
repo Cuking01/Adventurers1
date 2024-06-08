@@ -7,5 +7,7 @@ struct Idt:Production<Idt>
 	~Idt();
 
 	void print_ast(u2 dep,std::wostream&o);
+
+	void analyze(){}
 };
 

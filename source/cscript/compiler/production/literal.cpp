@@ -16,6 +16,14 @@ Literal::~Literal()
 		compiler->unmatch_literal();
 }
 
+void Literal::analyze()
+{
+	if(literal->type==Literal_T::Integer)
+		t=2;
+	else
+		t=4;
+}
+
 void Literal::print_ast(u2 dep,std::wostream&o)
 {
 	print_tree(dep,o);

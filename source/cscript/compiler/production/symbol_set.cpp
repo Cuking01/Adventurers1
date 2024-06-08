@@ -8,7 +8,7 @@ Symbol_Set<symbols...>::Symbol_Set(Compiler&compiler):Base(compiler)
 	if(p)
 	{
 		Base::is_matched=true;
-		symbol=p->id;
+		symbol_matched=p->id;
 	}
 }
 
@@ -23,5 +23,7 @@ template<Symbol_Str... symbols>
 void Symbol_Set<symbols...>::print_ast(u2 dep,std::wostream&o)
 {
 	Base::print_tree(dep,o);
-	o<<L"keyword: "<<::Cscript::symbol_table[symbol]<<'\n';
+	o<<L"keyword: "<<::Cscript::symbol_table[symbol_matched]<<'\n';
 }
+
+

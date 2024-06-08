@@ -36,6 +36,20 @@ struct Repeat:Production<Repeat<Item>>
 		return items[i];
 	}
 
+	template<typename Callback>
+	void for_each(Callback&& callback)
+	{
+		for(auto&item:items)
+			callback(*item);
+	}
+
+	template<typename Callback>
+	void for_each_r(Callback&& callback)
+	{
+		for(auto it=items.rbegin();it!=items.rend();it++)
+			callback(**it);
+	}
+
 	void print_ast(u2 dep,std::wostream&o);
 };
 
@@ -77,6 +91,20 @@ struct Repeat_1:Production<Repeat_1<Item>>
 	Item& operator[](u2 i)
 	{
 		return items[i];
+	}
+
+	template<typename Callback>
+	void for_each(Callback&& callback)
+	{
+		for(auto&item:items)
+			callback(*item);
+	}
+
+	template<typename Callback>
+	void for_each_r(Callback&& callback)
+	{
+		for(auto it=items.rbegin();it!=items.rend();it++)
+			callback(**it);
 	}
 
 	void print_ast(u2 dep,std::wostream&o);
