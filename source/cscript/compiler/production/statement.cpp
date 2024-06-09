@@ -15,7 +15,7 @@ void Stat::analyze()
 
 void Compound_Stat::analyze()
 {
-	compiler->dep++;
+	compiler->dep_inc();
 
 	handler->get<1>().for_each([](auto&t)
 	{
@@ -26,7 +26,7 @@ void Compound_Stat::analyze()
 		);
 	});
 
-	compiler->dep--;
+	compiler->dep_dec();
 }
 
 void Exp_Stat::analyze()

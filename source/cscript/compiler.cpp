@@ -65,6 +65,7 @@ void Compiler::add_variable(u2 id,Variable info)
 	{
 		info.dep=dep;
 		stk.push(std::move(info));
+		scope_record.top().push_back(id);
 	}
 	else
 	{
@@ -86,10 +87,26 @@ Variable* Compiler::get_variable(u2 id)
 	return &it->second.top();
 }
 
+void Compiler::dep_inc()
+{
+	dep++;
+	scope_record.push({});
+}
+
+void Compiler::dep_dec()
+{
+	dep--;
+	for(auto id:scope_record.top())
+		earse_variable(id);
+	scope_record.pop();
+}
+
 std::wstring Compiler::identifier_name(s2 id) const
 {
 	return identifier_name_table.at(id-1000);
 }
+
+
 
 #include "compiler/lexer.cpp"
 #include "compiler/parser.cpp"

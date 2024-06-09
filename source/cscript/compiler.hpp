@@ -44,6 +44,7 @@ struct Compiler
 	Type_Tree type_tree;
 
 	std::map<u2,std::stack<Variable>> var_table;
+	std::stack<std::vector<u2>> scope_record;
 	u2 dep=0;
 
 	std::vector<std::wstring> error;
@@ -62,6 +63,8 @@ struct Compiler
 	void add_variable(u2 id,Variable info);
 	void earse_variable(u2 id);
 	Variable* get_variable(u2 id);
+	void dep_inc();
+	void dep_dec();
 
 	#include "compiler/lexer.hpp"
 	#include "compiler/parser.hpp"
